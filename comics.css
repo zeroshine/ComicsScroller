@@ -1,0 +1,69 @@
+
+html, body {
+	overflow: auto ;
+}
+img { background: none ;}
+/*end*/
+
+
+#comics_titlebar{
+	display: block;
+	position: fixed;
+	height: 50px;
+	width: 100%;
+	font-size: 30px;
+	background-color: black;
+	color: white;
+}
+
+#comics_nextchaptertxt{
+	float:left;
+	color: white;
+	font-size: 30px;
+	margin-left: 40%;
+	margin-top:8px; 
+}
+
+#comics_nextchapter{
+	font-family: Arial, sans-serif;
+	color: #fff;
+	font-size: 20px;
+	width:10%;
+	border-radius: 5px;
+	border-style: solid;
+	border-width: 1px;
+	height: 30px;
+	/*margin-top: 20px; */
+	/*min-height: 34px;*/
+	line-height: normal;
+	background-color: #357ae8;
+	float: right;
+	margin-top: 8px;
+	padding-top: 5px;
+	margin-right: 15%;
+	/*margin: auto;*/
+	text-align: 
+
+}
+
+#comics_panel{
+	display: block;
+	padding-bottom: 40px;
+	text-align: center;
+	background-color: black;
+	
+}
+
+.comics_img{
+	/*box-shadow: 1px 3px 10px 0px rgba(0, 0, 0, 0.4);*/
+	/*margin: 40px auto;*/
+	display:block;
+	/*width:850px;*/
+	max-width: 100%;
+	/*max-height: 100vh;*/
+	margin: auto;
+	padding-top: 40px;
+	/*vertical-align: middle;*/
+
+}
+

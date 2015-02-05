@@ -1,0 +1,44 @@
+{
+    
+    // "default_locale":"en",
+
+    "name":"alireader",
+    "version":"0.0.1",
+
+    "manifest_version":2,
+
+    "description":"an extention giving you a better reading experience on dm5 comics",
+
+    "icons":{
+        "16":"comics-16.png",
+        "48":"comics-48.png",
+        "128":"comics-64.png"
+    },
+    "background":{
+        "page": "background.html",
+        "script": "background.js",
+        "persistence":false
+    },
+    "content_scripts":[{
+        "matches":["http://manhua.ali213.net/comic/*/*.html"],
+        "css":["comics.css"],
+        "js":["echo.js","comics.js"],
+        "run_at":"document_start"
+    }],
+
+    "permissions":["tabs","http://manhua.ali213.net/*"],
+
+    // "content_security_policy": "script-src 'self' https:// ; object-src 'self'",
+
+    "page_action":{
+        "default_icon":"comics-16.png",
+        "default_title":"dm5reader"
+        // "default_popup":"popup.html"
+    },
+
+    // "options_page": "options.html",
+
+    "web_accessible_resources":["comics.css","echo.js","comics.js","comics-48.png","comics-64.png"]
+
+    // "homepage_url":"http://qcl.github.io/QCLean"
+}
