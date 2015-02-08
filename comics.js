@@ -11,21 +11,57 @@ document.onreadystatechange = function () {
 
 		var titlename=document.evaluate("//*[@id=\"enjoy_b\"]/div[1]/div[1]/h1/a",document,null,XPathResult.ANY_TYPE, null).iterateNext().text;
 		var chapternum=document.evaluate("//*[@id=\"enjoy_b\"]/div[1]/div[1]/h2/a",document,null,XPathResult.ANY_TYPE, null).iterateNext().text;
-		var nextURL=document.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[6]/a/@href",document,null,XPathResult.ANY_TYPE, null).iterateNext().text;
-		var nextURL=document.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[6]/a",document,null,XPathResult.ANY_TYPE, null).iterateNext().getAttribute("href");
-		comics.nextChaptertxt=document.createElement("a");
-		comics.nextChaptertxt.id="comics_nextchaptertxt";
-		comics.nextChaptertxt.textContent=titlename+" / "+chapternum+"  ";
+		// var nextURL=document.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[6]/a/@href",document,null,XPathResult.ANY_TYPE, null).iterateNext().text;
+		comics.nextURL=document.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[6]/a",document,null,XPathResult.ANY_TYPE, null).iterateNext().getAttribute("href");
+		
+		comics.chaptertxt=document.createElement("a");
+		comics.chaptertxt.id="comics_nextchaptertxt";
+		comics.chaptertxt.textContent=titlename+" / "+chapternum+"  ";
 
-		comics.nextChapter=document.createElement("div");
-		comics.nextChapter.id="comics_nextchapter";
-		comics.nextChapter.textContent="下一章";
-		comics.nextChapter.addEventListener("click", function(){
-    		window.location="http://manhua.ali213.net"+nextURL;
+
+		comics.maxwidthbutton=document.createElement("button");
+		comics.maxwidthbutton.className="comics_button";
+		comics.maxwidthbutton.textContent="符合頁寬";
+		comics.maxwidthbutton.addEventListener("click", function(){
+    		var imglist=document.getElementsByClassName("comics_img");
+    		for(var i=0; i< imglist.length;++i){
+    			console.log(imglist[i]);
+    			imglist[i].style.maxHeight="none";
+    			console.log(imglist[i]);
+    		}
 		});
 
-		comics.titlebar.appendChild(comics.nextChaptertxt);
-		comics.titlebar.appendChild(comics.nextChapter);
+		comics.maxheightbutton=document.createElement("button");
+		comics.maxheightbutton.className="comics_button";
+		comics.maxheightbutton.textContent="符合頁高";
+		comics.maxheightbutton.addEventListener("click", function(){
+    		var imglist=document.getElementsByClassName("comics_img");
+    		for(var i=0; i< imglist.length;++i){
+    			console.log(imglist[i]);
+    			imglist[i].style.maxHeight="92vh";
+    			console.log(imglist[i]);
+    		}
+		});
+
+		comics.buttonplace=document.createElement("div");
+		comics.buttonplace.id="comics_button_place";
+		
+
+		if(comics.nextURL!==null){
+			comics.nextChapter=document.createElement("button");
+			comics.nextChapter.className="comics_button";
+			comics.nextChapter.textContent="下一章";
+			comics.nextChapter.addEventListener("click", function(){
+	    		window.location="http://manhua.ali213.net"+comics.nextURL;
+			});
+			comics.buttonplace.appendChild(comics.nextChapter);
+		}
+		
+		comics.buttonplace.appendChild(comics.maxheightbutton);
+		comics.buttonplace.appendChild(comics.maxwidthbutton);
+
+		comics.titlebar.appendChild(comics.chaptertxt);
+		comics.titlebar.appendChild(comics.buttonplace);
 		comics.panel.appendChild(comics.titlebar);
 		document.body.parentElement.appendChild(comics.panel);
 		document.body.style.display="none";
@@ -48,8 +84,17 @@ document.onreadystatechange = function () {
 		for(var i=0;i<comics.pageMax;i++){
 			imgs[i]=img_domain+imgpath+i+".jpg";
 		}
-		
 		comics.images=imgs;
+
+		comics.setImages=function(url){
+			var req = new XMLHttpRequest();
+			req.open("GET", contentURL, true);
+			req.responseType='document';
+			req.onload = function(){ saveInformation(req,comics);};
+			req.send();
+		}
+
+		
 		comics.appendImage=function(){
 			console.log('appendImage');
 			for(var i=0;i<comics.pageMax;++i){
@@ -61,21 +106,7 @@ document.onreadystatechange = function () {
 				this.panel.appendChild(img);
 			}	
 		};
-		comics.appendImage();
-		window.onscroll=function(){
-			if (document.body.scrollTop+document.documentElement.clientHeight==document.body.scrollHeight){
-				comics.setImages(comics.nextURL);
-				comics.appendImage();
-				echo.init({
-	    			offset: 2500,
-	    			throttle: 0,
-	    			unload: false,
-	    			callback: function (element, op) {
-	        		// console.log(element, 'has been', op + 'ed')
-	    			}
-				});
-			}
-		};	
+		comics.appendImage();	
 		echo.init({
 	    	offset: 2500,
 	    	throttle: 100,

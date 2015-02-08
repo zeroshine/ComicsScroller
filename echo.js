@@ -115,7 +115,10 @@
   
 
   echo.detach = function () {
-    
+    // var req=new XMLHttpRequest();
+    // req.open("GET","http://manhua.ali213.net"+comics.nextURL);
+    // req.onload
+    // req.send()
 
     // if (document.removeEventListener) {
     //   root.removeEventListener('scroll', debounceOrThrottle);
