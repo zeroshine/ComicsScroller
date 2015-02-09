@@ -24,17 +24,39 @@
     return (box.right >= view.l && box.bottom >= view.t && box.left <= view.r && box.top <= view.b);
   };
 
+  var setInViewInfor=function(){
+    var nodes = document.querySelectorAll('img[data-title]');
+    
+    var oview={
+      l: 0,
+      t: 0,
+      b: (root.innerHeight || document.documentElement.clientHeight),
+      r: (root.innerWidth || document.documentElement.clientWidth)
+    };
+    for (var i = 0; i < nodes.length; i++) {
+      var elem=nodes[i];
+      if(inView(elem, oview)&&comics.chaptertxt.textContent!==elem.getAttribute("data-title")){
+        comics.chaptertxt.textContent=elem.getAttribute("data-title");
+        if(elem.getAttribute("data-num")=="0"){
+          comics.nextURL=comics.nextURL_tmp;
+        }
+        return;
+      }
+    }
+
+  }
   var debounceOrThrottle = function () {
     if(!useDebounce && !!poll) {
       return;
     }
     clearTimeout(poll);
     poll = setTimeout(function(){
+      setInViewInfor();
       echo.render();
       poll = null;
     }, delay);
   };
-
+  
   echo.init = function (opts) {
     opts = opts || {};
     var offsetAll = opts.offset || 0;
@@ -108,6 +130,7 @@
       }
     }
     if (!length) {
+      console.log("detach");
       echo.detach();
     }
   };
@@ -115,10 +138,17 @@
   
 
   echo.detach = function () {
-    // var req=new XMLHttpRequest();
-    // req.open("GET","http://manhua.ali213.net"+comics.nextURL);
-    // req.onload
-    // req.send()
+    var req=new XMLHttpRequest();
+    console.log("http://manhua.ali213.net"+comics.nextURL);
+    req.open("GET","http://manhua.ali213.net"+comics.nextURL,true);
+    req.responseType="document";
+    req.onload=function(){
+      console.log(req.response);
+      var doc=req.response;
+      comics.setImages(doc);
+      comics.appendImage();
+    };
+    req.send();
 
     // if (document.removeEventListener) {
     //   root.removeEventListener('scroll', debounceOrThrottle);

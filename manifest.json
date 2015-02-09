@@ -2,7 +2,7 @@
     
     // "default_locale":"en",
 
-    "name":"alireader",
+    "name":"Comics Reader",
     "version":"0.0.1",
 
     "manifest_version":2,
@@ -21,6 +21,7 @@
     },
     "content_scripts":[{
         "matches":["http://manhua.ali213.net/comic/*/*.html"],
+        "exclude_matches":["http://manhua.ali213.net/comic/latest/*.html"],
         "css":["comics.css"],
         "js":["echo.js","comics.js"],
         "run_at":"document_start"
