@@ -70,9 +70,33 @@ document.onreadystatechange = function () {
 			// comics.pageMax=document.getElementsByClassName("chose")[0].childElementCount;
 			// comics.chapterId=/http\:\/\/manhua.ali213.net\/comic\/\d*\/(\d*).html/.exec(document.URL)[1];	
 		}	
-		
+function sfacg(chapter){
+	var js=$('script[src^=\\/Utility\\/]').filter(function(){ return $(this).attr('src').match(/Utility\/\d+/)!=null}).attr('src');
+	var script;
+	$.ajax({
+		url:js,
+		async:false,dataType:"text",
+		success:function(data){
+			script=data;
+		},error:function(x,e){log(e);}
+	});
+	eval(script);
+	var picHost=$.cookie('picHost');
+	picHost = picHost==null?0:picHost;
+	picHost = hosts[picHost];
+	var images =[]; 
+	for(var i=1;i<=chapter.pageMax;i++){
+		images[i-1]=picHost+picAy[i-1];
+	}
+	chapter["images"]=images;
+
+	//h		
 
 		comics.setImages=function(doc){
+			var scriptURL=doc.evaluate("/html/head/script[2]",doc,null,XPathResult.ANY_TYPE,null).iterateNext().getAttribute('src');
+			var req=new 
+
+
 			var imgpath='';
 			eval(doc.head.innerHTML.replace(/[\r\n]/g,'@@@').match(/(eval.*?)\/*@@@/)[1]);
 			var titlename=doc.evaluate("//*[@id=\"enjoy_b\"]/div[1]/div[1]/h1/a",doc,null,XPathResult.ANY_TYPE, null).iterateNext().text;

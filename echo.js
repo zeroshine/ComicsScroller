@@ -17,12 +17,19 @@
 
   var callback = function () {};
 
+  var update = function () {console.log("default update")};
+
   var offset, poll, delay, useDebounce, unload;
 
   var inView = function (element, view) {
     var box = element.getBoundingClientRect();
     return (box.right >= view.l && box.bottom >= view.t && box.left <= view.r && box.top <= view.b);
   };
+
+  var checkView =function(element,view){
+    var box=element.getBoundingClientRect();
+    return ((box.bottom+box.top)/2 >= view.t && (box.bottom+box.top)/2 <= view.b);
+  }
 
   var setInViewInfor=function(){
     var nodes = document.querySelectorAll('img[data-title]');
@@ -35,10 +42,25 @@
     };
     for (var i = 0; i < nodes.length; i++) {
       var elem=nodes[i];
-      if(inView(elem, oview)&&comics.chaptertxt.textContent!==elem.getAttribute("data-title")){
-        comics.chaptertxt.textContent=elem.getAttribute("data-title");
+      if(checkView(elem, oview)){
+        if(comics.chaptertxt.textContent!==elem.getAttribute("data-title")){
+          comics.chaptertxt.textContent=elem.getAttribute("data-title");  
+        }
         if(elem.getAttribute("data-num")=="0"){
           comics.nextURL=comics.nextURL_tmp;
+          comics.preURL=comics.preURL_tmp;
+        }
+        console.log(parseInt(elem.getAttribute("data-chapter")));
+        console.log(comics.maxChapter);
+        if(parseInt(elem.getAttribute("data-chapter"))==comics.maxChapter){
+          comics.nextChapter.style.display="none";
+        }else{
+          comics.nextChapter.style.display="inline-block";
+        }
+        if(parseInt(elem.getAttribute("data-chapter"))==1){
+          comics.preChapter.style.display="none";
+        }else{
+          comics.preChapter.style.display="inline-block";
         }
         return;
       }
@@ -75,6 +97,7 @@
     useDebounce = opts.debounce !== false;
     unload = !!opts.unload;
     callback = opts.callback || callback;
+    update=opts.update || update;
     echo.render();
     if (document.addEventListener) {
       root.addEventListener('scroll', debounceOrThrottle, false);
@@ -97,7 +120,7 @@
     };
     for (var i = 0; i < length; i++) {
       elem = nodes[i];
-      if (inView(elem, view)) {
+      if (checkView(elem, view)) {
 
         if (unload) {
           elem.setAttribute('data-echo-placeholder', elem.src);
@@ -131,31 +154,19 @@
     }
     if (!length) {
       console.log("detach");
-      echo.detach();
+      update();
     }
   };
 
   
 
   echo.detach = function () {
-    var req=new XMLHttpRequest();
-    console.log("http://manhua.ali213.net"+comics.nextURL);
-    req.open("GET","http://manhua.ali213.net"+comics.nextURL,true);
-    req.responseType="document";
-    req.onload=function(){
-      console.log(req.response);
-      var doc=req.response;
-      comics.setImages(doc);
-      comics.appendImage();
-    };
-    req.send();
-
-    // if (document.removeEventListener) {
-    //   root.removeEventListener('scroll', debounceOrThrottle);
-    // } else {
-    //   root.detachEvent('onscroll', debounceOrThrottle);
-    // }
-    // clearTimeout(poll);
+    if (document.removeEventListener) {
+      root.removeEventListener('scroll', debounceOrThrottle);
+    } else {
+      root.detachEvent('onscroll', debounceOrThrottle);
+    }
+    clearTimeout(poll);
   };
 
   return echo;
