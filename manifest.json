@@ -19,15 +19,8 @@
         // "script": "background.js"
         "persistence":false
     },
-    // "content_scripts":[{
-    //     "matches":["http://manhua.ali213.net/comic/*/*.html"],
-    //     "exclude_matches":["http://manhua.ali213.net/comic/latest/*.html"],
-    //     "css":["comics.css"],
-    //     "js":["echo.js","comics.js"],
-    //     "run_at":"document_start"
-    // }],
 
-    "permissions":["tabs","activeTab","http://manhua.ali213.net/*","http://new.comicvip.com/*"],
+    "permissions":["tabs","activeTab","http://manhua.ali213.net/*","http://new.comicvip.com/*","http://comic.sfacg.com/"],
 
     // "content_security_policy": "script-src 'self' https:// ; object-src 'self'",
 
@@ -39,7 +32,6 @@
 
     // "options_page": "options.html",
 
-    "web_accessible_resources":["comics.css","echo.js","comics.js","comics-48.png","comics-64.png"]
+    "web_accessible_resources":["comics_sf.js","comics_8.js","comics.css","echo.js","comics_ali.js","comics-48.png","comics-64.png"]
 
-    // "homepage_url":"http://qcl.github.io/QCLean"
 }

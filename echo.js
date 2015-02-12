@@ -40,6 +40,7 @@
       b: (root.innerHeight || document.documentElement.clientHeight),
       r: (root.innerWidth || document.documentElement.clientWidth)
     };
+    
     for (var i = 0; i < nodes.length; i++) {
       var elem=nodes[i];
       if(checkView(elem, oview)){
