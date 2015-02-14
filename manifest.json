@@ -2,12 +2,12 @@
     
     // "default_locale":"en",
 
-    "name":"Comics Reader",
+    "name":"Comics Scroller",
     "version":"0.0.1",
 
     "manifest_version":2,
 
-    "description":"an extention giving you a better reading experience on dm5 comics",
+    "description":"an extention giving you a better reading experience on website",
 
     "icons":{
         "16":"comics-16.png",
@@ -20,18 +20,18 @@
         "persistence":false
     },
 
-    "permissions":["tabs","activeTab","http://manhua.ali213.net/*","http://new.comicvip.com/*","http://comic.sfacg.com/"],
+    "permissions":["tabs","activeTab","http://manhua.ali213.net/*","http://new.comicvip.com/*","http://comic.sfacg.com/*","http://tel.dm5.com/*"],
 
     // "content_security_policy": "script-src 'self' https:// ; object-src 'self'",
 
     "page_action":{
         "default_icon":"comics-16.png",
-        "default_title":"Comic Reader",
+        "default_title":"Comics Scroller",
         "default_popup":"popup.html"
     },
 
     // "options_page": "options.html",
 
-    "web_accessible_resources":["comics_sf.js","comics_8.js","comics.css","echo.js","comics_ali.js","comics-48.png","comics-64.png"]
+    "web_accessible_resources":["comics_dm5.js","comics_sf.js","comics_8.js","comics_ali.js","comics.js","comics.css","echo.js","comics-48.png","comics-64.png"]
 
 }
