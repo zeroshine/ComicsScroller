@@ -20,7 +20,8 @@ html, body {
 	float: left;
 	color: white;
 	font-size: 30px;
-	margin-left: 15%; 
+	margin-left: 10%;
+	font-family: sans-serif; 
 }
 
 #comics_button_place{

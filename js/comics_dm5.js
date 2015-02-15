@@ -4,8 +4,7 @@ document.onreadystatechange = function () {
 	if (document.readyState == "interactive") {
 		comics.setImages=function(doc){
 			comics.preChapter.style.display="none";
-			var script1=doc.head.children[doc.head.childElementCount-1].textContent;
-			script1=script1.split("reseturl")[0];
+			var script1=/<script type\=\"text\/javascript\">(.*)reseturl/.exec(document.head.innerHTML)[1];
 			eval(script1);
 			comics.titleInfor=DM5_CTITLE;
 			comics.pageMax=DM5_IMAGE_COUNT;
@@ -27,11 +26,14 @@ document.onreadystatechange = function () {
 				console.log(img[i]);
 			}
 			comics.images=img;
-		}		
+		};		
 		comics.maxChapter="";
 		comics.createItem();
 		comics.setImages(document);
 		comics.nextURL=comics.nextURL_tmp;
+		if(comics.nextURL==""){
+			comics.nextChapter.style.display="none";
+		}
 		comics.appendImage();	
 		echo.init({
 	    	offset: 2500,

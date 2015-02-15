@@ -10,9 +10,9 @@
     "description":"an extention giving you a better reading experience on website",
 
     "icons":{
-        "16":"comics-16.png",
-        "48":"comics-48.png",
-        "128":"comics-64.png"
+        "16":"img/comics-16.png",
+        "48":"img/comics-48.png",
+        "128":"img/comics-64.png"
     },
     "background":{
         "page": "background.html",
@@ -23,15 +23,15 @@
     "permissions":["tabs","activeTab","http://manhua.ali213.net/*","http://new.comicvip.com/*","http://comic.sfacg.com/*","http://tel.dm5.com/*"],
 
     // "content_security_policy": "script-src 'self' https:// ; object-src 'self'",
+    "content_security_policy": "script-src 'self' https://*.google-analytics.com; object-src 'self'",
 
     "page_action":{
-        "default_icon":"comics-16.png",
-        "default_title":"Comics Scroller",
-        "default_popup":"popup.html"
+        "default_icon":"img/comics-16.png",
+        "default_title":"Comics Scroller"
     },
 
-    // "options_page": "options.html",
+    "options_page": "options.html",
 
-    "web_accessible_resources":["comics_dm5.js","comics_sf.js","comics_8.js","comics_ali.js","comics.js","comics.css","echo.js","comics-48.png","comics-64.png"]
+    "web_accessible_resources":["js/*.js","css/*.css"]
 
 }

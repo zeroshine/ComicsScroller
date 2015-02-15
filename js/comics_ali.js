@@ -6,14 +6,13 @@ document.onreadystatechange = function () {
 			var imgpath='';
 			eval(doc.head.innerHTML.replace(/[\r\n]/g,'@@@').match(/(eval.*?)\/*@@@/)[1]);
 			var titlename=doc.evaluate("//*[@id=\"enjoy_b\"]/div[1]/div[1]/h1/a",doc,null,XPathResult.ANY_TYPE, null).iterateNext().text;
-			var chapternum=doc.evaluate("//*[@id=\"enjoy_b\"]/div[1]/div[1]/h2/a",doc,null,XPathResult.ANY_TYPE, null).iterateNext().text;
-			chapternum=chapternum.substr(1, chapternum.length-2);
 			comics.nextURL_tmp="http://manhua.ali213.net"+doc.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[6]/a",doc,null,XPathResult.ANY_TYPE, null).iterateNext().getAttribute("href");
 			comics.preURL_tmp="http://manhua.ali213.net"+doc.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[2]/a",doc,null,XPathResult.ANY_TYPE, null).iterateNext().getAttribute("href");
-			comics.titleInfor=titlename+" / 第"+chapternum+"話 ";
-			comics.chapterId=chapternum;
+			var chapterInfor=doc.evaluate("//*[@id=\"enjoy_b\"]/div[1]/div[1]/h2/a",doc,null,XPathResult.ANY_TYPE, null).iterateNext().text;
+			comics.titleInfor=titlename+" / "+chapterInfor;
+			comics.chapterId=currentchapter;
 			if(comics.nextURL_tmp=="http://manhua.ali213.net"+"javascript:void(0);"){
-				comics.maxChapter=parseInt(chapternum);
+				comics.maxChapter=comics.chapterId;
 				comics.nextURL_tmp="";
 			}
 			if(comics.preURL_tmp=="http://manhua.ali213.net"+"javascript:void(0);"){
@@ -22,7 +21,7 @@ document.onreadystatechange = function () {
 
 			var img_domain='';
 			comics.pageMax=pages;
-			comics.chaptertxt.textContent=comics.titleInfor+"第 1/"+comics.pageMax+"頁";
+			comics.chaptertxt.textContent=comics.titleInfor+" 第 1/"+comics.pageMax+"頁";
 			var verifystr=/http\:\/\/manhua.ali213.net\/comic\/\d*\/(\d*).html/.exec(doc.URL)[1];
 			if (verifystr>144681){
 				img_domain="http://mhimg1.ali213.net";
@@ -36,7 +35,7 @@ document.onreadystatechange = function () {
 				imgs[i]=img_domain+imgpath+i+".jpg";
 			}
 			comics.images=imgs;	
-		}		
+		};		
 		
 		comics.nextURL="http://manhua.ali213.net"+document.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[6]/a",document,null,XPathResult.ANY_TYPE, null).iterateNext().getAttribute("href");
 		comics.preURL="http://manhua.ali213.net"+document.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[2]/a",document,null,XPathResult.ANY_TYPE, null).iterateNext().getAttribute("href");

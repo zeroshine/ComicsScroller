@@ -68,7 +68,7 @@ comics.appendImage=function(){
 				var img=new Image();
 				img.setAttribute("data-echo",comics.images[i]);
 				img.setAttribute("data-num",i);
-				img.setAttribute("data-title",comics.titleInfor+"第"+(i+1)+"/"+comics.pageMax+"頁");
+				img.setAttribute("data-title",comics.titleInfor+" 第"+(i+1)+"/"+comics.pageMax+"頁");
 				img.setAttribute("data-chapter",comics.chapterId);
 				img.setAttribute("data-pageMax",comics.pageMax);
 				if(comics.setMaxHeight){

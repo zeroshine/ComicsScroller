@@ -3,12 +3,13 @@ console.log("reader starts");
 document.onreadystatechange = function () {
 	if (document.readyState == "interactive") {
 		comics.setImages=function(doc){
-			var scriptURL=doc.evaluate("/html/head/script[2]",doc,null,XPathResult.ANY_TYPE,null).iterateNext().getAttribute('src');
+			var scriptURL=/src=\"(\/Utility\/\d*\/\d*\.js)\">/.exec(doc.head.innerHTML)[1]; 
 			var chapternum=/http\:\/\/comic\.sfacg\.com\/HTML\/.*\/(\w*)\/$/.exec(doc.URL)[1];
 			comics.chapterId=chapternum;
 			var req = new XMLHttpRequest;
 			req.open("GET",scriptURL);
 			req.onload=function(){
+				console.log(req.response);
 				eval(req.response);
 				comics.titleInfor=comicName+" / 第"+comics.chapterId+"話 ";		
 				comics.nextURL_tmp=nextVolume;
@@ -20,7 +21,6 @@ document.onreadystatechange = function () {
 				if(preVolume=="javascript:alert('已经是当前连载的最初回!');"){
 					comics.preURL_tmp="";	
 				}
-
 				var name = "picHost=";
 				var picHost="";
     			var ca = document.cookie.split(';');
@@ -40,7 +40,7 @@ document.onreadystatechange = function () {
 				comics.appendImage();
 			};
 			req.send(); 
-		}		
+		};		
 		comics.maxChapter=9999;
 		comics.createItem();
 		comics.setImages(document);	

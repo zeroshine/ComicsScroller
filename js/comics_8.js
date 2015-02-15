@@ -3,10 +3,8 @@ console.log("reader starts");
 document.onreadystatechange = function () {
 	if (document.readyState == "interactive") {		
 		comics.setImages=function(doc){
-			
 			var script=doc.evaluate("//*[@id=\"Form1\"]/script/text()",doc,null,XPathResult.ANY_TYPE, null).iterateNext().textContent.split('eval')[0];
 			eval(script);
-			
 			comics.maxChapter=chs;
 			console.log(comics.maxChapter);
 			if(parseInt(doc.URL.split("=")[1])>1){
