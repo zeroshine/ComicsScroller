@@ -1,9 +1,6 @@
 {
-    
-    // "default_locale":"en",
-
     "name":"Comics Scroller",
-    "version":"0.0.1",
+    "version":"1.0.2",
 
     "manifest_version":2,
 
@@ -17,22 +14,15 @@
     },
     "background":{
         "page": "background.html",
-        // "script": "background.js"
         "persistence":false
     },
 
-    "permissions":["storage","tabs","activeTab","http://manhua.ali213.net/*","http://new.comicvip.com/*","http://comic.sfacg.com/*","http://tel.dm5.com/*"],
-
-    // "content_security_policy": "script-src 'self' https:// ; object-src 'self'",
+    "permissions":["tabs","activeTab","http://manhua.ali213.net/*","http://new.comicvip.com/*","http://comic.sfacg.com/*","http://tel.dm5.com/*"],
     "content_security_policy": "script-src 'self' https://*.google-analytics.com; object-src 'self'",
 
     "page_action":{
         "default_icon":"img/comics-16.png",
         "default_title":"Comics Scroller"
     },
-
-    // "options_page": "options.html",
-
     "web_accessible_resources":["js/*.js","css/*.css"]
-
 }
