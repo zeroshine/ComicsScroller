@@ -8,17 +8,16 @@ document.onreadystatechange = function () {
 			comics.chapterId=chapternum;
 			var req = new XMLHttpRequest;
 			req.open("GET",scriptURL);
-			req.onload=function(){
+		req.onload=function(){
 				eval(req.response);
 				comics.titleInfor=comicName+" / 第"+comics.chapterId+"話 ";		
 				comics.nextURL_tmp=nextVolume;
-				console.log(comics.nextURL_tmp);
 				comics.preURL_tmp=preVolume;	
-				if(nextVolume=="javascript:alert('已经是当前连载的最后一回!');"){
+				if(nextVolume=="javascript:alert('已经是当前连载的最后一回!');" || nextVolume=="#"){
 					comics.nextURL_tmp="";
 					comics.maxChapter_tmp=comics.chapterId;	
 				}
-				if(preVolume=="javascript:alert('已经是当前连载的最初回!');"){
+				if(preVolume=="javascript:alert('已经是当前连载的最初回!');" || preVolume=="#"){
 					comics.preURL_tmp="";
 					comics.minChapter_tmp=comics.chapterId;	
 				}
@@ -40,7 +39,6 @@ document.onreadystatechange = function () {
 				comics.images=img;
 				comics.preURL=comics.preURL_tmp;
 				comics.nextURL=comics.nextURL_tmp;
-				console.log("nextURL " +comics.nextURL);
 				if(comics.nextURL==""){
 					comics.maxChapter=comics.chapterId;
 					comics.nextChapter.style.display="none";
