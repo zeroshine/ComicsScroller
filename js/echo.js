@@ -55,9 +55,11 @@
         if(comics.chaptertxt.textContent!==elem.getAttribute("data-title")){
           comics.chaptertxt.textContent=elem.getAttribute("data-title");  
         }
-        if(elem.getAttribute("data-num")=="0"){
+        if(elem.getAttribute("data-num")==comics.chapterID){
           comics.nextURL=comics.nextURL_tmp;
           comics.preURL=comics.preURL_tmp;
+          comics.maxChapter=comics.maxChapter_tmp;
+          comics.minChapter=comics.minChapter_tmp;
         }
         // console.log(parseInt(elem.getAttribute("data-chapter")));
         // console.log(comics.maxChapter);
@@ -66,7 +68,7 @@
         }else{
           comics.nextChapter.style.display="inline-block";
         }
-        if(elem.getAttribute("data-chapter")==1){
+        if(elem.getAttribute("data-chapter")==comics.minChapter){
           comics.preChapter.style.display="none";
         }else{
           comics.preChapter.style.display="inline-block";
@@ -166,7 +168,6 @@
       }
     }
     if (!length) {
-      console.log("detach");
       update();
     }
   };

@@ -9,17 +9,18 @@ document.onreadystatechange = function () {
 			var req = new XMLHttpRequest;
 			req.open("GET",scriptURL);
 			req.onload=function(){
-				console.log(req.response);
 				eval(req.response);
 				comics.titleInfor=comicName+" / 第"+comics.chapterId+"話 ";		
 				comics.nextURL_tmp=nextVolume;
+				console.log(comics.nextURL_tmp);
 				comics.preURL_tmp=preVolume;	
 				if(nextVolume=="javascript:alert('已经是当前连载的最后一回!');"){
 					comics.nextURL_tmp="";
-					comics.maxChapter=comics.chapterId;	
+					comics.maxChapter_tmp=comics.chapterId;	
 				}
 				if(preVolume=="javascript:alert('已经是当前连载的最初回!');"){
-					comics.preURL_tmp="";	
+					comics.preURL_tmp="";
+					comics.minChapter_tmp=comics.chapterId;	
 				}
 				var name = "picHost=";
 				var picHost="";
@@ -37,13 +38,25 @@ document.onreadystatechange = function () {
 					img[i]=picHost+picAy[i];
 				}
 				comics.images=img;
+				comics.preURL=comics.preURL_tmp;
+				comics.nextURL=comics.nextURL_tmp;
+				console.log("nextURL " +comics.nextURL);
+				if(comics.nextURL==""){
+					comics.maxChapter=comics.chapterId;
+					comics.nextChapter.style.display="none";
+				}
+				if(comics.preURL==""){
+					comics.minChapter=comics.chapterId;
+					comics.preChapter.style.display="none";
+				}
 				comics.appendImage();
 			};
 			req.send(); 
 		};		
-		comics.maxChapter=9999;
+		comics.maxChapter="";
+		comics.minChapter="";
 		comics.createItem();
-		comics.setImages(document);	
+		comics.setImages(document);
 		echo.init({
 	    	offset: 2500,
 	    	throttle: 100,
@@ -51,11 +64,10 @@ document.onreadystatechange = function () {
 	    	update: function () {
 	    		if(comics.nextURL!==""){
 		        	var req=new XMLHttpRequest();
-				    // console.log("http://manhua.ali213.net"+comics.nextURL);
 				    req.open("GET",comics.nextURL,true);
 				    req.responseType="document";
 				    req.onload=function(){
-				      console.log(req.response);
+				      // console.log(req.response);
 				      var doc=req.response;
 				      comics.setImages(doc);
 				      // comics.appendImage();

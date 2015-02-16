@@ -5,8 +5,8 @@ document.onreadystatechange = function () {
 		comics.setImages=function(doc){
 			var script=doc.evaluate("//*[@id=\"Form1\"]/script/text()",doc,null,XPathResult.ANY_TYPE, null).iterateNext().textContent.split('eval')[0];
 			eval(script);
-			comics.maxChapter=chs;
-			console.log(comics.maxChapter);
+			comics.maxChapter=chs.toString();
+			comics.minChapter="1";
 			if(parseInt(doc.URL.split("=")[1])>1){
 				comics.preURL_tmp=doc.URL.split("=")[0]+"="+(parseInt(doc.URL.split("=")[1])-1);
 			}else{
@@ -89,22 +89,16 @@ document.onreadystatechange = function () {
 		
 		comics.createItem();
 		comics.setImages(document);
-		if(parseInt(document.URL.split("=")[1])>1){
-			comics.preURL_tmp=document.URL.split("=")[0]+"="+(parseInt(document.URL.split("=")[1])-1);
-		}else{
-			comics.preURL_tmp="";
-			comics.preChapter.style.display="none";
-		}
-
-		if(parseInt(document.URL.split("=")[1])<comics.maxChapter){
-			comics.nextURL_tmp=document.URL.split("=")[0]+"="+(parseInt(document.URL.split("=")[1])+1);
-		}else{
-			comics.nextURL_tmp="";
+		comics.preURL=comics.preURL_tmp;
+		comics.nextURL=comics.nextURL_tmp;
+		if(comics.nextURL==""){
+			comics.maxChapter=comics.chapterId;
 			comics.nextChapter.style.display="none";
 		}
-		comics.nextURL=comics.nextURL_tmp;
-		console.log("nextURL "+comics.maxChapter);
-		comics.preURL=comics.preURL_tmp;
+		if(comics.preURL==""){
+			comics.minChapter=comics.chapterId;
+			comics.preChapter.style.display="none";
+		}
 		comics.appendImage();	
 		echo.init({
 	    	offset: 2500,

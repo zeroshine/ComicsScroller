@@ -7,12 +7,13 @@
 
     "manifest_version":2,
 
-    "description":"an extention giving you a better reading experience on website",
+    "description":"an extention giving you a better reading experience on website.",
 
     "icons":{
         "16":"img/comics-16.png",
         "48":"img/comics-48.png",
-        "128":"img/comics-64.png"
+        "64":"img/comics-64.png",
+        "128":"img/comics-128.png"
     },
     "background":{
         "page": "background.html",
@@ -20,7 +21,7 @@
         "persistence":false
     },
 
-    "permissions":["tabs","activeTab","http://manhua.ali213.net/*","http://new.comicvip.com/*","http://comic.sfacg.com/*","http://tel.dm5.com/*"],
+    "permissions":["storage","tabs","activeTab","http://manhua.ali213.net/*","http://new.comicvip.com/*","http://comic.sfacg.com/*","http://tel.dm5.com/*"],
 
     // "content_security_policy": "script-src 'self' https:// ; object-src 'self'",
     "content_security_policy": "script-src 'self' https://*.google-analytics.com; object-src 'self'",
@@ -30,7 +31,7 @@
         "default_title":"Comics Scroller"
     },
 
-    "options_page": "options.html",
+    // "options_page": "options.html",
 
     "web_accessible_resources":["js/*.js","css/*.css"]
 

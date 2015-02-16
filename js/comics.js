@@ -1,4 +1,5 @@
 var comics=comics || { };
+
 comics.createItem=function(){
 			comics.panel=document.createElement("div");
 			comics.panel.id="comics_panel";
@@ -66,12 +67,13 @@ comics.appendImage=function(){
 			console.log('appendImage');
 			for(var i=0;i<comics.pageMax;++i){
 				var img=new Image();
+				// console.log(comics.images[i]);
 				img.setAttribute("data-echo",comics.images[i]);
 				img.setAttribute("data-num",i);
 				img.setAttribute("data-title",comics.titleInfor+" 第"+(i+1)+"/"+comics.pageMax+"頁");
 				img.setAttribute("data-chapter",comics.chapterId);
 				img.setAttribute("data-pageMax",comics.pageMax);
-				if(comics.setMaxHeight){
+				if(comics.setMaxHeight||localStorage["mode"]=="page_high"){
 					img.style.maxHeight="92vh";
 				}
 				img.src="";

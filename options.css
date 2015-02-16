@@ -1,0 +1,85 @@
+body, button, td {
+	font-family: 'Noto Sans', 'Segoe UI', 'Lucida Grande', 'Open Sans', arial, sans-serif;
+	font-size: 12px;
+	color: rgb(48, 57, 66);
+}
+
+body {
+	background-color: white;
+	font-size: 12px;
+	margin-left: 155px;
+	margin-right: 0px;
+	overflow-x: hidden;
+}
+h1 {
+	font-weight: 400;
+	font-size: 18px;
+	display: inline;
+	line-height: 18px;
+	vertical-align: middle;
+}
+header {
+	display: block;
+	padding-top: 10px;
+	padding-bottom: 8px;
+	min-width: 600px;
+}
+h3 {
+	display: block;
+	font-size: 1.17em;
+	-webkit-margin-before: 1em;
+	-webkit-margin-after: 1em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	font-weight: bold;
+}
+section {
+	-webkit-padding-start: 18px;
+	margin-bottom: 24px;
+	margin-top: 8px;
+	max-width: 600px;
+}
+section h3 {
+	-webkit-margin-start: -18px;
+	color: black;
+	line-height: 14px;
+	font-size: 14px;
+	font-weight: normal;
+	margin-bottom: 11px;
+}
+
+.fixed-top {
+	position: fixed;
+	top: 0;
+	background-color: white;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+#cast-icon {
+	width: 36px;
+	height: 36px;
+	line-height: 18px;
+	vertical-align: middle;
+}
+
+.options-sections{
+	margin-top: 66px;
+} 
+
+
+.options-sections section {
+	margin-top: 8px;
+	margin-bottom: 24px;
+	max-width: 600px;
+}
+
+.sp{
+	-webkit-box-align: center;
+	display: -webkit-box;
+	padding-bottom: 7px;
+	padding-top: 7px;
+}
+
+label[for] {
+	display: inline;
+}

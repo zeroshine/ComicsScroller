@@ -6,17 +6,18 @@ document.onreadystatechange = function () {
 			var imgpath='';
 			eval(doc.head.innerHTML.replace(/[\r\n]/g,'@@@').match(/(eval.*?)\/*@@@/)[1]);
 			var titlename=doc.evaluate("//*[@id=\"enjoy_b\"]/div[1]/div[1]/h1/a",doc,null,XPathResult.ANY_TYPE, null).iterateNext().text;
-			comics.nextURL_tmp="http://manhua.ali213.net"+doc.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[6]/a",doc,null,XPathResult.ANY_TYPE, null).iterateNext().getAttribute("href");
-			comics.preURL_tmp="http://manhua.ali213.net"+doc.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[2]/a",doc,null,XPathResult.ANY_TYPE, null).iterateNext().getAttribute("href");
+			comics.nextURL_tmp=doc.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[6]/a",doc,null,XPathResult.ANY_TYPE, null).iterateNext().getAttribute("href");
+			comics.preURL_tmp=doc.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[2]/a",doc,null,XPathResult.ANY_TYPE, null).iterateNext().getAttribute("href");
 			var chapterInfor=doc.evaluate("//*[@id=\"enjoy_b\"]/div[1]/div[1]/h2/a",doc,null,XPathResult.ANY_TYPE, null).iterateNext().text;
 			comics.titleInfor=titlename+" / "+chapterInfor;
-			comics.chapterId=currentchapter;
-			if(comics.nextURL_tmp=="http://manhua.ali213.net"+"javascript:void(0);"){
+			comics.chapterId=currentchapter.toString();
+			if(comics.nextURL_tmp=="javascript:void(0);"){
 				comics.maxChapter=comics.chapterId;
 				comics.nextURL_tmp="";
 			}
-			if(comics.preURL_tmp=="http://manhua.ali213.net"+"javascript:void(0);"){
+			if(comics.preURL_tmp=="javascript:void(0);"){
 				comics.preURL_tmp="";
+				comics.minChapter_tmp=comics.chapterId;
 			}
 
 			var img_domain='';
@@ -37,31 +38,32 @@ document.onreadystatechange = function () {
 			comics.images=imgs;	
 		};		
 		
-		comics.nextURL="http://manhua.ali213.net"+document.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[6]/a",document,null,XPathResult.ANY_TYPE, null).iterateNext().getAttribute("href");
-		comics.preURL="http://manhua.ali213.net"+document.evaluate("//*[@id=\"enjoy_b\"]/div[2]/ul/li[2]/a",document,null,XPathResult.ANY_TYPE, null).iterateNext().getAttribute("href");
-		
-		comics.maxChapter=9999;
 		comics.createItem();
 		comics.setImages(document);
-		if(comics.nextURL=="http://manhua.ali213.net"+"javascript:void(0);"){
+		comics.preURL=comics.preURL_tmp;
+		comics.nextURL=comics.nextURL_tmp;
+		// console.log("nextURL " +comics.nextURL);
+		if(comics.nextURL==""){
+			comics.maxChapter=comics.chapterId;
 			comics.nextChapter.style.display="none";
 		}
-		if(comics.preURL=="http://manhua.ali213.net"+"javascript:void(0);"){
+		if(comics.preURL==""){
+			comics.minChapter=comics.chapterId;
 			comics.preChapter.style.display="none";
 		}
+
 		comics.appendImage();	
 		echo.init({
 	    	offset: 2500,
 	    	throttle: 100,
 	    	unload: false,
 	    	update: function () {
-	    		if(comics.nextURL!==""){
+	    		if(comics.nextURL!==""&&comics.nextURL!=="javascript:void(0);"){
 		        	var req=new XMLHttpRequest();
-				    console.log("http://manhua.ali213.net"+comics.nextURL);
 				    req.open("GET",comics.nextURL,true);
 				    req.responseType="document";
 				    req.onload=function(){
-				      console.log(req.response);
+				      // console.log(req.response);
 				      var doc=req.response;
 				      comics.setImages(doc);
 				      comics.appendImage();
