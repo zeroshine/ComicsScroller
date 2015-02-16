@@ -3,7 +3,7 @@ console.log("reader starts");
 document.onreadystatechange = function () {
 	if (document.readyState == "interactive") {
 		comics.setImages=function(doc){
-			var scriptURL=/src=\"(\/Utility\/\d*\/\d*\.js)\">/.exec(doc.head.innerHTML)[1]; 
+			var scriptURL=/src=\"(\/Utility\/\w*\/\w*\.js)\">/.exec(doc.head.innerHTML)[1]; 
 			var chapternum=/http\:\/\/comic\.sfacg\.com\/HTML\/.*\/(\w*)\/$/.exec(doc.URL)[1];
 			comics.chapterId=chapternum;
 			var req = new XMLHttpRequest;
