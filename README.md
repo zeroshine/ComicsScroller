@@ -9,6 +9,9 @@ http://www.8comic.com/
 http://comic.sfacg.com/  
 http://tel.dm5.com/  
 
+# Chrome Web Store
+https://chrome.google.com/webstore/detail/comics-scroller/mccpalfmlnjadfnojmphffidnbemnkec
+
 
 # LICENSE
 The MIT License (MIT)
