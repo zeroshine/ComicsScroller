@@ -1,8 +1,8 @@
 {
     "name":"Comics Scroller",
-    "version":"1.0.1",
+    "version":"1.0.3",
     "manifest_version":2,
-    "description":"an extention giving you a better reading experience on comics website.",
+    "description":"an extention giving you a better reading experience on website.",
     "icons":{
         "16":"img/comics-16.png",
         "48":"img/comics-48.png",
@@ -13,11 +13,11 @@
         "page": "background.html",
         "persistence":false
     },
-    "permissions":["tabs","activeTab","http://manhua.ali213.net/*","http://new.comicvip.com/*","http://comic.sfacg.com/*","http://tel.dm5.com/*"],
+    "permissions":["storage","tabs","activeTab","http://manhua.ali213.net/*","http://new.comicvip.com/*","http://comic.sfacg.com/*","http://tel.dm5.com/*"],
     "content_security_policy": "script-src 'self' https://*.google-analytics.com; object-src 'self'",
     "page_action":{
         "default_icon":"img/comics-16.png",
         "default_title":"Comics Scroller"
     },
-    "web_accessible_resources": [ "js/*.js", "css/*.css", "img/*.png" ]
+    "web_accessible_resources":["js/*.js","css/*.css"]
 }
