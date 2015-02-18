@@ -1,10 +1,10 @@
 {
     "name":"Comics Scroller",
-    "version":"1.0.3",
+    "version":"1.0.4",
 
     "manifest_version":2,
 
-    "description":"an extention giving you a better reading experience on website.",
+    "description":"Comics Scroller is an extention giving you a better reading experience on website.",
 
     "icons":{
         "16":"img/comics-16.png",
