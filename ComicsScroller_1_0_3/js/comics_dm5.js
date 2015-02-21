@@ -41,7 +41,7 @@ document.onreadystatechange = function () {
 	    	update: function () {
 	    		if(comics.nextURL!==""){
 		        	var req=new XMLHttpRequest();
-				    req.open("GET","http://tel.dm5.com"+comics.nextURL,true);
+				    req.open("GET","http://tel.dm5.com"+comics.nextURL_tmp,true);
 				    req.responseType="document";
 				    req.onload=function(){
 				      // console.log(req.response);
@@ -86,8 +86,9 @@ document.onreadystatechange = function () {
 			          comics.chaptertxt.textContent=elem.getAttribute("data-title");  
 			        }
 			        if(elem.getAttribute("data-chapter")!==comics.chapterId){
-			          // console.log("set URL");	
+			          console.log("set URL");	
 			          comics.nextURL=comics.nextURL_tmp;
+			          console.log(comics.nextURL);
 			          comics.preURL=comics.preURL_tmp;
 			          comics.maxChapter=comics.maxChapter_tmp;
 			        }

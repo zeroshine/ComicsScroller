@@ -55,7 +55,7 @@
         if(comics.chaptertxt.textContent!==elem.getAttribute("data-title")){
           comics.chaptertxt.textContent=elem.getAttribute("data-title");  
         }
-        if(elem.getAttribute("data-num")==comics.chapterID){
+        if(elem.getAttribute("data-chapter")!==comics.chapterID){
           comics.nextURL=comics.nextURL_tmp;
           comics.preURL=comics.preURL_tmp;
           comics.maxChapter=comics.maxChapter_tmp;

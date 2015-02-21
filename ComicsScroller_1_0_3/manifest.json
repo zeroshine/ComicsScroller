@@ -1,8 +1,8 @@
 {
     "name":"Comics Scroller",
-    "version":"1.0.3",
+    "version":"1.0.5",
     "manifest_version":2,
-    "description":"an extention giving you a better reading experience on website.",
+    "description":"Comics Scroller is an extention giving you a better reading experience on china comics website.",
     "icons":{
         "16":"img/comics-16.png",
         "48":"img/comics-48.png",
