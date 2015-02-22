@@ -62,7 +62,7 @@ document.onreadystatechange = function () {
 	    	update: function () {
 	    		if(comics.nextURL!==""){
 		        	var req=new XMLHttpRequest();
-				    req.open("GET",comics.nextURL,true);
+				    req.open("GET",comics.nextURL_tmp,true);
 				    req.responseType="document";
 				    req.onload=function(){
 				      // console.log(req.response);
