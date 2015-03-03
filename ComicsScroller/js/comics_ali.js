@@ -13,16 +13,13 @@ document.onreadystatechange = function () {
 			comics.chapterId=currentchapter.toString();
 			if(comics.nextURL_tmp=="javascript:void(0);"){
 				comics.maxChapter=comics.chapterId;
-				comics.nextURL_tmp="";
 			}
 			if(comics.preURL_tmp=="javascript:void(0);"){
-				comics.preURL_tmp="";
 				comics.minChapter_tmp=comics.chapterId;
 			}
 
 			var img_domain='';
 			comics.pageMax=pages;
-			comics.chaptertxt.textContent=comics.titleInfor+" 第 1/"+comics.pageMax+"頁";
 			var verifystr=/http\:\/\/manhua.ali213.net\/comic\/\d*\/(\d*).html/.exec(doc.URL)[1];
 			if (verifystr>144681){
 				img_domain="http://mhimg1.ali213.net";
@@ -40,6 +37,7 @@ document.onreadystatechange = function () {
 		
 		comics.createItem();
 		comics.setImages(document);
+		comics.chaptertxt.textContent=comics.titleInfor+" 第 1/"+comics.pageMax+"頁";
 		comics.preURL=comics.preURL_tmp;
 		comics.nextURL=comics.nextURL_tmp;
 		// console.log("nextURL " +comics.nextURL);
@@ -58,7 +56,7 @@ document.onreadystatechange = function () {
 	    	throttle: 100,
 	    	unload: false,
 	    	update: function () {
-	    		if(comics.nextURL!==""&&comics.nextURL!=="javascript:void(0);"){
+	    		if(comics.maxChapter==comics.chapterId){
 		        	var req=new XMLHttpRequest();
 				    req.open("GET",comics.nextURL_tmp,true);
 				    req.responseType="document";

@@ -55,23 +55,20 @@
         if(comics.chaptertxt.textContent!==elem.getAttribute("data-title")){
           comics.chaptertxt.textContent=elem.getAttribute("data-title");  
         }
-        if(elem.getAttribute("data-chapter")!==comics.chapterID){
-          comics.nextURL=comics.nextURL_tmp;
-          comics.preURL=comics.preURL_tmp;
-          comics.maxChapter=comics.maxChapter_tmp;
-          comics.minChapter=comics.minChapter_tmp;
-        }
-        // console.log(parseInt(elem.getAttribute("data-chapter")));
-        // console.log(comics.maxChapter);
-        if(elem.getAttribute("data-chapter")==comics.maxChapter){
-          comics.nextChapter.style.display="none";
-        }else{
-          comics.nextChapter.style.display="inline-block";
-        }
-        if(elem.getAttribute("data-chapter")==comics.minChapter){
-          comics.preChapter.style.display="none";
-        }else{
-          comics.preChapter.style.display="inline-block";
+        if(elem.getAttribute("data-chapter")!==comics.chapterIdInView){
+          comics.nextURL=elem.getAttribute("data-nextURL");
+          comics.preURL=elem.getAttribute("data-preURL");
+          comics.chapterIdInView=elem.getAttribute("data-chapter");
+          if(elem.getAttribute("data-chapter")==comics.maxChapter){
+            comics.nextChapter.style.display="none";
+          }else{
+            comics.nextChapter.style.display="inline-block";
+          }
+          if(elem.getAttribute("data-chapter")==comics.minChapter){
+            comics.preChapter.style.display="none";
+          }else{
+            comics.preChapter.style.display="inline-block";
+          }
         }
         return;
       }

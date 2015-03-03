@@ -73,6 +73,8 @@ comics.appendImage=function(){
 				img.setAttribute("data-title",comics.titleInfor+" 第"+(i+1)+"/"+comics.pageMax+"頁");
 				img.setAttribute("data-chapter",comics.chapterId);
 				img.setAttribute("data-pageMax",comics.pageMax);
+				img.setAttribute("data-nextURL",comics.nextURL_tmp);
+				img.setAttribute("data-preURL",comics.preURL_tmp);
 				if(comics.setMaxHeight||localStorage["mode"]=="page_high"){
 					img.style.maxHeight="92vh";
 				}
@@ -81,3 +83,4 @@ comics.appendImage=function(){
 				comics.panel.appendChild(img);
 			}
 };
+comics.chapterIdInView="";

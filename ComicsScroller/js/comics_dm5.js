@@ -8,13 +8,11 @@ document.onreadystatechange = function () {
 			eval(script1);
 			comics.titleInfor=DM5_CTITLE.toString();
 			comics.pageMax=DM5_IMAGE_COUNT;
-			comics.chaptertxt.textContent=comics.titleInfor+"  第1/"+comics.pageMax+"頁";
-			var scriptURL=doc.evaluate("/html/head/script[10]",doc,null,XPathResult.ANY_TYPE,null).iterateNext().getAttribute('src');
 			comics.chapterId=DM5_CID.toString();
+			var scriptURL=doc.evaluate("/html/head/script[10]",doc,null,XPathResult.ANY_TYPE,null).iterateNext().getAttribute('src');
 			var nextURLnode=doc.evaluate("//*[@id=\"index_right\"]/div[2]/div[2]/span[2]/a",doc,null,XPathResult.ANY_TYPE,null).iterateNext();
 			if(nextURLnode==null){
-				comics.nextURL_tmp="";
-				comics.maxChapter_tmp=comics.chapterId;	
+				comics.maxChapter=comics.chapterId;	
 			}else{
 				comics.nextURL_tmp=nextURLnode.getAttribute('href');
 			}
@@ -29,7 +27,8 @@ document.onreadystatechange = function () {
 		comics.createItem();
 		comics.setImages(document);
 		comics.nextURL=comics.nextURL_tmp;
-		if(comics.nextURL==""){
+		comics.chaptertxt.textContent=comics.titleInfor+"  第1/"+comics.pageMax+"頁";
+		if(comics.chapterId==comics.maxChapter){
 			comics.maxChapter=comics.chapterId;
 			comics.nextChapter.style.display="none";
 		}
@@ -39,7 +38,8 @@ document.onreadystatechange = function () {
 	    	throttle: 100,
 	    	unload: false,
 	    	update: function () {
-	    		if(comics.nextURL!==""){
+	    		// console.log("chapterInview "+comics.chapterId);
+	    		if(comics.chapterId!==comics.maxChapter){
 		        	var req=new XMLHttpRequest();
 				    req.open("GET","http://tel.dm5.com"+comics.nextURL_tmp,true);
 				    req.responseType="document";
@@ -81,23 +81,20 @@ document.onreadystatechange = function () {
 			    for (var i = 0; i < nodes.length; i++) {
 			      var elem=nodes[i];
 			      if(echo.checkView(elem, oview)){
-			      	// console.log("elem :"+elem.getAttribute("data-chapter")+"  "+comics.chapterId);
+			      	// console.log("elem chapterId inview :"+elem.getAttribute("data-chapter")+"  chapterInview "+comics.chapterId);
 			        if(comics.chaptertxt.textContent!==elem.getAttribute("data-title")){
 			          comics.chaptertxt.textContent=elem.getAttribute("data-title");  
 			        }
-			        if(elem.getAttribute("data-chapter")!==comics.chapterId){
-			          console.log("set URL");	
-			          comics.nextURL=comics.nextURL_tmp;
-			          console.log(comics.nextURL);
-			          comics.preURL=comics.preURL_tmp;
-			          comics.maxChapter=comics.maxChapter_tmp;
-			        }
-			        // console.log("maxChapter "+comics.maxChapter);
-			        if(elem.getAttribute("data-chapter")==comics.maxChapter){
-			          comics.nextChapter.style.display="none";
-			        }else{
-			          comics.nextChapter.style.display="inline-block";
-			        }
+			        if(elem.getAttribute("data-chapter")!==comics.chapterIdInView){
+				        comics.nextURL=elem.getAttribute("data-nextURL");
+				        comics.preURL=elem.getAttribute("data-preURL");
+				        comics.chapterIdInView=elem.getAttribute("data-chapter");
+				        if(elem.getAttribute("data-chapter")==comics.maxChapter){
+				        	comics.nextChapter.style.display="none";
+				        }else{
+				            comics.nextChapter.style.display="inline-block";
+				        }
+				    }
 			        return;
 			      }
 			    }

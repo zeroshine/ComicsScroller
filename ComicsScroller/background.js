@@ -12,7 +12,7 @@ var addIcon = function(tabId,changeInfo,tab){
 	var urlRegEX_ali=/http\:\/\/manhua\.ali213\.net\/comic\/(\d*)\/(\d*)\.html/;
 	var urlRegEX_8comics=/http\:\/\/new\.comicvip\.com\/show\/.*-\d*.html\?ch=\d*/;
 	var urlRegEX_sf=/http\:\/\/comic\.sfacg\.com\/HTML\/\w*\/\w*\//;
-	var urlRegEX_dm5=/http\:\/\/tel\.dm5\.com\/m(\d*)\//;
+	var urlRegEX_dm5=/http\:\/\/(www||tel)\.dm5\.com\/m(\d*)\//;
 	if(urlRegEX_ali.test(tab.url)&&changeInfo.status=="loading"){
 		console.log("ali fired");
 		chrome.pageAction.show(tabId);

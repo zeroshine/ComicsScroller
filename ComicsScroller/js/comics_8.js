@@ -9,14 +9,9 @@ document.onreadystatechange = function () {
 			comics.minChapter="1";
 			if(parseInt(doc.URL.split("=")[1])>1){
 				comics.preURL_tmp=doc.URL.split("=")[0]+"="+(parseInt(doc.URL.split("=")[1])-1);
-			}else{
-				comics.preURL_tmp="";
 			}
-
 			if(parseInt(doc.URL.split("=")[1])<comics.maxChapter){
 				comics.nextURL_tmp=doc.URL.split("=")[0]+"="+(parseInt(doc.URL.split("=")[1])+1);
-			}else{
-				comics.nextURL_tmp="";
 			}
 			
 			var ch = /.*ch\=(.*)/.exec(doc.URL)[1];
@@ -84,11 +79,10 @@ document.onreadystatechange = function () {
 			comics.images=img;
 			comics.chapterId=ch;
 			comics.titleInfor=titlename+"  /  "+"第"+comics.chapterId+"話 ";
-			comics.chaptertxt.textContent=comics.titleInfor+"第1/"+comics.pageMax+"頁";
 		};		
-		
 		comics.createItem();
 		comics.setImages(document);
+		comics.chaptertxt.textContent=comics.titleInfor+"第1/"+comics.pageMax+"頁";
 		comics.preURL=comics.preURL_tmp;
 		comics.nextURL=comics.nextURL_tmp;
 		if(comics.nextURL==""){
@@ -105,7 +99,7 @@ document.onreadystatechange = function () {
 	    	throttle: 100,
 	    	unload: false,
 	    	update: function () {
-	    		if(comics.nextURL!==""){
+	    		if(comics.chapterId!==comics.maxChapter){
 	    			var req=new XMLHttpRequest();
 				    req.open("GET",comics.nextURL_tmp,true);
 				    req.responseType="document";

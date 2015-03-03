@@ -8,18 +8,18 @@ document.onreadystatechange = function () {
 			comics.chapterId=chapternum;
 			var req = new XMLHttpRequest;
 			req.open("GET",scriptURL);
-		req.onload=function(){
+			req.onload=function(){
 				eval(req.response);
 				comics.titleInfor=comicName+" / 第"+comics.chapterId+"話 ";		
 				comics.nextURL_tmp=nextVolume;
 				comics.preURL_tmp=preVolume;	
 				if(nextVolume=="javascript:alert('已经是当前连载的最后一回!');" || nextVolume=="#"){
 					comics.nextURL_tmp="";
-					comics.maxChapter_tmp=comics.chapterId;	
+					comics.maxChapter=comics.chapterId;	
 				}
 				if(preVolume=="javascript:alert('已经是当前连载的最初回!');" || preVolume=="#"){
 					comics.preURL_tmp="";
-					comics.minChapter_tmp=comics.chapterId;	
+					comics.minChapter=comics.chapterId;	
 				}
 				var name = "picHost=";
 				var picHost="";
@@ -37,16 +37,8 @@ document.onreadystatechange = function () {
 					img[i]=picHost+picAy[i];
 				}
 				comics.images=img;
-				comics.preURL=comics.preURL_tmp;
-				comics.nextURL=comics.nextURL_tmp;
-				if(comics.nextURL==""){
-					comics.maxChapter=comics.chapterId;
-					comics.nextChapter.style.display="none";
-				}
-				if(comics.preURL==""){
-					comics.minChapter=comics.chapterId;
-					comics.preChapter.style.display="none";
-				}
+				// comics.preURL=comics.preURL_tmp;
+				// comics.nextURL=comics.nextURL_tmp;
 				comics.appendImage();
 			};
 			req.send(); 
@@ -60,7 +52,7 @@ document.onreadystatechange = function () {
 	    	throttle: 100,
 	    	unload: false,
 	    	update: function () {
-	    		if(comics.nextURL!==""){
+	    		if(comics.maxChapter!==comics.chapterId){
 		        	var req=new XMLHttpRequest();
 				    req.open("GET",comics.nextURL_tmp,true);
 				    req.responseType="document";
