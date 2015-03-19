@@ -12,7 +12,8 @@ var addIcon = function(tabId,changeInfo,tab){
 	var urlRegEX_ali=/http\:\/\/manhua\.ali213\.net\/comic\/(\d*)\/(\d*)\.html/;
 	var urlRegEX_8comics=/http\:\/\/new\.comicvip\.com\/show\/.*-\d*.html\?ch=\d*/;
 	var urlRegEX_sf=/http\:\/\/comic\.sfacg\.com\/HTML\/\w*\/\w*\//;
-	var urlRegEX_dm5=/http\:\/\/(www||tel)\.dm5\.com\/m(\d*)\//;
+	var urlRegEX_manben=/http\:\/\/www\.manben\.com\/m\d*\//;
+	var urlRegEX_dm5=/http\:\/\/(tel||www)\.dm5\.com\/m\d*\//;
 	if(urlRegEX_ali.test(tab.url)&&changeInfo.status=="loading"){
 		console.log("ali fired");
 		chrome.pageAction.show(tabId);
@@ -37,7 +38,7 @@ var addIcon = function(tabId,changeInfo,tab){
 		chrome.tabs.executeScript(null,{file:"js/comics_sf.js",runAt:"document_start"});
 		chrome.tabs.insertCSS(null,{file:"css/comics.css",runAt:"document_start"});
 		ga('send', 'event', "sf view");
-	}else if(urlRegEX_dm5.test(tab.url)&&changeInfo.status=="loading"){
+	}else if((urlRegEX_dm5.test(tab.url)||urlRegEX_manben.test(tab.url))&&changeInfo.status=="loading"){
 		console.log("dm5 fired");
 		chrome.pageAction.show(tabId);
 		chrome.tabs.executeScript(null,{file:"js/echo.js",runAt:"document_start"});

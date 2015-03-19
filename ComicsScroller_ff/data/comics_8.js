@@ -95,6 +95,7 @@ comics.setImages=function(doc){
 };		
 document.onreadystatechange = function () {
 	if (document.readyState == "interactive") {		
+		
 		comics.createItem();
 		comics.setImages(document);
 		comics.chaptertxt.textContent=comics.titleInfor+"第1/"+comics.pageMax+"頁";

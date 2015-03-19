@@ -1,0 +1,14 @@
+{
+  "name": "comics-scroller",
+  "title": "Comics Scroller",
+  "id": "jid1-yYyM4yHmqvnHmQ",
+  "description": "Comics Scroller is an add-on giving you a better reading experience on china comics website.",
+  "permissions": {
+    "cross-domain-content": ["http://manhua.ali213.net/*","http://new.comicvip.com/*","http://comic.sfacg.com/*","http://tel.dm5.com/*","http://www.dm5.com/*"]
+  },
+  "author": "Guan-Lin Chen",
+  "license": "MPL 2.0",
+  "version": "1.1.4",
+  "icon" : "./data/comics-64.png",
+  "icon64" : "./data/comics-64.png"
+}

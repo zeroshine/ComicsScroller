@@ -1,6 +1,10 @@
-
-html, body {
+html,body {
+	/*margin: 0px;*/
+	margin-left:0px;
+	margin-top:0px;  
 	overflow: auto ;
+	height: 100%;
+	width:100%;
 }
 
 #comics_titlebar{
@@ -48,6 +52,7 @@ html, body {
 	background-color: #357ae8;
 	display: inline-block;
 	cursor: pointer;
+	vertical-align: top;
 }
 
 
@@ -56,6 +61,7 @@ html, body {
 	padding-bottom: 40px;
 	background-color: #2a2a2a;
 	color: #C0c0c0;
+	min-height: 100%;
 }
 
 .comics_img{
