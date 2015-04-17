@@ -7,10 +7,11 @@ comics.setImages=function(doc){
 	var req = new XMLHttpRequest;
 	req.open("GET",scriptURL);
 	req.onload=function(){
-		eval(req.response);
-		comics.titleInfor=comicName+" / 第"+comics.chapterId+"話 ";		
-		comics.nextURL_tmp=nextVolume;
-		comics.preURL_tmp=preVolume;	
+		// eval(req.response);
+		( new Function(req.response+"comics.titleInfor=comicName+\" / 第\"+comics.chapterId+\"話 \";comics.nextURL_tmp=nextVolume;comics.preURL_tmp=preVolume;"))();
+		// comics.titleInfor=comicName+" / 第"+comics.chapterId+"話 ";		
+		// comics.nextURL_tmp=nextVolume;
+		// comics.preURL_tmp=preVolume;	
 		if(nextVolume=="javascript:alert('已经是当前连载的最后一回!');" || nextVolume=="#"){
 			comics.nextURL_tmp="";
 			comics.maxChapter=comics.chapterId;	
@@ -19,16 +20,16 @@ comics.setImages=function(doc){
 			comics.preURL_tmp="";
 			comics.minChapter=comics.chapterId;	
 		}
-		var name = "picHost=";
+		// var name = "picHost=";
 		var picHost="";
-    	var ca = document.cookie.split(';');
-    	for(var i=0; i<ca.length; i++) {
-        	var c = ca[i];
-        	while (c.charAt(0)==' ') c = c.substring(1);
-        	if (c.indexOf(name) == 0) picHost= c.substring(name.length,c.length);
-    	}
-    	picHost = picHost==null?0:picHost;
-		picHost = hosts[picHost];
+    	// var ca = document.cookie.split(';');
+    	// for(var i=0; i<ca.length; i++) {
+     //    	var c = ca[i];
+     //    	while (c.charAt(0)==' ') c = c.substring(1);
+     //    	if (c.indexOf(name) == 0) picHost= c.substring(name.length,c.length);
+    	// }
+    	// picHost = picHost==null?0:picHost;
+		picHost = hosts[0];
     	var img =[]; 
 		comics.pageMax=picCount;
 		for(var i=0;i<comics.pageMax;i++){

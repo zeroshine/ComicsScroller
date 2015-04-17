@@ -3,10 +3,11 @@ console.log("reader starts");
 comics.setImages=function(doc){
 	comics.preChapter.style.display="none";
 	var script1=/<script type\=\"text\/javascript\">(.*)reseturl/.exec(doc.head.innerHTML)[1];
-	eval(script1);
-	comics.titleInfor=DM5_CTITLE.toString();
-	comics.pageMax=DM5_IMAGE_COUNT;
-	comics.chapterId=DM5_CID.toString();
+	( new Function(script1+"comics.titleInfor=DM5_CTITLE.toString();comics.pageMax=DM5_IMAGE_COUNT;comics.chapterId=DM5_CID.toString();" ) )();  
+	// eval(script1);
+	// comics.titleInfor=DM5_CTITLE.toString();
+	// comics.pageMax=DM5_IMAGE_COUNT;
+	// comics.chapterId=DM5_CID.toString();
 	var scriptURL=doc.evaluate("/html/head/script[10]",doc,null,XPathResult.ANY_TYPE,null).iterateNext().getAttribute('src');
 	var nextURLnode=doc.evaluate("//*[@id=\"index_right\"]/div[2]/div[2]/span[2]/a",doc,null,XPathResult.ANY_TYPE,null).iterateNext();
 	if(nextURLnode==null){
@@ -42,22 +43,24 @@ comics.setImages=function(doc){
 		imgRender: function(elem){
 			return (function(){
 						var req=new XMLHttpRequest();
-			req.open("GET",elem.getAttribute("data-echo"),true);
-			req.onload=function(){
-					return (function(){
-						eval(req.response);
-						// console.log(req.response);
-						elem.src=d[0];
-						// if (typeof (hd_c) != "undefined" && hd_c.length > 0) {
-		   	//           				elem.src=hd_c[0];
-		   	//       				}else{
-		   	//       					elem.src=d[0];
-		   	//       				}
-		             	elem.removeAttribute('data-echo');
-					})(elem,req);
-			};
-			req.send();
-			})(elem);
+						req.open("GET",elem.getAttribute("data-echo"),true);
+						req.onload=function(){
+								return (function(){
+									// eval(req.response);
+									console.log(req.response);
+									( new Function( req.response,"comics.hd_c=hd_c;comics.d=d;" ) )(); 
+									// console.log(req.response);
+									// elem.src=d[0];
+									if (typeof (comics.hd_c) != "undefined" && comics.hd_c.length > 0) {
+								   	    elem.src=comics.hd_c[0];
+					  				}else{
+						   	      		elem.src=comics.d[0];
+					  				}
+					             	elem.removeAttribute('data-echo');
+								})(elem,req);
+						};
+						req.send();
+						})(elem);
 		},
 		setInViewInfor: function(){
 			var nodes = document.querySelectorAll('img[data-title]');    
