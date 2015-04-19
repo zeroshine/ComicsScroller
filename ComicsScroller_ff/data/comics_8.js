@@ -2,8 +2,9 @@ console.log("reader starts");
 // var comics=comics || { };
 comics.setImages=function(doc){
 	var script=doc.evaluate("//*[@id=\"Form1\"]/script/text()",doc,null,XPathResult.ANY_TYPE, null).iterateNext().textContent.split('eval')[0];
-	eval(script);
-	comics.maxChapter=chs.toString();
+	// eval(script);
+	( new Function(script+"comics.maxChapter=chs.toString();"))();
+	// comics.maxChapter=chs.toString();
 	comics.minChapter="1";
 	if(parseInt(doc.URL.split("=")[1])>1){
 		comics.preURL_tmp=doc.URL.split("=")[0]+"="+(parseInt(doc.URL.split("=")[1])-1);

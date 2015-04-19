@@ -1,0 +1,82 @@
+/* material-ui */
+@import "node_modules/material-ui/src/less/scaffolding.less";
+
+//Define a custom less file to override any variables defined in scaffolding.less
+@import "custom-overrides.less";
+
+@import "node_modules/material-ui/src/less/components.less";
+
+@menu-item-selected-text-color: @cyan-700;
+
+//Your custom app styles
+html,body{
+  margin: 0px;
+  height:100%;
+}
+
+.logo {
+  cursor: pointer;
+  .mui-font-style-headline;
+  .mui-text-full-white;
+  line-height: @app-bar-height;
+  .mui-font-weight-light;
+  background-color: @primary-1-color;
+  padding-left: @desktop-gutter;
+  padding-top: 0;
+  margin-bottom: @desktop-gutter-mini;
+}
+
+#comics_panel{
+  padding-top: 64px;
+  display: block; 
+  // margin-left:15%; 
+  background-color: #2a2a2a;
+  // color: #C0c0c0;
+  min-height: 100vh;
+}
+
+.comics_img{
+  display:block;
+  background: none ;
+  max-width: 100%;
+  font-family: Arial, sans-serif;
+  font-size: 30px;
+  text-align: center;
+  /*max-height: 92vh;*/
+  margin: auto;
+  /*margin-top: 40px;*/
+  padding-top: 10px;
+  padding-bottom: 50px;
+  background: #2a2a2a url(http://i.imgur.com/msdpdQm.gif) no-repeat center center;
+  /*vertical-align: middle;*/
+
+}
+
+
+.mui-left-nav-menu {
+  overflow-y: scroll;
+}
+
+.mui-menu-item {
+  &.mui-is-marked{
+    color: @grey-500;
+    &.mui-is-selected{
+      color: @menu-item-selected-text-color;
+    }
+  }
+
+}
+
+.chapter-menu{
+  position: fixed;
+  float: left;
+  height: 100vh;
+  padding-top: 63px;
+  width:15%;  
+  z-index: 1;
+  .mui-menu{
+    width:100%;
+    height:100%;
+    overflow-y: scroll;
+  } 
+}
