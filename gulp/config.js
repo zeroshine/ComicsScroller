@@ -28,20 +28,23 @@ module.exports = {
     bundleConfigs: [{
       entries: src + '/app/app_sf.jsx',
       dest: dest+'/js',
-      outputName: 'app_sf.js'
+      // outputName: 'app_sf.js'
+      outputName: 'app_sf_min.js'
     },{
-      entries: src + '/app/app_ali.jsx',
-      dest: dest+'/js',
-      outputName: 'app_ali.js'
-    },{
+    //   entries: src + '/app/app_ali.jsx',
+    //   dest: dest+'/js',
+    //   // outputName: 'app_ali.js'
+    //   outputName: 'app_ali_min.js'
+    // },{
       entries: src + '/app/app_8.jsx',
       dest: dest+'/js',
-      outputName: 'app_8.js'
+      // outputName: 'app_8.js'
+      outputName: 'app_8_min.js'
     },{
       entries: src + '/app/app_dm5.jsx',
       dest: dest+'/js',
-      outputName: 'app_dm5.js'
-
+      // outputName: 'app_dm5.js'
+      outputName: 'app_dm5_min.js'
     }]
   }
 };

@@ -18,17 +18,20 @@ var script_comics = document.createElement("script");
 script_comics.src = "js/comics.js";
 var script_main = document.createElement("script");
 switch(site){
-	case "ali":
-		script_main.src="js/app_ali.js";
-		break;
+	// case "ali":
+	// 	script_main.src="js/app_ali.js";
+	// 	break;
 	case "8comics":
-		script_main.src="js/app_8.js";
+		script_main.src="js/app_8_min.js";
+		// script_main.src="js/app_8.js";
 		break;
 	case "sf":
-		script_main.src="js/app_sf.js";
+		script_main.src="js/app_sf_min.js";
+		// script_main.src="js/app_sf.js";
 		break;
 	case "dm5":
-		script_main.src="js/app_dm5.js";
+		script_main.src="js/app_dm5_min.js";
+		// script_main.src="js/app_dm5.js";
 		break;
 }
 

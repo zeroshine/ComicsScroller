@@ -1,6 +1,6 @@
 {
     "name":"Comics Scroller",
-    "version":"2.0.0",
+    "version":"2.0.1",
     "manifest_version":2,
     "description":"Comics Scroller is an extention giving you a better reading experience on china comics website.",
     "icons":{
@@ -13,7 +13,7 @@
         "page": "background.html",
         "persistence":false
     },
-    "permissions":["webRequest","webRequestBlocking","cookies","storage","tabs","activeTab","http://www.158c.com/*","http://new.comicvip.com/*","http://www.comicvip.com/*","http://comic.sfacg.com/*","http://www.manben.com/*","http://tel.dm5.com/*","http://www.dm5.com/*"],
+    "permissions":["webRequest","webRequestBlocking","cookies","storage","tabs","activeTab","http://new.comicvip.com/*","http://www.comicvip.com/*","http://comic.sfacg.com/*","http://www.manben.com/*","http://tel.dm5.com/*","http://www.dm5.com/*"],
     "content_security_policy": "script-src 'self' 'unsafe-eval' https://*.google-analytics.com https://ajax.googleapis.com ; object-src 'self'",
     "page_action":{
         "default_icon":"img/comics-16.png",

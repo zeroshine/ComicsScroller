@@ -14,7 +14,7 @@ var chapterStore = assign({}, EventEmitter.prototype, {
     this.emit("update");
   },
   emitScroll: function(text,pageratio){
-    console.log(text,pageratio );
+    // console.log(text,pageratio );
     this.emit("scroll",text,pageratio);
   }
 });

@@ -14,17 +14,17 @@ var addIcon = function(tabId,changeInfo,tab){
 	var urlRegEX_sf=/http\:\/\/comic\.sfacg\.com(\/HTML\/\w*\/\w*\/.*)/;
 	var urlRegEX_manben=/http\:\/\/www\.manben\.com(\/m\d*\/)/;
 	var urlRegEX_dm5=/http\:\/\/(tel||www)\.dm5\.com(\/m\d*\/)/;
-	if(urlRegEX_ali.test(tab.url)&&changeInfo.status=="loading"){
-		console.log("ali fired");
-		var chapter=urlRegEX_ali.exec(tab.url)[1];
-		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"?site=ali&chapter="+chapter});
+	// if(urlRegEX_ali.test(tab.url)){
+		// console.log("ali fired");
+		// var chapter=urlRegEX_ali.exec(tab.url)[1];
+		// chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"?site=ali&chapter="+chapter});
 		// chrome.pageAction.show(tabId);
 		// chrome.tabs.executeScript(null,{file:"js/echo.js",runAt:"document_start"});
 		// chrome.tabs.executeScript(null,{file:"js/comics.js",runAt:"document_start"});
 		// chrome.tabs.executeScript(null,{file:"js/comics_ali.js",runAt:"document_start"});
 		// chrome.tabs.insertCSS(null,{file:"css/comics.css",runAt:"document_start"});
-		ga('send', 'event', "ali view");
-	}else if(urlRegEX_8comics.test(tab.url)&&changeInfo.status=="loading"){
+		// ga('send', 'event', "ali view");
+	if(urlRegEX_8comics.test(tab.url)){
 		console.log("8 comics fired");
 		var chapter=urlRegEX_8comics.exec(tab.url)[1];
 		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"?site=8comics&chapter="+chapter});
@@ -34,7 +34,7 @@ var addIcon = function(tabId,changeInfo,tab){
 		// chrome.tabs.executeScript(null,{file:"js/comics_8.js",runAt:"document_start"});
 		// chrome.tabs.insertCSS(null,{file:"css/comics.css",runAt:"document_start"});
 		ga('send', 'event', "8comics view");
-	}else if(urlRegEX_sf.test(tab.url)&&changeInfo.status=="loading"){
+	}else if(urlRegEX_sf.test(tab.url)){
 		console.log("sf fired");
 		var chapter=urlRegEX_sf.exec(tab.url)[1];
 		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"?site=sf&chapter="+chapter});
@@ -44,7 +44,7 @@ var addIcon = function(tabId,changeInfo,tab){
 		// chrome.tabs.executeScript(null,{file:"js/comics_sf.js",runAt:"document_start"});
 		// chrome.tabs.insertCSS(null,{file:"css/comics.css",runAt:"document_start"});
 		ga('send', 'event', "sf view");
-	}else if((urlRegEX_dm5.test(tab.url)||urlRegEX_manben.test(tab.url))&&changeInfo.status=="loading"){
+	}else if((urlRegEX_dm5.test(tab.url)||urlRegEX_manben.test(tab.url))){
 		console.log("dm5 fired");
 		var chapter=""
 		if(urlRegEX_dm5.test(tab.url)){

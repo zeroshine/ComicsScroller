@@ -16,10 +16,10 @@ var ChapterStore=require('../../store/chapterStore.js');
 var params_str=window.location.search.substring(1);
 var params=params_str.split('&');
 var site= /site\=(.*)/.exec(params[0])[1];
-var pageURL=/chapter\=(.*)\/(\w*)\/$/.exec(params[1])[1];   
+var pageURL=/chapter\=(\/HTML\/\w*\/)/.exec(params[1])[1];   
 var chapterURL=/chapter\=(.*)$/.exec(params[1])[1];  
 var lastIndex;
-var markedItems=[];
+var indexURL=Comics.baseURL+pageURL;
 // var obj={};
 // obj[params_str]=["/HTML/HH2/032/","/HTML/HH2/033/"];
 // chrome.storage.sync.set(obj,function(){console.log("save")});
@@ -36,7 +36,7 @@ var Main = React.createClass({
   componentDidMount: function() {
     // ChapterStore.addListener("update",this._updateChapter);
     ChapterStore.addListener("scroll",this._updateInfor);
-    chrome.storage.sync.get(params_str,function(items){
+    chrome.storage.sync.get(indexURL,function(items){
       this._getChapter(items);
     }.bind(this));
   },
@@ -62,7 +62,7 @@ var Main = React.createClass({
       menuItems[index].isMarked=true;
       this.markedItems.push(menuItems[index].payload);
       var obj={};
-      obj[params_str]=this.markedItems;
+      obj[indexURL]=this.markedItems;
       chrome.storage.sync.set(obj);
     }
     this.setState({menuItems:menuItems,selectedIndex:index,chapter:menuItems[index].text});
@@ -87,9 +87,10 @@ var Main = React.createClass({
 
   _getChapter: function(storeItem){
     // console.log(storeItem);
-    this.markedItems= (storeItem[params_str]===undefined)? [] : storeItem[params_str];    
-    console.log(this.markedItems);
+    this.markedItems= (storeItem[indexURL]===undefined)? [] : storeItem[indexURL];    
+    // console.log(this.markedItems);
     var creq=new XMLHttpRequest();
+    console.log(pageURL);
     creq.open("GET",Comics.baseURL+pageURL,true);
     creq.responseType="document";
     creq.withCredentials = true;
@@ -107,7 +108,7 @@ var Main = React.createClass({
           if(this.markedItems.indexOf(chapterURL)===-1){
             this.markedItems.push(chapterURL);
             var obj={};
-            obj[params_str]=this.markedItems;
+            obj[indexURL]=this.markedItems;
             chrome.storage.sync.set(obj);
           }
         }
@@ -184,7 +185,7 @@ var Main = React.createClass({
         menuItems[n].isMarked=true;
         this.markedItems.push(menuItems[n].payload);
         var obj={};
-        obj[params_str]=this.markedItems;
+        obj[indexURL]=this.markedItems;
         chrome.storage.sync.set(obj);
       }      
       this.setState({menuItems:menuItems,selectedIndex: n,chapter:this.state.menuItems[n].text});

@@ -19,6 +19,7 @@ var pageURL=/chapter\=.*-(\d*\.html)\?/.exec(params[1])[1];
 var chapterNum=/chapter\=.*\?ch\=(\d*)$/.exec(params[1])[1];
 var prefixURL=/chapter\=(.*\?ch\=)\d*$/.exec(params[1])[1];;  
 var lastIndex;
+var indexURL=Comics.pageURL+pageURL;
 
 var Main = React.createClass({
   
@@ -29,7 +30,7 @@ var Main = React.createClass({
   componentDidMount: function() {
     // ChapterStore.addListener("update",this._updateChapter);
     ChapterStore.addListener("scroll",this._updateInfor);
-    chrome.storage.sync.get(params_str,function(items){
+    chrome.storage.sync.get(indexURL,function(items){
       this._getChapter(items);
     }.bind(this));
   },
@@ -55,7 +56,7 @@ var Main = React.createClass({
       menuItems[index].isMarked=true;
       this.markedItems.push(menuItems[index].payload);
       var obj={};
-      obj[params_str]=this.markedItems;
+      obj[indexURL]=this.markedItems;
       chrome.storage.sync.set(obj);
     }   
     this.setState({menuItems:menuItems,selectedIndex:index,chapter:menuItems[index].text});
@@ -80,7 +81,7 @@ var Main = React.createClass({
 
   _getChapter: function(storeItem){
     console.log(Comics.pageURL+pageURL);    
-    this.markedItems= (storeItem[params_str]===undefined)? [] : storeItem[params_str];    
+    this.markedItems= (storeItem[indexURL]===undefined)? [] : storeItem[indexURL];    
     var creq=new XMLHttpRequest();
     creq.open("GET",Comics.pageURL+pageURL,true);
     creq.responseType="document";
@@ -99,11 +100,14 @@ var Main = React.createClass({
         index=0;
         item["isMarked"]=true;
         if(this.markedItems.indexOf(chapterNum)===-1){
-
+          this.markedItems.push(chapterNum);
           var obj={};
-          obj[params_str]=this.markedItems;
+          obj[indexURL]=this.markedItems;
           chrome.storage.sync.set(obj);
         }
+      }
+      if(this.markedItems.indexOf(item.payload)>=0){
+        item["isMarked"]=true;  
       }
       array.push(item);
       for(var i=nl.length-3;i>=0;--i){
@@ -111,13 +115,13 @@ var Main = React.createClass({
         item["payload"]=/cview\(\'.*-(\d*)\.html\',/.exec(nl[i].getAttribute("onclick"))[1];
         // console.log(item["payload"],chapterNum);
         if(item["payload"]===chapterNum){
-          console.log("match",i);
+          // console.log("match",i);
           index=nl.length-i-2;
           item["isMarked"]=true;
           if(this.markedItems.indexOf(chapterNum)===-1){
             this.markedItems.push(chapterNum);
             var obj={};
-            obj[params_str]=this.markedItems;
+            obj[indexURL]=this.markedItems;
             chrome.storage.sync.set(obj);
           }
         }
@@ -186,7 +190,7 @@ var Main = React.createClass({
         menuItems[n].isMarked=true;
         this.markedItems.push(menuItems[n].payload);
         var obj={};
-        obj[params_str]=this.markedItems;
+        obj[indexURL]=this.markedItems;
         chrome.storage.sync.set(obj);
       }      
       this.setState({menuItems:menuItems,selectedIndex: n,chapter:this.state.menuItems[n].text});
@@ -209,10 +213,7 @@ var Main = React.createClass({
         this._getImage(--lastIndex,prefixURL+this.state.menuItems[lastIndex].payload);
       }        
     }
-  }
-
-
-  
+  }  
 });
 
 module.exports = Main;

@@ -17,6 +17,7 @@ var site= /site\=(.*)/.exec(params[0])[1];
 var pageURL=/chapter\=(.*)\/(\w*)\/$/.exec(params[1])[1];   
 var chapterURL=/chapter\=(.*)$/.exec(params[1])[1];  
 var lastIndex;
+var indexURL="";
 // chrome.storage.sync.set({"test":"test"},function(){console.log("sync success")});
 // chrome.webRequest.onBeforeRequest.addListener(
 //         function(details) { console.log("request") },
@@ -28,7 +29,7 @@ handler = function(details) {
     blockingResponse = {};
   for (var i = 0, l = headers.length; i < l; ++i) {
     if (headers[i].name == 'Referer') {
-      headers[i].value = "http://your-url.com/";
+      headers[i].value = "http://www.manben.com/";
       isRefererSet = true;
       break;
     }
@@ -62,8 +63,10 @@ var Main = React.createClass({
     req.responseType="document";
     req.onload=function(){
       var doc=req.response;
-      var indexURL=doc.querySelector("body > div.view_hd > div.view_logo2.bai_lj > a:nth-child(3)").href;
-      chrome.storage.sync.get(params_str,function(items){
+      indexURL=doc.querySelector("#index_right > div.lan_kk2 > div:nth-child(1) > dl > dt.red_lj > a").href;
+      // console.log('index',indexURL);
+      chrome.storage.sync.get(indexURL,function(items){
+        console.log("store",items);
         this._getChapter(indexURL,items);
       }.bind(this)); 
     }.bind(this);
@@ -94,7 +97,7 @@ var Main = React.createClass({
       menuItems[index].isMarked=true;
       this.markedItems.push(menuItems[index].payload);
       var obj={};
-      obj[params_str]=this.markedItems;
+      obj[indexURL]=this.markedItems;
       chrome.storage.sync.set(obj);
     }
     this.setState({menuItems:menuItems,selectedIndex:index,chapter:menuItems[index].text});
@@ -118,7 +121,7 @@ var Main = React.createClass({
   },
 
   _getChapter: function(indexURL , storeItem){    
-    this.markedItems= (storeItem[params_str]===undefined)? [] : storeItem[params_str];    
+    this.markedItems= (storeItem[indexURL]===undefined)? [] : storeItem[indexURL];    
     var creq=new XMLHttpRequest();
     creq.open("GET",indexURL,true);
     console.log(indexURL);
@@ -127,6 +130,7 @@ var Main = React.createClass({
     creq.onload=function(){
       var doc=creq.response;
       var nl = Comics.getChapter(doc);
+      // console.log(nl);
       var array=[];
       var index=0;
       for(var i=0;i<nl.length;++i){
@@ -138,7 +142,7 @@ var Main = React.createClass({
           if(this.markedItems.indexOf(chapterURL)===-1){
             this.markedItems.push(chapterURL);
             var obj={};
-            obj[params_str]=this.markedItems;
+            obj[indexURL]=this.markedItems;
             chrome.storage.sync.set(obj);
           }
         }
@@ -152,6 +156,7 @@ var Main = React.createClass({
       if(index>0){
         Comics.setNextURL(array[index-1]["payload"]);  
       }
+      // console.log(index);
       this.setState({menuItems:array,selectedIndex:index,chapter:array[index].text,comicname:Comics.getTitleName(doc)});
       lastIndex=index;
       this._getImage(index,chapterURL);
@@ -222,7 +227,7 @@ var Main = React.createClass({
         menuItems[n].isMarked=true;
         this.markedItems.push(menuItems[n].payload);
         var obj={};
-        obj[params_str]=this.markedItems;
+        obj[indexURL]=this.markedItems;
         chrome.storage.sync.set(obj);
       }      
       this.setState({menuItems:menuItems,selectedIndex: n,chapter:this.state.menuItems[n].text});
