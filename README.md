@@ -3,11 +3,11 @@ ComicsScroller is a chrome extension which makes the comics website shows all im
 
 
 # Support Websites
-http://www.8comic.com/
-http://comic.sfacg.com/
-http://tel.dm5.com/
-http://www.dm5.com/
-http://www.manben.com/  
+http://www.8comic.com/  
+http://comic.sfacg.com/  
+http://tel.dm5.com/  
+http://www.dm5.com/  
+http://www.manben.com/    
 
 # Chrome Web Store
 https://chrome.google.com/webstore/detail/comics-scroller/mccpalfmlnjadfnojmphffidnbemnkec
