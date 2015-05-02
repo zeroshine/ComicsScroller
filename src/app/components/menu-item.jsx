@@ -2,7 +2,7 @@ var React = require('react');
 var Classable = require('../mixins/classable');
 var FontIcon = require('../font-icon');
 var Toggle = require('../toggle');
-
+var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 var Types = {
   LINK: 'LINK',
   SUBHEADER: 'SUBHEADER',
@@ -11,7 +11,7 @@ var Types = {
 
 var MenuItem = React.createClass({
 
-  mixins: [Classable],
+  mixins: [Classable,PureRenderMixin],
 
   propTypes: {
     index: React.PropTypes.number.isRequired,
@@ -41,6 +41,7 @@ var MenuItem = React.createClass({
 
   render: function() {
     var classes = this.getClasses('mui-menu-item', {
+      'mui-is-marked': this.props.isMarked,
       'mui-is-selected': this.props.selected,
       'mui-is-disabled': this.props.disabled
     });

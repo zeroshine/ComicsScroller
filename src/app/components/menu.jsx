@@ -37,7 +37,7 @@ var NestedMenuItem = React.createClass({
   },
 
   componentClickAway: function() {
-    this._closeNestedMenu();
+    this.setState({ open: false });
   },
 
   componentDidMount: function() {
@@ -55,7 +55,7 @@ var NestedMenuItem = React.createClass({
     });
 
     return (
-      <div className={classes} onMouseEnter={this._openNestedMenu} onMouseLeave={this._closeNestedMenu}>
+      <div className={classes}>
         <MenuItem index={this.props.index} disabled={this.props.disabled} iconRightClassName="muidocs-icon-custom-arrow-drop-right" onClick={this._onParentItemClick}>
           {this.props.text}
         </MenuItem>
@@ -72,36 +72,24 @@ var NestedMenuItem = React.createClass({
   },
 
   _positionNestedMenu: function() {
-    var el = React.findDOMNode(this),
-      nestedMenu = React.findDOMNode(this.refs.nestedMenu);
+    var el = this.getDOMNode(),
+      nestedMenu = this.refs.nestedMenu.getDOMNode();
 
     nestedMenu.style.left = el.offsetWidth + 'px';
   },
-  
-  _openNestedMenu: function() {
-    if (!this.props.disabled) this.setState({ open: true });
-  },
-  
-  _closeNestedMenu: function() {
-    this.setState({ open: false });
-  },
-  
-  _toggleNestedMenu: function() {
-    if (!this.props.disabled) this.setState({ open: !this.state.open });
-  },
 
   _onParentItemClick: function() {
-    this._toggleNestedMenu();
+    if (!this.props.disabled) this.setState({ open: !this.state.open });
   },
 
   _onMenuItemClick: function(e, index, menuItem) {
     if (this.props.onItemClick) this.props.onItemClick(e, index, menuItem);
-    this._closeNestedMenu();
+    this.setState({ open: false });
   },
   
   _onMenuItemTap: function(e, index, menuItem) {
     if (this.props.onItemTap) this.props.onItemTap(e, index, menuItem);
-    this._closeNestedMenu();
+    this.setState({ open: false });
   }
 
 });
@@ -140,9 +128,9 @@ var Menu = React.createClass({
   },
 
   componentDidMount: function() {
-    var el = React.findDOMNode(this);
+    var el = this.getDOMNode();
 
-    //Set the menu width
+    //Set the menu with
     this._setKeyWidth(el);
 
     //Save the initial menu height for later
@@ -154,6 +142,7 @@ var Menu = React.createClass({
 
   componentDidUpdate: function(prevProps, prevState) {
     if (this.props.visible !== prevProps.visible) this._renderVisibility();
+    console.log("Update menu",this.props.menuItems);
   },
 
   render: function() {
@@ -174,16 +163,16 @@ var Menu = React.createClass({
       menuItem,
       itemComponent,
       isSelected,
-      isDisabled;
-
+      isDisabled,
+      isMarked;
     //This array is used to keep track of all nested menu refs
     this._nestedChildren = [];
-
+    console.log("test");
     for (var i=0; i < this.props.menuItems.length; i++) {
       menuItem = this.props.menuItems[i];
       isSelected = i === this.props.selectedIndex;
       isDisabled = (menuItem.disabled === undefined) ? false : menuItem.disabled;
-
+      isMarked = (menuItem.isMarked === undefined) ? false :menuItem.isMarked;
       var {
         icon,
         data,
@@ -246,6 +235,7 @@ var Menu = React.createClass({
               number={menuItem.number}
               toggle={menuItem.toggle}
               disabled={isDisabled}
+              isMarked={isMarked}
               onClick={this._onItemClick}
               onTouchTap={this._onItemTap}>
               {menuItem.text}
@@ -273,8 +263,8 @@ var Menu = React.createClass({
     var el;
 
     if (this.props.hideable) {
-      el = React.findDOMNode(this);
-      var innerContainer = React.findDOMNode(this.refs.paperContainer.getInnerContainer());
+      el = this.getDOMNode();
+      var innerContainer = this.refs.paperContainer.getInnerContainer().getDOMNode();
       
       if (this.props.visible) {
 

@@ -9,7 +9,7 @@ module.exports = {
     ]
   },
   less: {
-    src: src + '/less/main.less',
+    src: src + '/less/popup.less',
     watch: [
       src + '/less/**',
       mui + '/less/**'

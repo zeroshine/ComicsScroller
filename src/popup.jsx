@@ -6,7 +6,7 @@ var Tabs=mui.Tabs;
 var IconButton=mui.IconButton;
 var SvgIcon=mui.SvgIcon;
 var injectTapEventPlugin = require("react-tap-event-plugin");
-
+// React.initializeTouchEvents(true);
 // var Card=require('./app/components/card.jsx');
 injectTapEventPlugin();
 
@@ -20,7 +20,10 @@ var Card=React.createClass({
 					<h3 className={'card-title-link'} onClick={this._openIndex}>{this.props.title} </h3>	
 					<h5 className={'card-readed-link'} onClick={this._openPage}>{this.props.str+' '+this.props.lastReaded.text}</h5>				
 				</div>
-				<IconButton className={'material-cancel-button'} iconClassName={'icon-bin'} onClick={this._removeElemet} />
+				<div className={'trash'}  onClick={this._removeElemet} >
+					<span className={'lid'} />
+					<span className={'can'} />
+				</div>
 			</Paper>
 			);
 

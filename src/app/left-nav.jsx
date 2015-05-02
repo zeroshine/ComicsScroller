@@ -15,9 +15,7 @@ var LeftNav = React.createClass({
     header: React.PropTypes.element,
     onChange: React.PropTypes.func,
     menuItems: React.PropTypes.array.isRequired,
-    selectedIndex: React.PropTypes.number,
-    onNavOpen: React.PropTypes.func,
-    onNavClose: React.PropTypes.func
+    selectedIndex: React.PropTypes.number
   },
 
   windowListeners: {
@@ -43,13 +41,11 @@ var LeftNav = React.createClass({
 
   close: function() {
     this.setState({ open: false });
-    if (this.props.onNavClose) this.props.onNavClose();
     return this;
   },
 
   open: function() {
     this.setState({ open: true });
-    if (this.props.onNavOpen) this.props.onNavOpen();
     return this;
   },
 

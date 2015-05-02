@@ -4,7 +4,7 @@ var IconButton = require('./icon-button');
 var NavigationMenu = require('./svg-icons/navigation-menu');
 var Paper = require('./paper');
 
-var AppBar = React.createClass({displayName: "AppBar",
+var AppBar = React.createClass({
 
   mixins: [Classable],
 
@@ -27,7 +27,7 @@ var AppBar = React.createClass({displayName: "AppBar",
   },
 
   componentDidMount: function() {
-    if (process.env.NODE_ENV !== 'production' &&
+    if (process.NODE_ENV !== 'production' && 
        (this.props.iconElementLeft && this.props.iconClassNameLeft)) {
         var warning = 'Properties iconClassNameLeft and iconElementLeft cannot be simultaneously ' +
                       'defined. Please use one or the other.';
@@ -36,10 +36,10 @@ var AppBar = React.createClass({displayName: "AppBar",
   },
 
   render: function() {
-    var $__0=
-      
-      
-      this.props,onTouchTap=$__0.onTouchTap,other=(function(source, exclusion) {var rest = {};var hasOwn = Object.prototype.hasOwnProperty;if (source == null) {throw new TypeError();}for (var key in source) {if (hasOwn.call(source, key) && !hasOwn.call(exclusion, key)) {rest[key] = source[key];}}return rest;})($__0,{onTouchTap:1});
+    var {
+      onTouchTap,
+      ...other
+    } = this.props;
 
     var classes = this.getClasses('mui-app-bar'),
       title, menuElementLeft, menuElementRight;
@@ -47,40 +47,40 @@ var AppBar = React.createClass({displayName: "AppBar",
     if (this.props.title) {
       // If the title is a string, wrap in an h1 tag.
       // If not, just use it as a node.
-      title = Object.prototype.toString.call(this.props.title) === '[object String]' ?
-        React.createElement("h1", {className: "mui-app-bar-title"}, this.props.title) :
+      title = toString.call(this.props.title) === '[object String]' ?
+        <h1 className="mui-app-bar-title">{this.props.title}</h1> :
         this.props.title;
     }
 
     if (this.props.showMenuIconButton) {
       if (this.props.iconElementLeft) {
         menuElementLeft = (
-          React.createElement("div", {className: "mui-app-bar-navigation-icon-button"}, 
-            this.props.iconElementLeft
-          )
+          <div className="mui-app-bar-navigation-icon-button"> 
+            {this.props.iconElementLeft} 
+          </div>
         );
       } else {
-        var child = (this.props.iconClassNameLeft) ? '' : React.createElement(NavigationMenu, null);
+        var child = (this.props.iconClassNameLeft) ? '' : <NavigationMenu/>;
         menuElementLeft = (
-          React.createElement(IconButton, {
-            className: "mui-app-bar-navigation-icon-button", 
-            iconClassName: this.props.iconClassNameLeft, 
-            onTouchTap: this._onMenuIconButtonTouchTap}, 
-              child
-          )
+          <IconButton
+            className="mui-app-bar-navigation-icon-button" 
+            iconClassName={this.props.iconClassNameLeft}
+            onTouchTap={this._onMenuIconButtonTouchTap}>
+              {child}
+          </IconButton>
         );
       }
     }
 
-    menuElementRight = (this.props.children) ? this.props.children :
+    menuElementRight = (this.props.children) ? this.props.children : 
                        (this.props.iconElementRight) ? this.props.iconElementRight : '';
 
     return (
-      React.createElement(Paper, {rounded: false, className: classes, zDepth: this.props.zDepth}, 
-        menuElementLeft, 
-        title, 
-        menuElementRight
-      )
+      <Paper rounded={false} className={classes} zDepth={this.props.zDepth}>
+        {menuElementLeft}
+        {title}
+        {menuElementRight}
+      </Paper>
     );
   },
 
