@@ -41,27 +41,24 @@ comics.setImages=function(doc){
 				req.send()	}
 		},
 		imgRender: function(elem){
-			return (function(){
-						var req=new XMLHttpRequest();
-						req.open("GET",elem.getAttribute("data-echo"),true);
-						req.onload=function(){
-								return (function(){
-									// eval(req.response);
-									console.log(req.response);
-									( new Function( req.response,"comics.hd_c=hd_c;comics.d=d;" ) )(); 
-									// console.log(req.response);
-									// elem.src=d[0];
-									if (typeof (comics.hd_c) != "undefined" && comics.hd_c.length > 0) {
-								   	    elem.src=comics.hd_c[0];
-					  				}else{
-						   	      		elem.src=comics.d[0];
-					  				}
-					             	elem.removeAttribute('data-echo');
-								})(elem,req);
-						};
-						req.send();
-						})(elem);
-		},
+                var req=new XMLHttpRequest();
+                req.open("GET",elem.getAttribute("data-echo"),true);
+                req.withCredentials = true;
+                req.onload=(function(elem){
+                  return function(){
+                    eval(req.response);
+                    // console.log(typeof (hd_c),req.response);
+                    if (typeof (hd_c) != "undefined" && hd_c.length > 0 &&typeof (isrevtt) != "undefined") {
+                      elem.src=hd_c[0];
+                    }else{
+                      elem.src=d[0];
+                    }
+                    elem.removeAttribute('data-echo');
+                    elem.removeAttribute('style');
+                  }
+                })(elem);
+                req.send();
+            },
 		setInViewInfor: function(){
 			var nodes = document.querySelectorAll('img[data-title]');    
 			var oview={

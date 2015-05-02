@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -10,7 +10,7 @@
  */
 /*jslint evil: true */
 
-"use strict";
+'use strict';
 
 var React = require('React');
 var instantiateReactComponent = require('instantiateReactComponent');
@@ -32,7 +32,7 @@ describe('Danger', function() {
     it('should render markup', function() {
       var markup = instantiateReactComponent(
         <div />
-      ).mountComponent('.rX', transaction, 0);
+      ).mountComponent('.rX', transaction, {});
       var output = Danger.dangerouslyRenderMarkup([markup])[0];
 
       expect(output.nodeName).toBe('DIV');
@@ -44,7 +44,7 @@ describe('Danger', function() {
       ).mountComponent(
         '.rX',
         transaction,
-        0
+        {}
       );
       var output = Danger.dangerouslyRenderMarkup([markup])[0];
 
@@ -55,7 +55,7 @@ describe('Danger', function() {
     it('should render wrapped markup', function() {
       var markup = instantiateReactComponent(
         <th />
-      ).mountComponent('.rX', transaction, 0);
+      ).mountComponent('.rX', transaction, {});
       var output = Danger.dangerouslyRenderMarkup([markup])[0];
 
       expect(output.nodeName).toBe('TH');

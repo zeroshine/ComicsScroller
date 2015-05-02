@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,9 @@
  * @providesModule sliceChildren
  */
 
-"use strict";
+'use strict';
+
+var ReactFragment = require('ReactFragment');
 
 var flattenChildren = require('flattenChildren');
 
@@ -43,7 +45,7 @@ function sliceChildren(children, start, end) {
       break;
     }
   }
-  return slicedChildren;
+  return ReactFragment.create(slicedChildren);
 }
 
 module.exports = sliceChildren;

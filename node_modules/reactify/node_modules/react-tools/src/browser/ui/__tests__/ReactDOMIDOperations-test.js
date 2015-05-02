@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -11,7 +11,7 @@
 
 /*jslint evil: true */
 
-"use strict";
+'use strict';
 
 describe('ReactDOMIDOperations', function() {
   var DOMPropertyOperations = require('DOMPropertyOperations');
@@ -36,7 +36,7 @@ describe('ReactDOMIDOperations', function() {
     ).toBe('testID');
 
     expect(
-      DOMPropertyOperations.setValueForProperty.callCount
+      DOMPropertyOperations.setValueForProperty.calls.length
     ).toBe(0);
   });
 

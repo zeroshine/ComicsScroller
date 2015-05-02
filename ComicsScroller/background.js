@@ -1,66 +1,21 @@
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://ssl.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-59728771-1', 'auto');
-ga('set','checkProtocolTask', null);
-ga('send', 'pageview');
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var ObjectAssign=require("object-assign"),Comics_sf=require("./app/comics_sf.js"),Comics_8=require("./app/comics_8.js"),Comics_dm5=require("./app/comics_dm5.js"),collected={collected:[]},readed={readed:[]},update={update:[]},redirectLocal=function(e,t,c){var o=/http\:\/\/new\.comicvip\.com\/show\/(.*-\d*.html\?ch=\d*)/,r=/http\:\/\/comic\.sfacg\.com(\/HTML\/\w*\/\w*\/.*)/,a=/http\:\/\/www\.manben\.com(\/m\d*\/)/,s=/http\:\/\/(tel||www)\.dm5\.com(\/m\d*\/)/;if(o.test(c.url)){var n=o.exec(c.url)[1];chrome.tabs.update(c.id,{url:chrome.extension.getURL("reader.html")+"?site=comics8&chapter="+n}),ga("send","event","8comics view")}else if(r.test(c.url)){var n=r.exec(c.url)[1];chrome.tabs.update(c.id,{url:chrome.extension.getURL("reader.html")+"?site=sf&chapter="+n}),ga("send","event","sf view")}else if(s.test(c.url)||a.test(c.url)){var n="";n=s.test(c.url)?s.exec(c.url)[2]:a.exec(c.url)[1],chrome.tabs.update(c.id,{url:chrome.extension.getURL("reader.html")+"?site=dm5&chapter="+n}),ga("send","event","dm5 view")}};chrome.notifications.onClicked.addListener(function(e){chrome.tabs.create({url:e})});var comicsQuery=function(){chrome.storage.local.get("collected",function(e){for(var t=0;t<e.collected.length;++t){var c=e.collected[t].url,o=e.collected[t].menuItems,r=new XMLHttpRequest;r.open("GET",c),r.responseType="document","sf"===e.collected[t].site?r.onload=function(e,t,c,o,r,a){return function(){a.backgroundOnload(e,t,c,o,r)}}(c,o,r,e,t,Comics_sf):"comics8"===e.collected[t].site?r.onload=function(e,t,c,o,r,a){return function(){a.backgroundOnload(e,t,c,o,r)}}(c,o,r,e,t,Comics_8):"dm5"===e.collected[t].site&&(r.onload=function(e,t,c,o,r,a){return function(){a.backgroundOnload(e,t,c,o,r)}}(c,o,r,e,t,Comics_dm5)),r.send()}})};chrome.tabs.onUpdated.addListener(redirectLocal),chrome.storage.local.get("readed",function(e){var t=ObjectAssign(readed,e);chrome.storage.local.set(t)}),chrome.storage.local.get("update",function(e){var t=ObjectAssign(update,e);chrome.storage.local.set(t)}),chrome.storage.local.get("collected",function(e){var t=ObjectAssign(collected,e);chrome.storage.local.set(t,function(){setInterval(function(){comicsQuery()},6e4)})}),function(e,t,c,o,r,a,s){e.GoogleAnalyticsObject=r,e[r]=e[r]||function(){(e[r].q=e[r].q||[]).push(arguments)},e[r].l=1*new Date,a=t.createElement(c),s=t.getElementsByTagName(c)[0],a.alocal=1,a.src=o,s.parentNode.insertBefore(a,s)}(window,document,"script","https://ssl.google-analytics.com/analytics.js","ga"),ga("create","UA-59728771-1","auto"),ga("set","checkProtocolTask",null),ga("send","pageview");
 
-var comics=comics || { };
-var addIcon = function(tabId,changeInfo,tab){
-	console.log("fired");
-	var urlRegEX_ali=/http\:\/\/www\.158c\.com(\/comic\/\d*\/\d*\.html)/;
-	var urlRegEX_8comics=/http\:\/\/new\.comicvip\.com\/show\/(.*-\d*.html\?ch=\d*)/;
-	var urlRegEX_sf=/http\:\/\/comic\.sfacg\.com(\/HTML\/\w*\/\w*\/.*)/;
-	var urlRegEX_manben=/http\:\/\/www\.manben\.com(\/m\d*\/)/;
-	var urlRegEX_dm5=/http\:\/\/(tel||www)\.dm5\.com(\/m\d*\/)/;
-	// if(urlRegEX_ali.test(tab.url)){
-		// console.log("ali fired");
-		// var chapter=urlRegEX_ali.exec(tab.url)[1];
-		// chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"?site=ali&chapter="+chapter});
-		// chrome.pageAction.show(tabId);
-		// chrome.tabs.executeScript(null,{file:"js/echo.js",runAt:"document_start"});
-		// chrome.tabs.executeScript(null,{file:"js/comics.js",runAt:"document_start"});
-		// chrome.tabs.executeScript(null,{file:"js/comics_ali.js",runAt:"document_start"});
-		// chrome.tabs.insertCSS(null,{file:"css/comics.css",runAt:"document_start"});
-		// ga('send', 'event', "ali view");
-	if(urlRegEX_8comics.test(tab.url)){
-		console.log("8 comics fired");
-		var chapter=urlRegEX_8comics.exec(tab.url)[1];
-		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"?site=8comics&chapter="+chapter});
-		// chrome.pageAction.show(tabId);
-		// chrome.tabs.executeScript(null,{file:"js/echo.js",runAt:"document_start"});
-		// chrome.tabs.executeScript(null,{file:"js/comics.js",runAt:"document_start"});
-		// chrome.tabs.executeScript(null,{file:"js/comics_8.js",runAt:"document_start"});
-		// chrome.tabs.insertCSS(null,{file:"css/comics.css",runAt:"document_start"});
-		ga('send', 'event', "8comics view");
-	}else if(urlRegEX_sf.test(tab.url)){
-		console.log("sf fired");
-		var chapter=urlRegEX_sf.exec(tab.url)[1];
-		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"?site=sf&chapter="+chapter});
-		// chrome.pageAction.show(tabId);
-		// chrome.tabs.executeScript(null,{file:"js/echo.js",runAt:"document_start"});
-		// chrome.tabs.executeScript(null,{file:"js/comics.js",runAt:"document_start"});
-		// chrome.tabs.executeScript(null,{file:"js/comics_sf.js",runAt:"document_start"});
-		// chrome.tabs.insertCSS(null,{file:"css/comics.css",runAt:"document_start"});
-		ga('send', 'event', "sf view");
-	}else if((urlRegEX_dm5.test(tab.url)||urlRegEX_manben.test(tab.url))){
-		console.log("dm5 fired");
-		var chapter=""
-		if(urlRegEX_dm5.test(tab.url)){
-			chapter=urlRegEX_dm5.exec(tab.url)[2];
-		}else{
-			chapter=urlRegEX_manben.exec(tab.url)[1];
-		}
-		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"?site=dm5&chapter="+chapter});
-		// chrome.pageAction.show(tabId);
-		// chrome.tabs.executeScript(null,{file:"js/echo.js",runAt:"document_start"});
-		// chrome.tabs.executeScript(null,{file:"js/comics.js",runAt:"document_start"});
-		// chrome.tabs.executeScript(null,{file:"js/comics_dm5.js",runAt:"document_start"});
-		// chrome.tabs.insertCSS(null,{file:"css/comics.css",runAt:"document_start"});
-		ga('send', 'event', "dm5 view");
-	}
-};
-chrome.tabs.onUpdated.addListener(addIcon);
 
-  
+},{"./app/comics_8.js":3,"./app/comics_dm5.js":4,"./app/comics_sf.js":5,"object-assign":2}],2:[function(require,module,exports){
+"use strict";function ToObject(e){if(null==e)throw new TypeError("Object.assign cannot be called with null or undefined");return Object(e)}module.exports=Object.assign||function(e,t){for(var n,r,c=ToObject(e),o=1;o<arguments.length;o++){n=arguments[o],r=Object.keys(Object(n));for(var u=0;u<r.length;u++)c[r[u]]=n[r[u]]}return c};
+
+
+},{}],3:[function(require,module,exports){
+var ObjectAssign=require("object-assign"),comics={baseURL:"http://new.comicvip.com/show/",comicspageURL:"http://www.comicvip.com/html/",getChapter:function(t){return t.querySelectorAll(".ch , #lch")},getChapterUrl:function(t){var e=/cview\(\'(.*-\d*\.html)\',(\d*)/.exec(t),c=e[2],i=e[1],o="";return(4==c||6==c||12==c||22==c)&&(o="http://new.comicvip.com/show/cool-"),(1==c||17==c||19==c||21==c)&&(o="http://new.comicvip.com/show/cool-"),(2==c||5==c||7==c||9==c)&&(o="http://new.comicvip.com/show/cool-"),(10==c||11==c||13==c||14==c)&&(o="http://new.comicvip.com/show/best-manga-"),(3==c||8==c||15==c||16==c||18==c||20==c)&&(o="http://new.comicvip.com/show/best-manga-"),i=i.replace(".html","").replace("-",".html?ch="),o+i},getTitleName:function(t){return t.querySelector("body > table:nth-child(7) > tbody > tr > td > table > tbody > tr:nth-child(1) > td:nth-child(2) > table:nth-child(1) > tbody > tr:nth-child(1) > td > table > tbody > tr > td:nth-child(2) > font").textContent},getCoverImg:function(t){return t.querySelector("body > table:nth-child(7) > tbody > tr > td > table > tbody > tr:nth-child(1) > td:nth-child(1) > img").src},setImages:function(index,doc){var script=doc.evaluate('//*[@id="Form1"]/script/text()',doc,null,XPathResult.ANY_TYPE,null).iterateNext().textContent.split("eval")[0];eval(script);var ch=/.*ch\=(.*)/.exec(doc.URL)[1];ch.indexOf("#")>0&&(ch=ch.split("#")[0]);var p=1,f=50;ch.indexOf("-")>0&&(p=parseInt(ch.split("-")[1]),ch=ch.split("-")[0]),ch=""==ch?1:parseInt(ch);for(var ss=function(t,e,c,i){var o=t.substring(e,e+c);return null==i?o.replace(/[a-z]*/gi,""):o},nn=function(t){return 10>t?"00"+t:100>t?"0"+t:t},mm=function(t){return parseInt((t-1)/10)%10+(t-1)%10*3},c="",cc=cs.length,j=0;cc/f>j;j++)if(ss(cs,j*f,4)==ch){c=ss(cs,j*f,f,f),ci=j;break}""==c&&(c=ss(cs,cc-f,f),ch=c),ps=ss(c,7,3),this.pageMax=ps;for(var img=[],i=0;i<this.pageMax;++i){for(var c="",cc=cs.length,j=0;cc/f>j;j++)if(ss(cs,j*f,4)==ch){c=ss(cs,j*f,f,f),ci=j;break}""==c&&(c=ss(cs,cc-f,f),ch=chs),img[i]="http://img"+ss(c,4,2)+".8comic.com/"+ss(c,6,1)+"/"+ti+"/"+ss(c,0,4)+"/"+nn(i+1)+"_"+ss(c,mm(i+1)+10,3,f)+".jpg"}this.images=img,this.appendImage(index)},backgroundOnload:function(t,e,c,i,o){var s=c.response,a=this.getChapter(s),r=this.getTitleName(s),n=this.getCoverImg(s),l=[],h={},m={};m.payload=Comics_8.getChapterUrl(a[a.length-2].getAttribute("onclick")),m.text=a[a.length-1].textContent,l.push(m);for(var p=!1,d=0;d<e.length;++d)if(e[d].payload===m.payload){p=!0;break}p===!1&&e.length>0&&(ObjectAssign(h,{url:t,title:r,site:"comics8",iconUrl:n,lastReaded:m}),chrome.notifications.create(m.payload,{type:"image",iconUrl:"img/comics-64.png",title:"Comics Update",message:r+"  "+h.lastReaded.text,imageUrl:n}),chrome.storage.local.get("update",function(t){t.update.push(this);var e=t.update.length.toString();chrome.browserAction.setBadgeText({text:e}),chrome.storage.local.set(t)}.bind(h)));for(var g=a.length-3;g>=0;--g){var m={};m.payload=Comics_8.getChapterUrl(a[g].getAttribute("onclick")),m.text=a[g].textContent.trim(),l.push(m);for(var h={},p=!1,d=0;d<e.length;++d)if(e[d].payload===m.payload){p=!0;break}p===!1&&e.length>0&&(ObjectAssign(h,{url:t,title:r,site:"comics8",iconUrl:n,lastReaded:m}),chrome.notifications.create(m.payload,{type:"image",iconUrl:"img/comics-64.png",title:"Comics Update",message:r+"  "+h.lastReaded.text,imageUrl:n}),chrome.storage.local.get("update",function(t){t.update.push(this);var e=t.update.length.toString();chrome.browserAction.setBadgeText({text:e}),chrome.storage.local.set(t)}.bind(h)))}i.collected[o].menuItems=l,chrome.storage.local.set(i)}};module.exports=comics;
+
+
+},{"object-assign":2}],4:[function(require,module,exports){
+var comics={baseURL:"http://www.manben.com",getChapter:function(e){var t=e.querySelectorAll(".nr6.lan2>li>.tg");return t},getTitleName:function(e){return e.querySelector(".inbt_title_h2").textContent},getCoverImg:function(e){return e.querySelector(".innr91>img").src},setImages:function(index,xhr){var doc=xhr.response,script1=/<script type\=\"text\/javascript\">(.*)reseturl/.exec(doc.head.innerHTML)[1];eval(script1),this.pageMax=DM5_IMAGE_COUNT;for(var img=[],i=0;i<this.pageMax;++i)img[i]=doc.URL+"chapterfun.ashx?cid="+DM5_CID.toString()+"&page="+(i+1)+"&key=&language=1";this.images=img,this.appendImage(index)},backgroundOnload:function(e,t,a,r,i){for(var o=a.response,n=this.getChapter(o),s=this.getTitleName(o),c=this.getCoverImg(o),g=[],l={},m=0;m<n.length;++m){var h={};h.payload=n[m].href,h.text=n[m].textContent,g.push(h);for(var p=!1,d=0;d<t.length;++d)if(t[d].payload===h.payload){p=!0;break}p===!1&&t.length>0&&(ObjectAssign(l,{url:e,title:s,site:"dm5",iconUrl:c,lastReaded:h}),chrome.notifications.create(h.payload,{type:"image",iconUrl:"img/comics-64.png",title:"Comics Update",message:s+"  "+l.lastReaded.text,imageUrl:c}),chrome.storage.local.get("update",function(e){e.update.push(this);var t=e.update.length.toString();chrome.browserAction.setBadgeText({text:t}),chrome.storage.local.set(e)}.bind(l)))}r.collected[i].menuItems=g,chrome.storage.local.set(r)}};module.exports=comics;
+
+
+},{}],5:[function(require,module,exports){
+var ObjectAssign=require("object-assign"),comics={baseURL:"http://comic.sfacg.com",getChapter:function(e){var t=e.querySelectorAll(".serialise_list>li>a");return t},getTitleName:function(e){return e.querySelector("body > table:nth-child(8) > tbody > tr > td:nth-child(1) > table:nth-child(2) > tbody > tr > td > h1 > b").textContent},getCoverImg:function(e){return e.querySelector(".comic_cover>img").src},setImages:function(index,xhr){eval(xhr.response);var name="picHost=",picHost=hosts[0],img=[];this.pageMax=picCount;for(var i=0;i<this.pageMax;i++)img[i]=picHost+picAy[i];this.images=img,this.appendImage(index)},backgroundOnload:function(e,t,i,o,a){for(var r=i.response,s=this.getChapter(r),c=this.getTitleName(r),n=this.getCoverImg(r),l=[],g={},h=0;h<s.length;++h){var m={};m.payload=s[h].href,m.text=s[h].textContent,l.push(m);for(var d=!1,p=0;p<t.length;++p)if(t[p].payload===m.payload){d=!0;break}!d&&t.length>0&&(ObjectAssign(g,{url:e,title:c,site:"sf",iconUrl:n,lastReaded:m}),chrome.notifications.create(m.payload,{type:"image",iconUrl:"img/comics-64.png",title:"Comics Update",message:c+"  "+g.lastReaded.text,imageUrl:n}),chrome.storage.local.get("update",function(e){e.update.push(this);var t=e.update.length.toString();chrome.browserAction.setBadgeText({text:t}),chrome.storage.local.set(e)}.bind(g)))}o.collected[a].menuItems=l,chrome.storage.local.set(o)}};module.exports=comics;
+
+
+},{"object-assign":2}]},{},[1]);

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -14,7 +14,7 @@
 
 var ExecutionEnvironment = require('ExecutionEnvironment');
 
-var createArrayFrom = require('createArrayFrom');
+var createArrayFromMixed = require('createArrayFromMixed');
 var getMarkupWrap = require('getMarkupWrap');
 var invariant = require('invariant');
 
@@ -73,10 +73,10 @@ function createNodesFromMarkup(markup, handleScript) {
       handleScript,
       'createNodesFromMarkup(...): Unexpected <script> element rendered.'
     );
-    createArrayFrom(scripts).forEach(handleScript);
+    createArrayFromMixed(scripts).forEach(handleScript);
   }
 
-  var nodes = createArrayFrom(node.childNodes);
+  var nodes = createArrayFromMixed(node.childNodes);
   while (node.lastChild) {
     node.removeChild(node.lastChild);
   }

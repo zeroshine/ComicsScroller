@@ -1,5 +1,5 @@
 /**
- * Copyright 2014, Facebook, Inc.
+ * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -10,7 +10,7 @@
  * @typechecks
  */
 
-"use strict";
+'use strict';
 
 var PooledClass = require('PooledClass');
 var CallbackQueue = require('CallbackQueue');

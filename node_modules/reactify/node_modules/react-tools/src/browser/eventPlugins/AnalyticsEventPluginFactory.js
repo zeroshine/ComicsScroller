@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -74,7 +74,7 @@
  * usage.
  */
 
-"use strict";
+'use strict';
 
 var ExecutionEnvironment = require('ExecutionEnvironment');
 
@@ -152,7 +152,7 @@ function extractEvents(
     return null;
   }
 
-  var analyticsEventsArr = analyticsEventsStr.split(",");
+  var analyticsEventsArr = analyticsEventsStr.split(',');
   if (!analyticsData.hasOwnProperty(analyticsID)) {
     initAnalyticsDataForID(analyticsID, analyticsEventsArr);
   }

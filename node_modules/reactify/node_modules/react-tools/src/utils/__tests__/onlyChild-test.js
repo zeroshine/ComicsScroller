@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,16 +9,18 @@
  * @emails react-core
  */
 
-"use strict";
+'use strict';
 
 describe('onlyChild', function() {
 
   var React;
+  var ReactFragment;
   var onlyChild;
   var WrapComponent;
 
   beforeEach(function() {
     React = require('React');
+    ReactFragment = require('ReactFragment');
     onlyChild = require('onlyChild');
     WrapComponent = React.createClass({
       render: function() {
@@ -64,7 +66,7 @@ describe('onlyChild', function() {
     expect(function() {
       var instance =
         <WrapComponent>
-          {{oneThing: <span />}}
+          {ReactFragment.create({oneThing: <span />})}
         </WrapComponent>;
       onlyChild(instance.props.children);
     }).toThrow();

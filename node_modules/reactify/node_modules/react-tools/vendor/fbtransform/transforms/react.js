@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -7,18 +7,17 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 /*global exports:true*/
-"use strict";
+'use strict';
 
 var Syntax = require('jstransform').Syntax;
 var utils = require('jstransform/src/utils');
 
-var FALLBACK_TAGS = require('./xjs').knownTags;
-var renderXJSExpressionContainer =
-  require('./xjs').renderXJSExpressionContainer;
-var renderXJSLiteral = require('./xjs').renderXJSLiteral;
-var quoteAttrName = require('./xjs').quoteAttrName;
+var renderJSXExpressionContainer =
+  require('./jsx').renderJSXExpressionContainer;
+var renderJSXLiteral = require('./jsx').renderJSXLiteral;
+var quoteAttrName = require('./jsx').quoteAttrName;
 
-var trimLeft = require('./xjs').trimLeft;
+var trimLeft = require('./jsx').trimLeft;
 
 /**
  * Customized desugar processor for React JSX. Currently:
@@ -51,30 +50,20 @@ function visitReactTag(traverse, object, path, state) {
 
   utils.catchup(openingElement.range[0], state, trimLeft);
 
-  if (nameObject.type === Syntax.XJSNamespacedName && nameObject.namespace) {
+  if (nameObject.type === Syntax.JSXNamespacedName && nameObject.namespace) {
     throw new Error('Namespace tags are not supported. ReactJSX is not XML.');
   }
 
   // We assume that the React runtime is already in scope
   utils.append('React.createElement(', state);
 
-  // Identifiers with lower case or hypthens are fallback tags (strings).
-  // XJSMemberExpressions are not.
-  if (nameObject.type === Syntax.XJSIdentifier && isTagName(nameObject.name)) {
-    // This is a temporary error message to assist upgrades
-    if (!FALLBACK_TAGS.hasOwnProperty(nameObject.name)) {
-      throw new Error(
-        'Lower case component names (' + nameObject.name + ') are no longer ' +
-        'supported in JSX: See http://fb.me/react-jsx-lower-case'
-      );
-    }
-
+  if (nameObject.type === Syntax.JSXIdentifier && isTagName(nameObject.name)) {
     utils.append('"' + nameObject.name + '"', state);
     utils.move(nameObject.range[1], state);
   } else {
     // Use utils.catchup in this case so we can easily handle
-    // XJSMemberExpressions which look like Foo.Bar.Baz. This also handles
-    // XJSIdentifiers that aren't fallback tags.
+    // JSXMemberExpressions which look like Foo.Bar.Baz. This also handles
+    // JSXIdentifiers that aren't fallback tags.
     utils.move(nameObject.range[0], state);
     utils.catchup(nameObject.range[1], state);
   }
@@ -84,7 +73,7 @@ function visitReactTag(traverse, object, path, state) {
   var hasAttributes = attributesObject.length;
 
   var hasAtLeastOneSpreadProperty = attributesObject.some(function(attr) {
-    return attr.type === Syntax.XJSSpreadAttribute;
+    return attr.type === Syntax.JSXSpreadAttribute;
   });
 
   // if we don't have any attributes, pass in null
@@ -103,7 +92,7 @@ function visitReactTag(traverse, object, path, state) {
   attributesObject.forEach(function(attr, index) {
     var isLast = index === attributesObject.length - 1;
 
-    if (attr.type === Syntax.XJSSpreadAttribute) {
+    if (attr.type === Syntax.JSXSpreadAttribute) {
       // Close the previous object or initial object
       if (!previousWasSpread) {
         utils.append('}, ', state);
@@ -136,7 +125,7 @@ function visitReactTag(traverse, object, path, state) {
 
     // If the next attribute is a spread, we're effective last in this object
     if (!isLast) {
-      isLast = attributesObject[index + 1].type === Syntax.XJSSpreadAttribute;
+      isLast = attributesObject[index + 1].type === Syntax.JSXSpreadAttribute;
     }
 
     if (attr.name.namespace) {
@@ -165,9 +154,9 @@ function visitReactTag(traverse, object, path, state) {
       // Use catchupNewlines to skip over the '=' in the attribute
       utils.catchupNewlines(attr.value.range[0], state);
       if (attr.value.type === Syntax.Literal) {
-        renderXJSLiteral(attr.value, isLast, state);
+        renderJSXLiteral(attr.value, isLast, state);
       } else {
-        renderXJSExpressionContainer(traverse, attr.value, isLast, path, state);
+        renderJSXExpressionContainer(traverse, attr.value, isLast, path, state);
       }
     }
 
@@ -200,8 +189,8 @@ function visitReactTag(traverse, object, path, state) {
     var lastRenderableIndex;
 
     childrenToRender.forEach(function(child, index) {
-      if (child.type !== Syntax.XJSExpressionContainer ||
-          child.expression.type !== Syntax.XJSEmptyExpression) {
+      if (child.type !== Syntax.JSXExpressionContainer ||
+          child.expression.type !== Syntax.JSXEmptyExpression) {
         lastRenderableIndex = index;
       }
     });
@@ -216,9 +205,9 @@ function visitReactTag(traverse, object, path, state) {
       var isLast = index >= lastRenderableIndex;
 
       if (child.type === Syntax.Literal) {
-        renderXJSLiteral(child, isLast, state);
-      } else if (child.type === Syntax.XJSExpressionContainer) {
-        renderXJSExpressionContainer(traverse, child, isLast, path, state);
+        renderJSXLiteral(child, isLast, state);
+      } else if (child.type === Syntax.JSXExpressionContainer) {
+        renderJSXExpressionContainer(traverse, child, isLast, path, state);
       } else {
         traverse(child, path, state);
         if (!isLast) {
@@ -245,7 +234,7 @@ function visitReactTag(traverse, object, path, state) {
 }
 
 visitReactTag.test = function(object, path, state) {
-  return object.type === Syntax.XJSElement;
+  return object.type === Syntax.JSXElement;
 };
 
 exports.visitorList = [

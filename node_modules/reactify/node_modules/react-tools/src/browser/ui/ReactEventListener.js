@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -10,7 +10,7 @@
  * @typechecks static-only
  */
 
-"use strict";
+'use strict';
 
 var EventListener = require('EventListener');
 var ExecutionEnvironment = require('ExecutionEnvironment');
@@ -123,7 +123,7 @@ var ReactEventListener = {
   trapBubbledEvent: function(topLevelType, handlerBaseName, handle) {
     var element = handle;
     if (!element) {
-      return;
+      return null;
     }
     return EventListener.listen(
       element,
@@ -145,7 +145,7 @@ var ReactEventListener = {
   trapCapturedEvent: function(topLevelType, handlerBaseName, handle) {
     var element = handle;
     if (!element) {
-      return;
+      return null;
     }
     return EventListener.capture(
       element,
@@ -157,7 +157,6 @@ var ReactEventListener = {
   monitorScrollValue: function(refresh) {
     var callback = scrollValueMonitor.bind(null, refresh);
     EventListener.listen(window, 'scroll', callback);
-    EventListener.listen(window, 'resize', callback);
   },
 
   dispatchEvent: function(topLevelType, nativeEvent) {

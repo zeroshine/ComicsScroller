@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -10,7 +10,7 @@
  * @typechecks static-only
  */
 
-"use strict";
+'use strict';
 
 /**
  * Memoizes the return value of a function that accepts one string argument.
@@ -21,11 +21,10 @@
 function memoizeStringOnly(callback) {
   var cache = {};
   return function(string) {
-    if (cache.hasOwnProperty(string)) {
-      return cache[string];
-    } else {
-      return cache[string] = callback.call(this, string);
+    if (!cache.hasOwnProperty(string)) {
+      cache[string] = callback.call(this, string);
     }
+    return cache[string];
   };
 }
 

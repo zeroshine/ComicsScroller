@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -11,18 +11,12 @@
 
 /*jshint evil:true, unused:false*/
 
-"use strict";
+'use strict';
 
 require('mock-modules').autoMockOff();
 
 describe('react jsx', function() {
   var transformAll = require('../../syntax.js').transformAll;
-  var xjs = require('../xjs.js');
-
-  // Add <font-face> to list of known tags to ensure that when we test support
-  // for hyphentated known tags, it's there.
-  // TODO: remove this when/if <font-face> is supported out of the box.
-  xjs.knownTags['font-face'] = true;
 
   var transform = function(code, options, excludes) {
     return transformAll(
@@ -39,13 +33,15 @@ describe('react jsx', function() {
   var z = 345678;
 
   var expectObjectAssign = function(code) {
+    /*eslint-disable no-unused-vars, no-eval*/
     var Component = jest.genMockFunction();
     var Child = jest.genMockFunction();
     var objectAssignMock = jest.genMockFunction();
     React.__spread = objectAssignMock;
     eval(transform(code).code);
     return expect(objectAssignMock);
-  }
+    /*eslint-enable*/
+  };
 
   var React = {
     createElement: jest.genMockFunction()
@@ -272,13 +268,8 @@ describe('react jsx', function() {
 
   it('should handle hasOwnProperty correctly', function() {
     var code = '<hasOwnProperty>testing</hasOwnProperty>;';
-    // var result = 'React.createElement("hasOwnProperty", null, "testing");';
-
-    // expect(transform(code).code).toBe(result);
-
-    // This is currently not supported, and will generate a string tag in
-    // a follow up.
-    expect(() => transform(code)).toThrow();
+    var result = 'React.createElement("hasOwnProperty", null, "testing");';
+    expect(transform(code).code).toBe(result);
   });
 
   it('should allow constructor as prop', function() {
@@ -346,10 +337,11 @@ describe('react jsx', function() {
     ).not.toBeCalled();
   });
 
-  it('should throw for unknown hyphenated tags', function() {
+  it('should not throw for unknown hyphenated tags', function() {
     var code = '<x-component />;';
-
-    expect(() => transform(code)).toThrow();
+    expect(function() {
+      transform(code);
+    }).not.toThrow();
   });
 
   it('calls assign with a new target object for spreads', function() {
@@ -361,13 +353,13 @@ describe('react jsx', function() {
   it('calls assign with an empty object when the spread is first', function() {
     expectObjectAssign(
       '<Component { ...x } y={2} />'
-    ).toBeCalledWith({}, x, { y: 2 });
+    ).toBeCalledWith({}, x, {y: 2});
   });
 
   it('coalesces consecutive properties into a single object', function() {
     expectObjectAssign(
       '<Component { ... x } y={2} z />'
-    ).toBeCalledWith({}, x, { y: 2, z: true });
+    ).toBeCalledWith({}, x, {y: 2, z: true});
   });
 
   it('avoids an unnecessary empty object when spread is not first', function() {
@@ -379,13 +371,13 @@ describe('react jsx', function() {
   it('passes the same value multiple times to React.__spread', function() {
     expectObjectAssign(
       '<Component x={1} y="2" {...z} {...z}><Child /></Component>'
-    ).toBeCalledWith({x: 1, y: "2"}, z, z);
+    ).toBeCalledWith({x: 1, y: '2'}, z, z);
   });
 
   it('evaluates sequences before passing them to React.__spread', function() {
     expectObjectAssign(
       '<Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>'
-    ).toBeCalledWith({x: "1"}, { y: 2 }, {z: 3});
+    ).toBeCalledWith({x: '1'}, {y: 2}, {z: 3});
   });
 
 });

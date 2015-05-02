@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,9 +9,7 @@
  * @providesModule flattenChildren
  */
 
-"use strict";
-
-var ReactTextComponent = require('ReactTextComponent');
+'use strict';
 
 var traverseAllChildren = require('traverseAllChildren');
 var warning = require('warning');
@@ -25,26 +23,17 @@ function flattenSingleChildIntoContext(traverseContext, child, name) {
   // We found a component instance.
   var result = traverseContext;
   var keyUnique = !result.hasOwnProperty(name);
-  warning(
-    keyUnique,
-    'flattenChildren(...): Encountered two children with the same key, ' +
-    '`%s`. Child keys must be unique; when two children share a key, only ' +
-    'the first child will be used.',
-    name
-  );
+  if (__DEV__) {
+    warning(
+      keyUnique,
+      'flattenChildren(...): Encountered two children with the same key, ' +
+      '`%s`. Child keys must be unique; when two children share a key, only ' +
+      'the first child will be used.',
+      name
+    );
+  }
   if (keyUnique && child != null) {
-    var type = typeof child;
-    var normalizedValue;
-
-    if (type === 'string') {
-      normalizedValue = ReactTextComponent(child);
-    } else if (type === 'number') {
-      normalizedValue = ReactTextComponent('' + child);
-    } else {
-      normalizedValue = child;
-    }
-
-    result[name] = normalizedValue;
+    result[name] = child;
   }
 }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @emails react-core
  */
 
-"use strict";
+'use strict';
 
 var mocks = require('mocks');
 
@@ -30,11 +30,23 @@ describe('ReactMount', function() {
     });
   });
 
+  describe('unmountComponentAtNode', function() {
+    it('throws when given a non-node', function() {
+      var nodeArray = document.getElementsByTagName('div');
+      expect(function() {
+        React.unmountComponentAtNode(nodeArray);
+      }).toThrow(
+        'Invariant Violation: unmountComponentAtNode(...): Target container ' +
+        'is not a DOM element.'
+      );
+    });
+  });
+
   it('throws when given a string', function() {
     expect(function() {
       ReactTestUtils.renderIntoDocument('div');
     }).toThrow(
-      'Invariant Violation: renderComponent(): Invalid component element. ' +
+      'Invariant Violation: React.render(): Invalid component element. ' +
       'Instead of passing an element string, make sure to instantiate it ' +
       'by passing it to React.createElement.'
     );
@@ -49,7 +61,7 @@ describe('ReactMount', function() {
     expect(function() {
       ReactTestUtils.renderIntoDocument(Component);
     }).toThrow(
-      'Invariant Violation: renderComponent(): Invalid component element. ' +
+      'Invariant Violation: React.render(): Invalid component element. ' +
       'Instead of passing a component class, make sure to instantiate it ' +
       'by passing it to React.createElement.'
     );
@@ -107,5 +119,29 @@ describe('ReactMount', function() {
     var instance2 = React.render(<div />, container);
 
     expect(instance1 === instance2).toBe(true);
+  });
+
+  it('should warn if mounting into dirty rendered markup', function() {
+    var container = document.createElement('container');
+    container.innerHTML = React.renderToString(<div />) + ' ';
+
+    console.warn = mocks.getMockFunction();
+    ReactMount.render(<div />, container);
+    expect(console.warn.mock.calls.length).toBe(1);
+
+    container.innerHTML = ' ' + React.renderToString(<div />);
+
+    console.warn = mocks.getMockFunction();
+    ReactMount.render(<div />, container);
+    expect(console.warn.mock.calls.length).toBe(1);
+  });
+
+  it('should not warn if mounting into non-empty node', function() {
+    var container = document.createElement('container');
+    container.innerHTML = '<div></div>';
+
+    console.warn = mocks.getMockFunction();
+    ReactMount.render(<div />, container);
+    expect(console.warn.mock.calls.length).toBe(0);
   });
 });

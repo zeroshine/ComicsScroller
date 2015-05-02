@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @typechecks static-only
  * @providesModule ReactServerRendering
  */
-"use strict";
+'use strict';
 
 var ReactElement = require('ReactElement');
 var ReactInstanceHandles = require('ReactInstanceHandles');
@@ -17,6 +17,7 @@ var ReactMarkupChecksum = require('ReactMarkupChecksum');
 var ReactServerRenderingTransaction =
   require('ReactServerRenderingTransaction');
 
+var emptyObject = require('emptyObject');
 var instantiateReactComponent = require('instantiateReactComponent');
 var invariant = require('invariant');
 
@@ -37,7 +38,8 @@ function renderToString(element) {
 
     return transaction.perform(function() {
       var componentInstance = instantiateReactComponent(element, null);
-      var markup = componentInstance.mountComponent(id, transaction, 0);
+      var markup =
+        componentInstance.mountComponent(id, transaction, emptyObject);
       return ReactMarkupChecksum.addChecksumToMarkup(markup);
     }, null);
   } finally {
@@ -63,7 +65,7 @@ function renderToStaticMarkup(element) {
 
     return transaction.perform(function() {
       var componentInstance = instantiateReactComponent(element, null);
-      return componentInstance.mountComponent(id, transaction, 0);
+      return componentInstance.mountComponent(id, transaction, emptyObject);
     }, null);
   } finally {
     ReactServerRenderingTransaction.release(transaction);

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -10,7 +10,7 @@
  * @typechecks static-only
  */
 
-"use strict";
+'use strict';
 
 var EventConstants = require('EventConstants');
 var EventPluginUtils = require('EventPluginUtils');
@@ -62,13 +62,15 @@ var dependencies = [
   topLevelTypes.topMouseUp
 ];
 
+var touchDependencies = [
+  topLevelTypes.topTouchStart,
+  topLevelTypes.topTouchCancel,
+  topLevelTypes.topTouchEnd,
+  topLevelTypes.topTouchMove
+];
+
 if (EventPluginUtils.useTouchEvents) {
-  dependencies.push(
-    topLevelTypes.topTouchCancel,
-    topLevelTypes.topTouchEnd,
-    topLevelTypes.topTouchStart,
-    topLevelTypes.topTouchMove
-  );
+  dependencies = dependencies.concat(touchDependencies);
 }
 
 var eventTypes = {
@@ -80,6 +82,10 @@ var eventTypes = {
     dependencies: dependencies
   }
 };
+
+var usedTouch = false;
+var usedTouchTime = 0;
+var TOUCH_DELAY = 1000;
 
 var TapEventPlugin = {
 
@@ -102,6 +108,17 @@ var TapEventPlugin = {
       nativeEvent) {
     if (!isStartish(topLevelType) && !isEndish(topLevelType)) {
       return null;
+    }
+    // on ios, there is a delay after touch event and synthetic
+    // mouse events, so that user can perform double tap
+    // solution: ignore mouse events following touchevent within small timeframe
+    if (touchDependencies.indexOf(topLevelType) !== -1) {
+      usedTouch = true;
+      usedTouchTime = Date.now();
+    } else {
+      if (usedTouch && (Date.now() - usedTouchTime < TOUCH_DELAY)) {
+        return null;
+      }
     }
     var event = null;
     var distance = getDistance(startCoords, nativeEvent);

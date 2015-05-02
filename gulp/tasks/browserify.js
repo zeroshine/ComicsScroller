@@ -46,6 +46,8 @@ gulp.task('browserify', function(callback) {
             drop_console: true
           }
         }, 'uglifyify')
+
+        // .external("sdk/simple-storage")
         
         .bundle()
         // Report compile errors

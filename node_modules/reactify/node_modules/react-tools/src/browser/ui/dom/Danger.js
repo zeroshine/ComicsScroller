@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -12,7 +12,7 @@
 
 /*jslint evil: true, sub: true */
 
-"use strict";
+'use strict';
 
 var ExecutionEnvironment = require('ExecutionEnvironment');
 
@@ -82,7 +82,8 @@ var Danger = {
       // This for-in loop skips the holes of the sparse array. The order of
       // iteration should follow the order of assignment, which happens to match
       // numerical index order, but we don't rely on that.
-      for (var resultIndex in markupListByNodeName) {
+      var resultIndex;
+      for (resultIndex in markupListByNodeName) {
         if (markupListByNodeName.hasOwnProperty(resultIndex)) {
           var markup = markupListByNodeName[resultIndex];
 
@@ -103,8 +104,8 @@ var Danger = {
         emptyFunction // Do nothing special with <script> tags.
       );
 
-      for (i = 0; i < renderNodes.length; ++i) {
-        var renderNode = renderNodes[i];
+      for (var j = 0; j < renderNodes.length; ++j) {
+        var renderNode = renderNodes[j];
         if (renderNode.hasAttribute &&
             renderNode.hasAttribute(RESULT_INDEX_ATTR)) {
 
@@ -124,7 +125,7 @@ var Danger = {
 
         } else if (__DEV__) {
           console.error(
-            "Danger: Discarding unexpected node:",
+            'Danger: Discarding unexpected node:',
             renderNode
           );
         }
@@ -170,7 +171,7 @@ var Danger = {
       'dangerouslyReplaceNodeWithMarkup(...): Cannot replace markup of the ' +
       '<html> node. This is because browser quirks make this unreliable ' +
       'and/or slow. If you want to render to the root you must use ' +
-      'server rendering. See renderComponentToString().'
+      'server rendering. See React.renderToString().'
     );
 
     var newChild = createNodesFromMarkup(markup, emptyFunction)[0];

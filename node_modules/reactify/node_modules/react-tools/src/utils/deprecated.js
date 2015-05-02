@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -8,6 +8,8 @@
  *
  * @providesModule deprecated
  */
+
+'use strict';
 
 var assign = require('Object.assign');
 var warning = require('warning');
@@ -29,8 +31,12 @@ function deprecated(namespace, oldName, newName, ctx, fn) {
     var newFn = function() {
       warning(
         warned,
-        `${namespace}.${oldName} will be deprecated in a future version. ` +
-        `Use ${namespace}.${newName} instead.`
+        '%s.%s will be deprecated in a future version. ' +
+        'Use %s.%s instead.',
+        namespace,
+        oldName,
+        namespace,
+        newName
       );
       warned = true;
       return fn.apply(ctx, arguments);

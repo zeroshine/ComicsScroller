@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @providesModule getNodeForCharacterOffset
  */
 
-"use strict";
+'use strict';
 
 /**
  * Given any node return the first leaf node without children.
@@ -53,7 +53,7 @@ function getNodeForCharacterOffset(root, offset) {
   var nodeEnd = 0;
 
   while (node) {
-    if (node.nodeType == 3) {
+    if (node.nodeType === 3) {
       nodeEnd = nodeStart + node.textContent.length;
 
       if (nodeStart <= offset && nodeEnd >= offset) {

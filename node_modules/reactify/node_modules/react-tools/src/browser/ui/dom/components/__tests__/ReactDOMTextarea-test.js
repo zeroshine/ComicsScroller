@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @emails react-core
  */
 
-"use strict";
+'use strict';
 
 var emptyFunction = require('emptyFunction');
 var mocks = require('mocks');
@@ -29,8 +29,9 @@ describe('ReactDOMTextarea', function() {
     renderTextarea = function(component) {
       var stub = ReactTestUtils.renderIntoDocument(component);
       var node = stub.getDOMNode();
-      // Polyfilling the browser's quirky behavior.
-      node.value = node.innerHTML;
+      // Fixing jsdom's quirky behavior -- in reality, the parser should strip
+      // off the leading newline but we need to do it by hand here.
+      node.value = node.innerHTML.replace(/^\n/, '');
       return stub;
     };
   });
@@ -215,11 +216,10 @@ describe('ReactDOMTextarea', function() {
   });
 
   it('should support ReactLink', function() {
-    var container = document.createElement('div');
     var link = new ReactLink('yolo', mocks.getMockFunction());
     var instance = <textarea valueLink={link} />;
 
-    instance = React.render(instance, container);
+    instance = renderTextarea(instance);
 
     expect(instance.getDOMNode().value).toBe('yolo');
     expect(link.value).toBe('yolo');

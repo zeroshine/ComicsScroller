@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @emails react-core
  */
 
-"use strict";
+'use strict';
 
 require('mock-modules')
   .dontMock('cloneWithProps')
@@ -82,6 +82,8 @@ describe('cloneWithProps', function() {
   });
 
   it('should warn when cloning with refs', function() {
+    spyOn(console, 'warn');
+
     var Grandparent = React.createClass({
       render: function() {
         return <Parent><div ref="yolo" /></Parent>;
@@ -97,17 +99,9 @@ describe('cloneWithProps', function() {
       }
     });
 
-    var _warn = console.warn;
-
-    try {
-      console.warn = mocks.getMockFunction();
-
-      var component = ReactTestUtils.renderIntoDocument(<Grandparent />);
-      expect(component.refs).toBe(emptyObject);
-      expect(console.warn.mock.calls.length).toBe(1);
-    } finally {
-      console.warn = _warn;
-    }
+    var component = ReactTestUtils.renderIntoDocument(<Grandparent />);
+    expect(component.refs).toBe(emptyObject);
+    expect(console.warn.argsForCall.length).toBe(1);
   });
 
   it('should transfer the key property', function() {

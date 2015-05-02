@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -24,7 +24,22 @@
  * @param [string ...]  Variable list of classNames in the string case.
  * @return string       Renderable space-separated CSS className.
  */
+
+'use strict';
+var warning = require('warning');
+
+var warned = false;
+
 function cx(classNames) {
+  if (__DEV__) {
+    warning(
+      warned,
+      'React.addons.classSet will be deprecated in a future version. See ' +
+      'http://fb.me/react-addons-classset'
+    );
+    warned = true;
+  }
+
   if (typeof classNames == 'object') {
     return Object.keys(classNames).filter(function(className) {
       return classNames[className];

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @emails react-core
  */
 
-"use strict";
+'use strict';
 
 var React = require('React');
 var ReactTestUtils = require('ReactTestUtils');
@@ -26,8 +26,8 @@ describe('ReactCompositeComponent-error', function() {
       }
     });
 
-    var instance = <Component />;
-    instance = ReactTestUtils.renderIntoDocument(instance);
+    new Component();
+
     expect(ReactErrorUtils.guard.mostRecentCall.args[1])
       .toEqual('Component.someHandler');
   });

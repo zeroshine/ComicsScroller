@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,9 +9,10 @@
  * @providesModule ReactChildren
  */
 
-"use strict";
+'use strict';
 
 var PooledClass = require('PooledClass');
+var ReactFragment = require('ReactFragment');
 
 var traverseAllChildren = require('traverseAllChildren');
 var warning = require('warning');
@@ -81,13 +82,15 @@ function mapSingleChildIntoContext(traverseContext, child, name, i) {
   var mapResult = mapBookKeeping.mapResult;
 
   var keyUnique = !mapResult.hasOwnProperty(name);
-  warning(
-    keyUnique,
-    'ReactChildren.map(...): Encountered two children with the same key, ' +
-    '`%s`. Child keys must be unique; when two children share a key, only ' +
-    'the first child will be used.',
-    name
-  );
+  if (__DEV__) {
+    warning(
+      keyUnique,
+      'ReactChildren.map(...): Encountered two children with the same key, ' +
+      '`%s`. Child keys must be unique; when two children share a key, only ' +
+      'the first child will be used.',
+      name
+    );
+  }
 
   if (keyUnique) {
     var mappedChild =
@@ -119,7 +122,7 @@ function mapChildren(children, func, context) {
   var traverseContext = MapBookKeeping.getPooled(mapResult, func, context);
   traverseAllChildren(children, mapSingleChildIntoContext, traverseContext);
   MapBookKeeping.release(traverseContext);
-  return mapResult;
+  return ReactFragment.create(mapResult);
 }
 
 function forEachSingleChildDummy(traverseContext, child, name, i) {

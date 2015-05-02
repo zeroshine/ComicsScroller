@@ -1,5 +1,5 @@
 /**
- * Copyright 2014, Facebook, Inc.
+ * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -16,7 +16,7 @@ var invariant = require('invariant');
  * Convert array-like objects to arrays.
  *
  * This API assumes the caller knows the contents of the data type. For less
- * well defined inputs use createArrayFrom.
+ * well defined inputs use createArrayFromMixed.
  *
  * @param {object|function|filelist} obj
  * @return {array}

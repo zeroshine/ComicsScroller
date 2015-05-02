@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @emails react-core
  */
 
-"use strict";
+'use strict';
 
 var OrderedMap;
 
@@ -78,7 +78,7 @@ var hasUndefinedStringKey = [
 var hasPositiveNumericKey = [
   {uniqueID: 'notANumber', data: []},
   {uniqueID: '5', data: []},
-  {uniqueID: 'notAnotherNumber',data: []}
+  {uniqueID: 'notAnotherNumber', data: []}
 ];
 
 var hasZeroStringKey = [

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -11,11 +11,9 @@
 
 /*jslint evil: true */
 
-"use strict";
+'use strict';
 
 var React = require('React');
-var ReactDOM = require('ReactDOM');
-var ReactMount = require('ReactMount');
 var ReactTestUtils = require('ReactTestUtils');
 var div = React.createFactory('div');
 
@@ -49,11 +47,17 @@ describe('ReactDOM', function() {
   });
   */
 
+  it("allows a DOM element to be used with a string", function() {
+    var element = React.createElement('div', {className: 'foo'});
+    var instance = ReactTestUtils.renderIntoDocument(element);
+    expect(instance.getDOMNode().tagName).toBe('DIV');
+  });
+
   it("should allow children to be passed as an argument", function() {
     var argDiv = ReactTestUtils.renderIntoDocument(
       div(null, 'child')
     );
-    var argNode = ReactMount.getNode(argDiv._rootNodeID);
+    var argNode = argDiv.getDOMNode();
     expect(argNode.innerHTML).toBe('child');
   });
 
@@ -61,7 +65,7 @@ describe('ReactDOM', function() {
     var conflictDiv = ReactTestUtils.renderIntoDocument(
       div({children: 'fakechild'}, 'child')
     );
-    var conflictNode = ReactMount.getNode(conflictDiv._rootNodeID);
+    var conflictNode = conflictDiv.getDOMNode();
     expect(conflictNode.innerHTML).toBe('child');
   });
 
@@ -71,39 +75,39 @@ describe('ReactDOM', function() {
    */
   it("should purge the DOM cache when removing nodes", function() {
     var myDiv = ReactTestUtils.renderIntoDocument(
-      <div>{{
-        theDog: <div className="dog" />,
-        theBird: <div className="bird" />
-      }}</div>
+      <div>
+        <div key="theDog" className="dog" />,
+        <div key="theBird" className="bird" />
+      </div>
     );
     // Warm the cache with theDog
     myDiv.setProps({
-      children: {
-        theDog: <div className="dogbeforedelete" />,
-        theBird: <div className="bird" />
-      }
+      children: [
+        <div key="theDog" className="dogbeforedelete" />,
+        <div key="theBird" className="bird" />
+      ]
     });
     // Remove theDog - this should purge the cache
     myDiv.setProps({
-      children: {
-        theBird: <div className="bird" />
-      }
+      children: [
+        <div key="theBird" className="bird" />
+      ]
     });
     // Now, put theDog back. It's now a different DOM node.
     myDiv.setProps({
-      children: {
-        theDog: <div className="dog" />,
-        theBird: <div className="bird" />
-      }
+      children: [
+        <div key="theDog" className="dog" />,
+        <div key="theBird" className="bird" />
+      ]
     });
     // Change the className of theDog. It will use the same element
     myDiv.setProps({
-      children: {
-        theDog: <div className="bigdog" />,
-        theBird: <div className="bird" />
-      }
+      children: [
+        <div key="theDog" className="bigdog" />,
+        <div key="theBird" className="bird" />
+      ]
     });
-    var root = ReactMount.getNode(myDiv._rootNodeID);
+    var root = myDiv.getDOMNode();
     var dog = root.childNodes[0];
     expect(dog.className).toBe('bigdog');
   });
@@ -115,23 +119,4 @@ describe('ReactDOM', function() {
     expect(console.warn.argsForCall.length).toBe(0);
   });
 
-  it('warns but allow dom factories to be used in createFactory', function() {
-    spyOn(console, 'warn');
-    var factory = React.createFactory(React.DOM.div);
-    expect(factory().type).toBe('div');
-    expect(console.warn.argsForCall.length).toBe(1);
-    expect(console.warn.argsForCall[0][0]).toContain(
-      'Do not pass React.DOM.div'
-    );
-  });
-
-  it('warns but allow dom factories to be used in createElement', function() {
-    spyOn(console, 'warn');
-    var element = React.createElement(React.DOM.div);
-    expect(element.type).toBe('div');
-    expect(console.warn.argsForCall.length).toBe(1);
-    expect(console.warn.argsForCall[0][0]).toContain(
-      'Do not pass React.DOM.div'
-    );
-  });
 });

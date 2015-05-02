@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @emails react-core
  */
 
-"use strict";
+'use strict';
 
 var React;
 var ReactTransitionGroup;
@@ -35,6 +35,13 @@ describe('ReactTransitionGroup', function() {
     var Child = React.createClass({
       componentDidMount: function() {
         log.push('didMount');
+      },
+      componentWillAppear: function(cb) {
+        log.push('willAppear');
+        cb();
+      },
+      componentDidAppear: function() {
+        log.push('didAppear');
       },
       componentWillEnter: function(cb) {
         log.push('willEnter');
@@ -72,15 +79,15 @@ describe('ReactTransitionGroup', function() {
     });
 
     var instance = React.render(<Component />, container);
-    expect(log).toEqual(['didMount']);
+    expect(log).toEqual(['didMount', 'willAppear', 'didAppear']);
 
+    log = [];
     instance.setState({count: 2}, function() {
-      expect(log).toEqual(['didMount', 'didMount', 'willEnter', 'didEnter']);
+      expect(log).toEqual(['didMount', 'willEnter', 'didEnter']);
+
+      log = [];
       instance.setState({count: 1}, function() {
-        expect(log).toEqual([
-          "didMount", "didMount", "willEnter", "didEnter",
-          "willLeave", "didLeave", "willUnmount"
-        ]);
+        expect(log).toEqual(['willLeave', 'didLeave', 'willUnmount']);
       });
     });
   });

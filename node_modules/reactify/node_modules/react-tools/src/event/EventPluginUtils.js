@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @providesModule EventPluginUtils
  */
 
-"use strict";
+'use strict';
 
 var EventConstants = require('EventConstants');
 
@@ -115,8 +115,8 @@ function executeDispatch(event, listener, domID) {
 /**
  * Standard/simple iteration through an event's collected dispatches.
  */
-function executeDispatchesInOrder(event, executeDispatch) {
-  forEachEventDispatch(event, executeDispatch);
+function executeDispatchesInOrder(event, cb) {
+  forEachEventDispatch(event, cb);
   event._dispatchListeners = null;
   event._dispatchIDs = null;
 }

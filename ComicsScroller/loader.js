@@ -21,7 +21,7 @@ switch(site){
 	// case "ali":
 	// 	script_main.src="js/app_ali.js";
 	// 	break;
-	case "8comics":
+	case "comics8":
 		script_main.src="js/app_8_min.js";
 		// script_main.src="js/app_8.js";
 		break;

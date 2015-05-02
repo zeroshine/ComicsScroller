@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -10,12 +10,11 @@
  * @typechecks static-only
  */
 
-"use strict";
+'use strict';
 
 var DOMProperty = require('DOMProperty');
 
-var escapeTextForBrowser = require('escapeTextForBrowser');
-var memoizeStringOnly = require('memoizeStringOnly');
+var quoteAttributeValueForBrowser = require('quoteAttributeValueForBrowser');
 var warning = require('warning');
 
 function shouldIgnoreValue(name, value) {
@@ -25,10 +24,6 @@ function shouldIgnoreValue(name, value) {
     (DOMProperty.hasPositiveNumericValue[name] && (value < 1)) ||
     (DOMProperty.hasOverloadedBooleanValue[name] && value === false);
 }
-
-var processAttributeNameAndPrefix = memoizeStringOnly(function(name) {
-  return escapeTextForBrowser(name) + '="';
-});
 
 if (__DEV__) {
   var reactProps = {
@@ -61,7 +56,9 @@ if (__DEV__) {
     // logging too much when using transferPropsTo.
     warning(
       standardName == null,
-      'Unknown DOM property ' + name + '. Did you mean ' + standardName + '?'
+      'Unknown DOM property %s. Did you mean %s?',
+      name,
+      standardName
     );
 
   };
@@ -79,8 +76,8 @@ var DOMPropertyOperations = {
    * @return {string} Markup string.
    */
   createMarkupForID: function(id) {
-    return processAttributeNameAndPrefix(DOMProperty.ID_ATTRIBUTE_NAME) +
-      escapeTextForBrowser(id) + '"';
+    return DOMProperty.ID_ATTRIBUTE_NAME + '=' +
+      quoteAttributeValueForBrowser(id);
   },
 
   /**
@@ -99,16 +96,14 @@ var DOMPropertyOperations = {
       var attributeName = DOMProperty.getAttributeName[name];
       if (DOMProperty.hasBooleanValue[name] ||
           (DOMProperty.hasOverloadedBooleanValue[name] && value === true)) {
-        return escapeTextForBrowser(attributeName);
+        return attributeName;
       }
-      return processAttributeNameAndPrefix(attributeName) +
-        escapeTextForBrowser(value) + '"';
+      return attributeName + '=' + quoteAttributeValueForBrowser(value);
     } else if (DOMProperty.isCustomAttribute(name)) {
       if (value == null) {
         return '';
       }
-      return processAttributeNameAndPrefix(name) +
-        escapeTextForBrowser(value) + '"';
+      return name + '=' + quoteAttributeValueForBrowser(value);
     } else if (__DEV__) {
       warnUnknownProperty(name);
     }

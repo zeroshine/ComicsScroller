@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -10,7 +10,7 @@
  * @typechecks static-only
  */
 
-"use strict";
+'use strict';
 
 var ReactPropTypes = require('ReactPropTypes');
 
@@ -81,7 +81,7 @@ var LinkedValueUtils = {
             props.onChange ||
             props.readOnly ||
             props.disabled) {
-          return;
+          return null;
         }
         return new Error(
           'You provided a `value` prop to a form field without an ' +
@@ -95,7 +95,7 @@ var LinkedValueUtils = {
             props.onChange ||
             props.readOnly ||
             props.disabled) {
-          return;
+          return null;
         }
         return new Error(
           'You provided a `checked` prop to a form field without an ' +

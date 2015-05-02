@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -10,11 +10,10 @@
  * @typechecks static-only
  */
 
-"use strict";
+'use strict';
 
 var ReactElement = require('ReactElement');
 var ReactElementValidator = require('ReactElementValidator');
-var ReactLegacyElement = require('ReactLegacyElement');
 
 var mapObject = require('mapObject');
 
@@ -26,13 +25,9 @@ var mapObject = require('mapObject');
  */
 function createDOMFactory(tag) {
   if (__DEV__) {
-    return ReactLegacyElement.markNonLegacyFactory(
-      ReactElementValidator.createFactory(tag)
-    );
+    return ReactElementValidator.createFactory(tag);
   }
-  return ReactLegacyElement.markNonLegacyFactory(
-    ReactElement.createFactory(tag)
-  );
+  return ReactElement.createFactory(tag);
 }
 
 /**

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,9 +9,10 @@
  * @emails react-core
  */
 
-"use strict";
+'use strict';
 
 var React;
+var ReactFragment;
 var ReactTestUtils;
 var reactComponentExpect;
 var ReactMount;
@@ -21,6 +22,7 @@ describe('ReactIdentity', function() {
   beforeEach(function() {
     require('mock-modules').dumpCache();
     React = require('React');
+    ReactFragment = require('ReactFragment');
     ReactTestUtils = require('ReactTestUtils');
     reactComponentExpect = require('reactComponentExpect');
     ReactMount = require('ReactMount');
@@ -35,13 +37,17 @@ describe('ReactIdentity', function() {
     expect(actual[1]).toEqual(expected[1]);
   }
 
+  function frag(obj) {
+    return ReactFragment.create(obj);
+  }
+
   it('should allow keyed objects to express identity', function() {
     var instance =
       <div>
-        {{
+        {frag({
           first: <div />,
           second: <div />
-        }}
+        })}
       </div>;
 
     instance = React.render(instance, document.createElement('div'));
@@ -106,7 +112,7 @@ describe('ReactIdentity', function() {
 
         var map = {};
         map[key] = span2;
-        return <div>{[span1, map]}</div>;
+        return <div>{[span1, frag(map)]}</div>;
       }
 
     });
@@ -182,7 +188,7 @@ describe('ReactIdentity', function() {
 
     expect(function() {
 
-      React.render(<TestContainer />, document.createElement('div'));
+      ReactTestUtils.renderIntoDocument(<TestContainer />);
 
     }).not.toThrow();
   });
@@ -218,7 +224,7 @@ describe('ReactIdentity', function() {
 
     expect(function() {
 
-      React.render(<TestContainer />, document.createElement('div'));
+      ReactTestUtils.renderIntoDocument(<TestContainer />);
 
     }).not.toThrow();
   });
@@ -245,7 +251,7 @@ describe('ReactIdentity', function() {
 
     expect(function() {
 
-      React.render(<TestContainer />, document.createElement('div'));
+      ReactTestUtils.renderIntoDocument(<TestContainer />);
 
     }).not.toThrow();
   });
@@ -261,11 +267,11 @@ describe('ReactIdentity', function() {
     var TestContainer = React.createClass({
 
       getInitialState: function() {
-        return { swapped: false };
+        return {swapped: false};
       },
 
       swap: function() {
-        this.setState({ swapped: true });
+        this.setState({swapped: true});
       },
 
       render: function() {
@@ -304,7 +310,7 @@ describe('ReactIdentity', function() {
       </div>;
 
     expect(function() {
-      React.render(component, document.createElement('div'));
+      ReactTestUtils.renderIntoDocument(component);
     }).not.toThrow();
   });
 

@@ -1,114 +1,68 @@
 var React = require('react');
-var mui = require('material-ui');
-var AppBar =mui.AppBar;
-var AppCanvas=mui.AppCanvas;
-var LeftNav=require('./app-left-nav.jsx');
-var Menu = mui.Menu;
-var ChapterMenu=require('./chapter-menu.jsx');  
 
 var Comics=require('../comics_dm5.js');
 var Echo=require('../echo');
+var Mixins=require('../../Mixin/mymixin.jsx');
+
 var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
 
-var params_str=window.location.search.substring(1);
-var params=params_str.split('&');
-var site= /site\=(.*)/.exec(params[0])[1];
-var pageURL=/chapter\=(.*)\/(\w*)\/$/.exec(params[1])[1];   
-var chapterURL=/chapter\=(.*)$/.exec(params[1])[1];  
-var lastIndex;
-var indexURL="";
-// chrome.storage.sync.set({"test":"test"},function(){console.log("sync success")});
-// chrome.webRequest.onBeforeRequest.addListener(
-//         function(details) { console.log("request") },
-//         {urls: ["<all_urls>"]},
-//         ["blocking"]);
-handler = function(details) {
+var handler = function(details) {
   var isRefererSet = false;
   var headers = details.requestHeaders,
     blockingResponse = {};
-  for (var i = 0, l = headers.length; i < l; ++i) {
-    if (headers[i].name == 'Referer') {
-      headers[i].value = "http://www.manben.com/";
-      isRefererSet = true;
-      break;
-    }
-  }
-  if (!isRefererSet) {
-    headers.push({
-      name: "Referer",
-      value: "http://www.manben.com/"
-    });
-  }
-
+  headers.push({
+    name: "Referer",
+    value: "http://www.manben.com/"
+  });
+  headers.push({
+    name: "Cookie",
+    value: "isAdult=1"
+  })
   blockingResponse.requestHeaders = headers;
   return blockingResponse;
 };
 
-chrome.webRequest.onBeforeSendHeaders.addListener(handler, {urls: ["<all_urls>"]},['requestHeaders', 'blocking']);
+chrome.webRequest.onBeforeSendHeaders.addListener(handler, {urls: ["http://www.manben.com/*"]},['requestHeaders', 'blocking']);
 
 
 
 var Main = React.createClass({
   
-  getInitialState: function(){
-    return {menuItems:[],selectedIndex:null,comicname:"",pageratio:"",chapter:""}
-  },  
+  mixins:[Mixins,Comics],  
 
   componentDidMount: function() {
     // ChapterStore.addListener("update",this._updateChapter);
+    var params_str=window.location.search.substring(1);
+    var params=params_str.split('&');
+    this.site= /site\=(.*)/.exec(params[0])[1];
+    this.pageURL=/chapter\=(.*)\/(\w*)\/$/.exec(params[1])[1];   
+    this.chapterURL=this.baseURL+(/chapter\=(.*)$/.exec(params[1])[1]);  
+
     ChapterStore.addListener("scroll",this._updateInfor);
     var req=new XMLHttpRequest();
-    req.open("GET",Comics.baseURL+chapterURL);
+    req.open("GET",this.chapterURL);
     req.responseType="document";
     req.onload=function(){
       var doc=req.response;
-      indexURL=doc.querySelector("#index_right > div.lan_kk2 > div:nth-child(1) > dl > dt.red_lj > a").href;
-      // console.log('index',indexURL);
-      chrome.storage.sync.get(indexURL,function(items){
-        console.log("store",items);
-        this._getChapter(indexURL,items);
-      }.bind(this)); 
+      this.indexURL=doc.querySelector("#index_right > div.lan_kk2 > div:nth-child(1) > dl > dt.red_lj > a").href;
+      this._getChromeStore(); 
     }.bind(this);
     req.send();
     // this._getChapter();
   },
-  
-  render: function() {
-    var title="Comics Scroller";
-    return (
-      <AppCanvas predefinedLayout={1}>
-        <AppBar title={title+"  "+this.state.comicname+"  "+this.state.chapter+"  "+this.state.pageratio} onMenuIconButtonTouchTap={this._onMenuIconButtonTouchTap} />
-        <LeftNav menuItems={this.state.menuItems} selectedIndex={this.state.selectedIndex} isInitiallyOpen={false} ref="leftNav" onMenuItemClick={this._onMenuItemClick}/>
-        <div id="comics_panel" />   
-      </AppCanvas>
-    );
-  },
-
-  _onMenuIconButtonTouchTap: function() {
-    this.refs.leftNav.toggle();
-  },
-
   _onMenuItemClick: function(e, index, item) {
-    console.log(item.payload);
     var panel=document.getElementById("comics_panel");
-    var menuItems=this._cloneMenuItems();
+    var menuItems=this._cloneMenuItems({isMarked:true,text:true});
     if(this.markedItems.indexOf(menuItems[index].payload)===-1){
       menuItems[index].isMarked=true;
       this.markedItems.push(menuItems[index].payload);
-      var obj={};
-      obj[indexURL]=this.markedItems;
-      chrome.storage.sync.set(obj);
-    }
-    this.setState({menuItems:menuItems,selectedIndex:index,chapter:menuItems[index].text});
-    if(index>0){
-      Comics.setNextURL(this.state.menuItems[index-1]["payload"]);  
-    }
-    lastIndex=index;
+    }   
+    this.setState({menuItems:menuItems,selectedIndex:index,chapter:menuItems[index].text},function(){this._saveChromeStoreReaded()}.bind(this));
+    this.lastIndex=index;
     panel.innerHTML="";
     this._getImage(index,item.payload);
     if(!Echo.hadInited){
-          // console.log("echo init");
       Echo.init({
         offsetBottom: 2500,
         throttle: 50,
@@ -116,63 +70,51 @@ var Main = React.createClass({
       }); 
     }else{
       Echo.run();
-          // console.log("run");
     }    
   },
-
-  _getChapter: function(indexURL , storeItem){    
-    this.markedItems= (storeItem[indexURL]===undefined)? [] : storeItem[indexURL];    
+  _getChapter: function(){    
     var creq=new XMLHttpRequest();
-    creq.open("GET",indexURL,true);
-    console.log(indexURL);
+    creq.open("GET",this.indexURL,true);
     creq.responseType="document";
     creq.withCredentials = true;
     creq.onload=function(){
       var doc=creq.response;
-      var nl = Comics.getChapter(doc);
-      // console.log(nl);
+      var nl = this.getChapter(doc);
+      this.title=this.getTitleName(doc);
+      this.iconUrl=this.getCoverImg(doc);
       var array=[];
       var index=0;
       for(var i=0;i<nl.length;++i){
         var item={};
-        item["payload"]=nl[i].getAttribute("href");
-        if(item["payload"]===chapterURL){
+        item.payload=nl[i].href;
+        if(item.payload===this.chapterURL){
           index=i;
-          item["isMarked"]=true;
-          if(this.markedItems.indexOf(chapterURL)===-1){
-            this.markedItems.push(chapterURL);
-            var obj={};
-            obj[indexURL]=this.markedItems;
-            chrome.storage.sync.set(obj);
+          this._getImage(index,item.payload);
+          item.isMarked=true;
+          if(this.markedItems.indexOf(item.payload)>=0){
+            this.markedItems.push(item.payload);
           }
         }
-        item["text"]=nl[i].textContent;
+        item.text=nl[i].textContent;
         if(this.markedItems.indexOf(item.payload)>=0){
-          item["isMarked"]=true;  
+          item.isMarked=true;  
         }
         array.push(item);
       }
-      Comics.setMinChapterIndex(array.length-1);
-      if(index>0){
-        Comics.setNextURL(array[index-1]["payload"]);  
-      }
-      // console.log(index);
-      this.setState({menuItems:array,selectedIndex:index,chapter:array[index].text,comicname:Comics.getTitleName(doc)});
-      lastIndex=index;
-      this._getImage(index,chapterURL);
+      this.setState({menuItems:array,selectedIndex:index,chapter:array[index].text,comicname:this.getTitleName(doc)},function(){this._saveChromeStoreReaded();}.bind(this));
+      this.lastIndex=index;
     }.bind(this);
     creq.send();
   },
 
   _getImage: function(index,url){
     var req=new XMLHttpRequest();
-    console.log(Comics.baseURL+url);
-    req.open("GET",Comics.baseURL+url,true);
+    req.open("GET",url,true);
     req.responseType="document";
     req.withCredentials = true;
-    req.onload=(function(index,req,Comics){
+    req.onload=(function(index,req,self){
       return function(){
-        Comics.setImages(index,req);
+        self.setImages(index,req);
         if(!Echo.hadInited){
           Echo.init({
             offset: 2500,
@@ -185,7 +127,7 @@ var Main = React.createClass({
                 req.onload=(function(elem){
                   return function(){
                     eval(req.response);
-                    if (typeof (hd_c) != "undefined" && hd_c.length > 0) {
+                    if (typeof (hd_c) != "undefined" && hd_c.length > 0 && typeof (isrevtt) != "undefined") {
                       elem.src=hd_c[0];
                     }else{
                       elem.src=d[0];
@@ -201,50 +143,9 @@ var Main = React.createClass({
           Echo.run();
         }
       }  
-    })(index,req,Comics);
+    })(index,req,this);
     req.send();
-  },
-
-  markedItems: [],
-
-  _cloneMenuItems: function(){
-    var menuItems=[];
-    for(var i=0;i<this.state.menuItems.length;++i){
-      var item={};
-      item.text=this.state.menuItems[i].text;
-      item.payload=this.state.menuItems[i].payload;
-      item.isMarked=this.state.menuItems[i].isMarked;
-      menuItems.push(item);
-    }
-    return menuItems;
-  },
-
-  _updateInfor: function(num,pageratio){
-    var n=parseInt(num);
-    if(n!==this.state.selectedIndex){      
-      var menuItems=this._cloneMenuItems();
-      if(this.markedItems.indexOf(menuItems[n].payload)===-1){
-        menuItems[n].isMarked=true;
-        this.markedItems.push(menuItems[n].payload);
-        var obj={};
-        obj[indexURL]=this.markedItems;
-        chrome.storage.sync.set(obj);
-      }      
-      this.setState({menuItems:menuItems,selectedIndex: n,chapter:this.state.menuItems[n].text});
-    }
-    if(typeof(this.state.menuItems[n].num)==="undefined"&&pageratio!==this.state.menuItems[n].number){
-      var menuItems=this._cloneMenuItems();
-      menuItems[n].number=pageratio;
-      this.setState({menuItems:menuItems,pageratio:pageratio});
-    }
-    if(n===lastIndex){
-      if(lastIndex>0){
-        // console.log("_updateChapter");
-        this._getImage(--lastIndex,this.state.menuItems[lastIndex].payload);
-      }        
-    }
   }
-
 });
 
 module.exports = Main;

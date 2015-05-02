@@ -1,74 +1,78 @@
-console.log("reader starts");
+var comics={
+	baseURL:"http://www.manben.com",	
 
-comics.baseURL="http://www.manben.com";
+	getChapter:function(doc){
+		var nl=doc.querySelectorAll(".nr6.lan2>li>.tg");
+		return nl;
+	},
 
-comics.chapterArray=[];
+	getTitleName:function(doc){
+		return doc.querySelector(".inbt_title_h2").textContent;
+	},
 
-comics.nowChapterIndex=-1;
+	getCoverImg:function(doc){
+		return doc.querySelector(".innr91>img").src;
+	},
 
-comics.appendImage=function(index){
-			console.log('appendImage');
-			for(var i=0;i<comics.pageMax;++i){
-				var img=new Image();
-				// console.log(comics.images[i]);
-				img.setAttribute("data-echo",comics.images[i]);
-				img.setAttribute("data-num",i+1);
-				// img.setAttribute("data-title",comics.titleInfor+" 第"+(i+1)+"/"+comics.pageMax+"頁");
-				img.setAttribute("data-chapter",index);
-				img.style.width="900px";
-				img.style.height="1300px";
-				img.setAttribute("data-pageMax",this.pageMax);
-				// img.setAttribute("data-nextURL",comics.nextURL_tmp);
-				// img.setAttribute("data-preURL",comics.preURL_tmp);
-				if(comics.setMaxHeight||localStorage["mode"]=="page_high"){
-					img.style.maxHeight="92vh";
-				}
-				img.src="";
-				img.className="comics_img";
-				// console.log(comics.titleInfor+" 第"+(i+1)+"/"+comics.pageMax+"頁");
-				document.getElementById("comics_panel").appendChild(img);
+	setImages:function(index,xhr){
+		var doc=xhr.response;
+		var script1=/<script type\=\"text\/javascript\">(.*)reseturl/.exec(doc.head.innerHTML)[1];
+		eval(script1);
+		this.pageMax=DM5_IMAGE_COUNT;
+		var img=[];
+		for(var i=0;i<this.pageMax;++i){
+			img[i]=doc.URL+"chapterfun.ashx?cid="+DM5_CID.toString()+"&page="+(i+1)+"&key=&language=1";
+		}
+		this.images=img;
+		this.appendImage(index);		
+	},
+	backgroundOnload:function(indexURL,chapters,req,items,k){
+      	var doc=req.response;
+	   	var nl = this.getChapter(doc);
+	   	var title=this.getTitleName(doc);
+	   	var imgUrl=this.getCoverImg(doc);
+      	var array=[];
+      	var obj={};
+      	for(var i=0;i<nl.length;++i){
+		  	var item={};
+	       	item.payload=nl[i].href;
+	       	item.text=nl[i].textContent;				      	
+		    array.push(item);
+		    var urlInChapter=false;
+		  	for(var j=0;j<chapters.length;++j){
+    			if(chapters[j].payload===item.payload){
+    				urlInChapter=true;
+    				break;
+    			}
+    		}
+		    if(urlInChapter===false&&chapters.length>0){
+				ObjectAssign(obj,{
+					url:indexURL,
+					title:title,
+					site:'dm5',
+					iconUrl:imgUrl,
+					lastReaded:item
+				});
+		    	chrome.notifications.create(item.payload,{
+					type:"image",
+					iconUrl:'img/comics-64.png',
+					title:"Comics Update",
+					message:title+"  "+obj.lastReaded.text,
+					imageUrl:imgUrl
+				});
+				chrome.storage.local.get('update',function(items){							
+					items.update.push(this);
+					var num=items.update.length.toString();
+					chrome.browserAction.setBadgeText({text:num});
+					chrome.storage.local.set(items);
+				}.bind(obj));
 			}
-			var chapterend=document.createElement("div");
-			chapterend.style.width="100%";
-			chapterend.style.height="50px";
-			chapterend.style.marginBottom="100px";
-			chapterend.style.borderBottom="3px solid white";
-			document.getElementById("comics_panel").appendChild(chapterend);
-};
-
-comics.setMinChapterIndex=function(min){
-	this.minChapterIndex=min;	
-};
-
-comics.setNowChapterIndex=function(){
-	this.nowChapterIndex=index;
-}
-
-comics.setNextURL=function(url){
-	this.nextURL=url;
-};
-
-comics.getChapter=function(doc){
-	var nl=doc.querySelectorAll(".nr6.lan2>li>.tg");
-	return nl;
-}
-
-comics.getTitleName=function(doc){
-	return doc.querySelector(".inbt_title_h2").textContent;
-}
-
-comics.setImages=function(index,xhr){
-	var doc=xhr.response;
-	var script1=/<script type\=\"text\/javascript\">(.*)reseturl/.exec(doc.head.innerHTML)[1];
-	eval(script1);
-	comics.pageMax=DM5_IMAGE_COUNT;
-	var img=[];
-	for(var i=0;i<comics.pageMax;++i){
-		img[i]=doc.URL+"chapterfun.ashx?cid="+DM5_CID.toString()+"&page="+(i+1)+"&key=&language=1";
+		}
+	    items['collected'][k].menuItems=array;
+	    chrome.storage.local.set(items);		
 	}
-	comics.images=img;
-	comics.appendImage(index);		
 };
+
 
 module.exports=comics;
 

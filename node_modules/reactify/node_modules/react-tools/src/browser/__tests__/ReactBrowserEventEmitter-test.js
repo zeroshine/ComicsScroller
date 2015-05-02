@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @emails react-core
  */
 
-"use strict";
+'use strict';
 
 require('mock-modules')
     .dontMock('EventPluginHub')
@@ -377,7 +377,7 @@ describe('ReactBrowserEventEmitter', function() {
     spyOn(EventListener, 'listen');
     ReactBrowserEventEmitter.listenTo(ON_CLICK_KEY, document);
     ReactBrowserEventEmitter.listenTo(ON_CLICK_KEY, document);
-    expect(EventListener.listen.callCount).toBe(1);
+    expect(EventListener.listen.calls.length).toBe(1);
   });
 
   it('should work with event plugins without dependencies', function() {

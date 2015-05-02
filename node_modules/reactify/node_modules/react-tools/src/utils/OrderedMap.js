@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @providesModule OrderedMap
  */
 
-"use strict";
+'use strict';
 
 var assign = require('Object.assign');
 var invariant = require('invariant');
@@ -29,7 +29,7 @@ var PREFIX = 'key:';
  */
 function extractObjectFromArray(arr, keyExtractor) {
   var normalizedObj = {};
-  for (var i=0; i < arr.length; i++) {
+  for (var i = 0; i < arr.length; i++) {
     var item = arr[i];
     var key = keyExtractor(item);
     assertValidPublicKey(key);
@@ -175,7 +175,7 @@ var OrderedMapMethods = {
 
   /**
    * Returns the object for a given key, or `undefined` if not present. To
-   * distinguish a undefined entry vs not being in the set, use `has()`.
+   * distinguish an undefined entry vs not being in the set, use `has()`.
    *
    * @param {string} key String key to lookup the value for.
    * @return {Object?} Object at key `key`, or undefined if not in map.

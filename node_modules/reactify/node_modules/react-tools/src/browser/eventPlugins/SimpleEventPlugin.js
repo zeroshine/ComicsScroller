@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @providesModule SimpleEventPlugin
  */
 
-"use strict";
+'use strict';
 
 var EventConstants = require('EventConstants');
 var EventPluginUtils = require('EventPluginUtils');
@@ -285,8 +285,8 @@ var topLevelEventsToDispatchConfig = {
   topWheel:       eventTypes.wheel
 };
 
-for (var topLevelType in topLevelEventsToDispatchConfig) {
-  topLevelEventsToDispatchConfig[topLevelType].dependencies = [topLevelType];
+for (var type in topLevelEventsToDispatchConfig) {
+  topLevelEventsToDispatchConfig[type].dependencies = [type];
 }
 
 var SimpleEventPlugin = {

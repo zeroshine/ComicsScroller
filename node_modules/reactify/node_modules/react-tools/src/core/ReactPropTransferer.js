@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,15 +9,11 @@
  * @providesModule ReactPropTransferer
  */
 
-"use strict";
+'use strict';
 
 var assign = require('Object.assign');
 var emptyFunction = require('emptyFunction');
-var invariant = require('invariant');
 var joinClasses = require('joinClasses');
-var warning = require('warning');
-
-var didWarn = false;
 
 /**
  * Creates a transfer strategy that will merge prop values using the supplied
@@ -96,8 +92,6 @@ function transferInto(props, newProps) {
  */
 var ReactPropTransferer = {
 
-  TransferStrategies: TransferStrategies,
-
   /**
    * Merge two props objects using TransferStrategies.
    *
@@ -107,57 +101,8 @@ var ReactPropTransferer = {
    */
   mergeProps: function(oldProps, newProps) {
     return transferInto(assign({}, oldProps), newProps);
-  },
-
-  /**
-   * @lends {ReactPropTransferer.prototype}
-   */
-  Mixin: {
-
-    /**
-     * Transfer props from this component to a target component.
-     *
-     * Props that do not have an explicit transfer strategy will be transferred
-     * only if the target component does not already have the prop set.
-     *
-     * This is usually used to pass down props to a returned root component.
-     *
-     * @param {ReactElement} element Component receiving the properties.
-     * @return {ReactElement} The supplied `component`.
-     * @final
-     * @protected
-     */
-    transferPropsTo: function(element) {
-      invariant(
-        element._owner === this,
-        '%s: You can\'t call transferPropsTo() on a component that you ' +
-        'don\'t own, %s. This usually means you are calling ' +
-        'transferPropsTo() on a component passed in as props or children.',
-        this.constructor.displayName,
-        typeof element.type === 'string' ?
-        element.type :
-        element.type.displayName
-      );
-
-      if (__DEV__) {
-        if (!didWarn) {
-          didWarn = true;
-          warning(
-            false,
-            'transferPropsTo is deprecated. ' +
-            'See http://fb.me/react-transferpropsto for more information.'
-          );
-        }
-      }
-
-      // Because elements are immutable we have to merge into the existing
-      // props object rather than clone it.
-      transferInto(element.props, this.props);
-
-      return element;
-    }
-
   }
+
 };
 
 module.exports = ReactPropTransferer;

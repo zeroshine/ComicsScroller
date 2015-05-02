@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -11,7 +11,7 @@
 
 /*jslint evil: true */
 
-"use strict";
+'use strict';
 
 require('mock-modules')
   .dontMock('ExecutionEnvironment')
@@ -48,9 +48,10 @@ describe('ReactServerRendering', function() {
 
     var DOMProperty = require('DOMProperty');
     ID_ATTRIBUTE_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
+    spyOn(console, 'warn');
   });
 
-  describe('renderComponentToString', function() {
+  describe('renderToString', function() {
     it('should generate simple markup', function() {
       var response = ReactServerRendering.renderToString(
         <span>hello world</span>
@@ -205,25 +206,22 @@ describe('ReactServerRendering', function() {
         <TestComponent name="x" />
       );
       ExecutionEnvironment.canUseDOM = true;
-      element.innerHTML = lastMarkup + ' __sentinel__';
+      element.innerHTML = lastMarkup;
 
       React.render(<TestComponent name="x" />, element);
       expect(mountCount).toEqual(3);
-      expect(element.innerHTML.indexOf('__sentinel__') > -1).toBe(true);
+      expect(element.innerHTML).toBe(lastMarkup);
       React.unmountComponentAtNode(element);
       expect(element.innerHTML).toEqual('');
 
       // Now simulate a situation where the app is not idempotent. React should
       // warn but do the right thing.
-      var _warn = console.warn;
-      console.warn = mocks.getMockFunction();
       element.innerHTML = lastMarkup;
       var instance = React.render(<TestComponent name="y" />, element);
       expect(mountCount).toEqual(4);
-      expect(console.warn.mock.calls.length).toBe(1);
+      expect(console.warn.argsForCall.length).toBe(1);
       expect(element.innerHTML.length > 0).toBe(true);
       expect(element.innerHTML).not.toEqual(lastMarkup);
-      console.warn = _warn;
 
       // Ensure the events system works
       expect(numClicks).toEqual(0);
@@ -244,9 +242,8 @@ describe('ReactServerRendering', function() {
     });
   });
 
-  describe('renderComponentToStaticMarkup', function() {
+  describe('renderToStaticMarkup', function() {
     it('should not put checksum and React ID on components', function() {
-      var lifecycle = [];
       var NestedComponent = React.createClass({
         render: function() {
           return <div>inner text</div>;
@@ -255,7 +252,6 @@ describe('ReactServerRendering', function() {
 
       var TestComponent = React.createClass({
         render: function() {
-          lifecycle.push('render');
           return <span><NestedComponent /></span>;
         }
       });

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -10,7 +10,7 @@
  * @typechecks static-only
  */
 
-"use strict";
+'use strict';
 
 var EventConstants = require('EventConstants');
 var EventPluginHub = require('EventPluginHub');
@@ -126,7 +126,7 @@ var topEventMapping = {
 /**
  * To ensure no conflicts with other potential React instances on the page
  */
-var topListenersIDKey = "_reactListenersID" + String(Math.random()).slice(2);
+var topListenersIDKey = '_reactListenersID' + String(Math.random()).slice(2);
 
 function getListeningForDocument(mountAt) {
   // In IE8, `mountAt` is a host object and doesn't have `hasOwnProperty`
@@ -328,7 +328,7 @@ var ReactBrowserEventEmitter = assign({}, ReactEventEmitterMixin, {
    *
    * @see http://www.quirksmode.org/dom/events/scroll.html
    */
-  ensureScrollValueMonitoring: function(){
+  ensureScrollValueMonitoring: function() {
     if (!isMonitoringScrollValue) {
       var refresh = ViewportMetrics.refreshScrollValues;
       ReactBrowserEventEmitter.ReactEventListener.monitorScrollValue(refresh);

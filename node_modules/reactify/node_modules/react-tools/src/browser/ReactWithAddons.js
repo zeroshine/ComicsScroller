@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -16,13 +16,14 @@
  * place to live inside React core.
  */
 
-"use strict";
+'use strict';
 
 var LinkedStateMixin = require('LinkedStateMixin');
 var React = require('React');
 var ReactComponentWithPureRenderMixin =
   require('ReactComponentWithPureRenderMixin');
 var ReactCSSTransitionGroup = require('ReactCSSTransitionGroup');
+var ReactFragment = require('ReactFragment');
 var ReactTransitionGroup = require('ReactTransitionGroup');
 var ReactUpdates = require('ReactUpdates');
 
@@ -39,6 +40,7 @@ React.addons = {
   batchedUpdates: ReactUpdates.batchedUpdates,
   classSet: cx,
   cloneWithProps: cloneWithProps,
+  createFragment: ReactFragment.create,
   update: update
 };
 

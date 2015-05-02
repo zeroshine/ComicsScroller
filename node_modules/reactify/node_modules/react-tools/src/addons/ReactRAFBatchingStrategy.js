@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -10,7 +10,9 @@
  * @typechecks static-only
  */
 
-"use strict";
+/* global requestAnimationFrame:true */
+
+'use strict';
 
 var ExecutionEnvironment = require('ExecutionEnvironment');
 var ReactUpdates = require('ReactUpdates');
@@ -29,8 +31,8 @@ var ReactRAFBatchingStrategy = {
    * Call the provided function in a context within which calls to `setState`
    * and friends are batched such that components aren't updated unnecessarily.
    */
-  batchedUpdates: function(callback, a, b) {
-    callback(a, b);
+  batchedUpdates: function(callback, a, b, c, d) {
+    callback(a, b, c, d);
   }
 };
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @emails react-core
  */
 
-"use strict";
+'use strict';
 
 var React;
 var ReactTestUtils;
@@ -629,6 +629,43 @@ describe('ReactUpdates', function() {
     ]);
   });
 
+  it('should flush updates in the correct order across roots', function() {
+    var instances = [];
+    var updates = [];
+
+    var MockComponent = React.createClass({
+      render: function() {
+        updates.push(this.props.depth);
+        return <div />;
+      },
+      componentDidMount: function() {
+        instances.push(this);
+        if (this.props.depth < this.props.count) {
+          React.render(
+            <MockComponent
+              depth={this.props.depth + 1}
+              count={this.props.count}
+            />,
+            this.getDOMNode()
+          );
+        }
+      }
+    });
+
+    ReactTestUtils.renderIntoDocument(<MockComponent depth={0} count={2} />);
+
+    expect(updates).toEqual([0, 1, 2]);
+
+    ReactUpdates.batchedUpdates(function() {
+      // Simulate update on each component from top to bottom.
+      instances.forEach(function(instance) {
+        instance.forceUpdate();
+      });
+    });
+
+    expect(updates).toEqual([0, 1, 2, 0, 1, 2]);
+  });
+
   it('should queue nested updates', function() {
     // See https://github.com/facebook/react/issues/1147
 
@@ -761,8 +798,7 @@ describe('ReactUpdates', function() {
       }
     });
 
-    var container = document.createElement('div');
-    var component = React.render(<A />, container);
+    var component = ReactTestUtils.renderIntoDocument(<A />);
     component.forceUpdate();
     expect(callbackCount).toBe(2);
   });
@@ -795,8 +831,7 @@ describe('ReactUpdates', function() {
       }
     });
 
-    var container = document.createElement('div');
-    var component = React.render(<A />, container);
+    var component = ReactTestUtils.renderIntoDocument(<A />);
     component.setState({updates: 1});
     expect(log).toEqual([
       'render-0',
@@ -815,4 +850,44 @@ describe('ReactUpdates', function() {
       'asap-1.2'
     ]);
   });
+
+  it('does not call render after a component as been deleted', function() {
+
+    var renderCount = 0;
+    var componentB = null;
+
+    var B = React.createClass({
+      getInitialState: function() {
+        return {updates: 0};
+      },
+      componentDidMount: function() {
+        componentB = this;
+      },
+      render: function() {
+        renderCount++;
+        return <div />;
+      }
+    });
+
+    var A = React.createClass({
+      getInitialState: function() {
+        return {showB: true};
+      },
+      render: function() {
+        return this.state.showB ? <B /> : <div />;
+      }
+    });
+
+    var component = ReactTestUtils.renderIntoDocument(<A />);
+
+    ReactUpdates.batchedUpdates(function() {
+      // B will have scheduled an update but the batching should ensure that its
+      // update never fires.
+      componentB.setState({updates: 1});
+      component.setState({showB: false});
+    });
+
+    expect(renderCount).toBe(1);
+  });
+
 });

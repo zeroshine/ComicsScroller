@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @providesModule EventPluginHub
  */
 
-"use strict";
+'use strict';
 
 var EventPluginRegistry = require('EventPluginRegistry');
 var EventPluginUtils = require('EventPluginUtils');
@@ -58,12 +58,14 @@ var executeDispatchesAndRelease = function(event) {
 var InstanceHandle = null;
 
 function validateInstanceHandle() {
-  var invalid = !InstanceHandle||
-    !InstanceHandle.traverseTwoPhase ||
-    !InstanceHandle.traverseEnterLeave;
-  if (invalid) {
-    throw new Error('InstanceHandle not injected before use!');
-  }
+  var valid =
+    InstanceHandle &&
+    InstanceHandle.traverseTwoPhase &&
+    InstanceHandle.traverseEnterLeave;
+  invariant(
+    valid,
+    'InstanceHandle not injected before use!'
+  );
 }
 
 /**

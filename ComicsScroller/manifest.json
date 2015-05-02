@@ -1,6 +1,6 @@
 {
     "name":"Comics Scroller",
-    "version":"2.0.1",
+    "version":"2.0.2",
     "manifest_version":2,
     "description":"Comics Scroller is an extention giving you a better reading experience on china comics website.",
     "icons":{
@@ -9,15 +9,18 @@
         "64":"img/comics-64.png",
         "128":"img/comics-128.png"
     },
+    "browser_action": {
+        "default_icon": {
+          "16": "images/comics-16.png"
+        },
+        "default_title": "Comics Scroller",      // optional; shown in tooltip
+        "default_popup": "popup.html"        // optional
+    },
     "background":{
         "page": "background.html",
-        "persistence":false
+        "persistence":true
     },
-    "permissions":["webRequest","webRequestBlocking","cookies","storage","tabs","activeTab","http://new.comicvip.com/*","http://www.comicvip.com/*","http://comic.sfacg.com/*","http://www.manben.com/*","http://tel.dm5.com/*","http://www.dm5.com/*"],
-    "content_security_policy": "script-src 'self' 'unsafe-eval' https://*.google-analytics.com https://ajax.googleapis.com ; object-src 'self'",
-    "page_action":{
-        "default_icon":"img/comics-16.png",
-        "default_title":"Comics Scroller"
-    },
+    "permissions":["unlimitedStorage","notifications","webRequest","webRequestBlocking","cookies","storage","tabs","activeTab","http://*.comicvip.com/*","http://*.sfacg.com/*","http://www.manben.com/*","http://*.dm5.com/*","http://*.cdndm5.com/*"],
+    "content_security_policy": "img-src 'self' * ; script-src 'self' 'unsafe-eval' https://*.google-analytics.com https://ajax.googleapis.com ; object-src 'self' ; ",
     "web_accessible_resources":["js/*.js","css/*.css"]
 }

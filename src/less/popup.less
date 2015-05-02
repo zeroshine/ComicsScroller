@@ -1,0 +1,73 @@
+@import "node_modules/material-ui/src/less/scaffolding.less";
+@import "node_modules/material-ui/src/less/components.less";
+//Define a custom less file to override any variables defined in scaffolding.less
+
+@import (less)"icomoon/style.css";
+// @import (less)"font-icons/style.css";
+// @import (less) "github.css";
+// @import "custom-overrides.less";
+@icon-size :16px;
+
+html,body{
+  // margin: 2px;
+  height:400px;
+  width:500px;
+  overflow-y: scroll;
+  // padding-left:10px;
+  // padding-right: 10px;
+  background-color: @grey-200; 
+}
+
+.mui-tabs-container {
+  .mui-tab-item-container {
+    .mui-tab-item {
+      font-size: 18px;
+	}
+  }
+}
+
+.mui-tabs-container {
+  .mui-tab-template {
+        height:352px;
+        overflow-y: scroll;
+  }
+}
+
+
+
+.material-card{
+	vertical-align:top;
+	height: 105px;
+	margin:10px;
+	background-color: @grey-50;
+	img{
+		height:100px;
+		width: 100px;
+		float: left;
+	}
+	.material-card-infor{
+		text-align: top;
+		display: inline-block;
+		// height:128px;
+		float: left;
+		margin-left:10px;
+		margin-top:0px;
+		.card-readed-link:hover{
+			color:red;
+			cursor: pointer;
+		}
+		.card-site-link{
+			color:@grey-700;
+		}
+		.card-title-link:hover{
+			color:blue;
+			cursor: pointer;
+		}
+	}
+	.material-cancel-button{
+		float: right;
+	}	
+	.material-cancel-button{
+		float: right;
+	}
+}

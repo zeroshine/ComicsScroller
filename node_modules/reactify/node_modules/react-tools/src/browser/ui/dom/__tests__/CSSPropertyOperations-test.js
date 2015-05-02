@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -11,7 +11,7 @@
 
 /*jslint evil: true */
 
-"use strict";
+'use strict';
 
 var React = require('React');
 
@@ -136,4 +136,35 @@ describe('CSSPropertyOperations', function() {
     expect(console.warn.argsForCall[1][0]).toContain('WebkitTransform');
   });
 
+  it('warns when miscapitalizing vendored style names', function() {
+    spyOn(console, 'warn');
+
+    CSSPropertyOperations.createMarkupForStyles({
+      msTransform: 'translate3d(0, 0, 0)',
+      oTransform: 'translate3d(0, 0, 0)',
+      webkitTransform: 'translate3d(0, 0, 0)'
+    });
+
+    // msTransform is correct already and shouldn't warn
+    expect(console.warn.argsForCall.length).toBe(2);
+    expect(console.warn.argsForCall[0][0]).toContain('oTransform');
+    expect(console.warn.argsForCall[0][0]).toContain('OTransform');
+    expect(console.warn.argsForCall[1][0]).toContain('webkitTransform');
+    expect(console.warn.argsForCall[1][0]).toContain('WebkitTransform');
+  });
+
+  it('should warn about style having a trailing semicolon', function() {
+    spyOn(console, 'warn');
+
+    CSSPropertyOperations.createMarkupForStyles({
+      fontFamily: 'Helvetica, arial',
+      backgroundImage: 'url(foo;bar)',
+      backgroundColor: 'blue;',
+      color: 'red;   '
+    });
+
+    expect(console.warn.calls.length).toBe(2);
+    expect(console.warn.argsForCall[0][0]).toContain('Try "backgroundColor: blue" instead');
+    expect(console.warn.argsForCall[1][0]).toContain('Try "color: red" instead');
+  });
 });

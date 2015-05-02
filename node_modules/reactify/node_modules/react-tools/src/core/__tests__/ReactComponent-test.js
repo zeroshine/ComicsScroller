@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,16 +9,20 @@
  * @emails react-core
  */
 
-"use strict";
+'use strict';
 
 var React;
+var ReactInstanceMap;
 var ReactTestUtils;
 
+var mocks;
 var reactComponentExpect;
 
 describe('ReactComponent', function() {
   beforeEach(function() {
+    mocks = require('mocks');
     React = require('React');
+    ReactInstanceMap = require('ReactInstanceMap');
     ReactTestUtils = require('ReactTestUtils');
     reactComponentExpect = require('reactComponentExpect');
   });
@@ -46,26 +50,6 @@ describe('ReactComponent', function() {
     expect(function() {
       instance = ReactTestUtils.renderIntoDocument(instance);
     }).toThrow();
-  });
-
-  it('should throw when attempting to hijack a ref', function() {
-    var Component = React.createClass({
-      render: function() {
-        var child = this.props.child;
-        this.attachRef('test', child);
-        return child;
-      }
-    });
-
-    var childInstance = ReactTestUtils.renderIntoDocument(<span />);
-    var instance = <Component child={childInstance} />;
-
-    expect(function() {
-      instance = ReactTestUtils.renderIntoDocument(instance);
-    }).toThrow(
-      'Invariant Violation: attachRef(test, ...): Only a component\'s owner ' +
-      'can store a ref to it.'
-    );
   });
 
   it('should support refs on owned components', function() {
@@ -118,98 +102,167 @@ describe('ReactComponent', function() {
     instance = ReactTestUtils.renderIntoDocument(instance);
   });
 
-  it('should correctly determine if a component is mounted', function() {
+  it('should support new-style refs', function() {
+    var innerObj = {}, outerObj = {};
+
+    var Wrapper = React.createClass({
+      getObject: function() {
+        return this.props.object;
+      },
+      render: function() {
+        return <div>{this.props.children}</div>;
+      }
+    });
+
+    var mounted = false;
     var Component = React.createClass({
-      componentWillMount: function() {
-        expect(this.isMounted()).toBeFalsy();
+      render: function() {
+        var inner = <Wrapper object={innerObj} ref={(c) => this.innerRef = c} />;
+        var outer = (
+          <Wrapper object={outerObj} ref={(c) => this.outerRef = c}>
+            {inner}
+          </Wrapper>
+        );
+        return outer;
       },
       componentDidMount: function() {
-        expect(this.isMounted()).toBeTruthy();
-      },
-      render: function() {
-        return <div/>;
+        expect(this.innerRef.getObject()).toEqual(innerObj);
+        expect(this.outerRef.getObject()).toEqual(outerObj);
+        mounted = true;
       }
     });
 
-    var element = <Component />;
-
-    var instance = ReactTestUtils.renderIntoDocument(element);
-    expect(instance.isMounted()).toBeTruthy();
-  });
-
-  it('should know its simple mount depth', function() {
-    var Owner = React.createClass({
-      render: function() {
-        return <Child ref="child" />;
-      }
-    });
-
-    var Child = React.createClass({
-      render: function() {
-        return <div />;
-      }
-    });
-
-    var instance = <Owner />;
+    var instance = <Component />;
     instance = ReactTestUtils.renderIntoDocument(instance);
-    expect(instance._mountDepth).toBe(0);
-    expect(instance.refs.child._mountDepth).toBe(1);
+    expect(mounted).toBe(true);
   });
 
-  it('should know its (complicated) mount depth', function() {
-    var Box = React.createClass({
+  it('should support new-style refs with mixed-up owners', function() {
+    var Wrapper = React.createClass({
       render: function() {
-        return <div ref="boxDiv">{this.props.children}</div>;
+        return this.props.getContent();
       }
     });
 
-    var Child = React.createClass({
-      render: function() {
-        return <span ref="span">child</span>;
-      }
-    });
-
-    var Switcher = React.createClass({
-      getInitialState: function() {
-        return {tabKey: 'hello'};
+    var mounted = false;
+    var Component = React.createClass({
+      getInner: function() {
+        // (With old-style refs, it's impossible to get a ref to this div
+        // because Wrapper is the current owner when this function is called.)
+        return <div title="inner" ref={(c) => this.innerRef = c} />;
       },
-
       render: function() {
-        var child = this.props.children;
-
         return (
-          <Box ref="box">
-            <div
-              ref="switcherDiv"
-              style={{
-                display: this.state.tabKey === child.key ? '' : 'none'
-            }}>
-              {child}
-            </div>
-          </Box>
+          <Wrapper
+            title="wrapper"
+            ref={(c) => this.wrapperRef = c}
+            getContent={this.getInner}
+            />
         );
+      },
+      componentDidMount: function() {
+        // Check .props.title to make sure we got the right elements back
+        expect(this.wrapperRef.props.title).toBe('wrapper');
+        expect(this.innerRef.props.title).toBe('inner');
+        mounted = true;
       }
     });
 
-    var App = React.createClass({
-      render: function() {
-        return (
-          <Switcher ref="switcher">
-            <Child key="hello" ref="child" />
-          </Switcher>
-        );
-      }
-    });
-
-    var root = <App />;
-    root = ReactTestUtils.renderIntoDocument(root);
-
-    expect(root._mountDepth).toBe(0);
-    expect(root.refs.switcher._mountDepth).toBe(1);
-    expect(root.refs.switcher.refs.box._mountDepth).toBe(2);
-    expect(root.refs.switcher.refs.switcherDiv._mountDepth).toBe(4);
-    expect(root.refs.child._mountDepth).toBe(5);
-    expect(root.refs.switcher.refs.box.refs.boxDiv._mountDepth).toBe(3);
-    expect(root.refs.child.refs.span._mountDepth).toBe(6);
+    var instance = <Component />;
+    instance = ReactTestUtils.renderIntoDocument(instance);
+    expect(mounted).toBe(true);
   });
+
+  it('should call refs at the correct time', function() {
+    var log = [];
+
+    var Inner = React.createClass({
+      render: function() {
+        log.push(`inner ${this.props.id} render`);
+        return <div />;
+      },
+      componentDidMount: function() {
+        log.push(`inner ${this.props.id} componentDidMount`);
+      },
+      componentDidUpdate: function() {
+        log.push(`inner ${this.props.id} componentDidUpdate`);
+      },
+      componentWillUnmount: function() {
+        log.push(`inner ${this.props.id} componentWillUnmount`);
+      }
+    });
+
+    var Outer = React.createClass({
+      render: function() {
+        return (
+          <div>
+            <Inner id={1} ref={(c) => {
+              log.push(`ref 1 got ${c ? `instance ${c.props.id}` : 'null'}`);
+            }}/>
+            <Inner id={2} ref={(c) => {
+              log.push(`ref 2 got ${c ? `instance ${c.props.id}` : 'null'}`);
+            }}/>
+          </div>
+        );
+      },
+      componentDidMount: function() {
+        log.push('outer componentDidMount');
+      },
+      componentDidUpdate: function() {
+        log.push('outer componentDidUpdate');
+      },
+      componentWillUnmount: function() {
+        log.push('outer componentWillUnmount');
+      }
+    });
+
+    // mount, update, unmount
+    var el = document.createElement('div');
+    log.push('start mount');
+    React.render(<Outer />, el);
+    log.push('start update');
+    React.render(<Outer />, el);
+    log.push('start unmount');
+    React.unmountComponentAtNode(el);
+
+    expect(log).toEqual([
+      'start mount',
+        'inner 1 render',
+        'inner 2 render',
+        'inner 1 componentDidMount',
+        'ref 1 got instance 1',
+        'inner 2 componentDidMount',
+        'ref 2 got instance 2',
+        'outer componentDidMount',
+      'start update',
+        // Previous (equivalent) refs get cleared
+        'ref 1 got null',
+        'inner 1 render',
+        'ref 2 got null',
+        'inner 2 render',
+        'inner 1 componentDidUpdate',
+        'ref 1 got instance 1',
+        'inner 2 componentDidUpdate',
+        'ref 2 got instance 2',
+        'outer componentDidUpdate',
+      'start unmount',
+        'outer componentWillUnmount',
+        'ref 1 got null',
+        'inner 1 componentWillUnmount',
+        'ref 2 got null',
+        'inner 2 componentWillUnmount'
+    ]);
+  });
+
+  it('fires the callback after a component is rendered', function() {
+    var callback = mocks.getMockFunction();
+    var container = document.createElement('div');
+    React.render(<div />, container, callback);
+    expect(callback.mock.calls.length).toBe(1);
+    React.render(<div className="foo" />, container, callback);
+    expect(callback.mock.calls.length).toBe(2);
+    React.render(<span />, container, callback);
+    expect(callback.mock.calls.length).toBe(3);
+  });
+
 });

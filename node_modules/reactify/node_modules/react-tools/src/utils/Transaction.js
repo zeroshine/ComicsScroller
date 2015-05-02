@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @providesModule Transaction
  */
 
-"use strict";
+'use strict';
 
 var invariant = require('invariant');
 
@@ -61,7 +61,7 @@ var invariant = require('invariant');
  *   content.
  * - (Future use case): Wrapping particular flushes of the `ReactWorker` queue
  *   to preserve the `scrollTop` (an automatic scroll aware DOM).
- * - (Future use case): Layout calculations before and after DOM upates.
+ * - (Future use case): Layout calculations before and after DOM updates.
  *
  * Transactional plugin API:
  * - A module that has an `initialize` method that returns any precomputation.
@@ -203,8 +203,8 @@ var Mixin = {
         // close -- if it's still set to true in the finally block, it means
         // wrapper.close threw.
         errorThrown = true;
-        if (initData !== Transaction.OBSERVED_ERROR) {
-          wrapper.close && wrapper.close.call(this, initData);
+        if (initData !== Transaction.OBSERVED_ERROR && wrapper.close) {
+          wrapper.close.call(this, initData);
         }
         errorThrown = false;
       } finally {

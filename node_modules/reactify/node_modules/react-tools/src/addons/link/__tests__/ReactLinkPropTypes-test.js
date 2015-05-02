@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -9,7 +9,7 @@
  * @emails react-core
  */
 
-"use strict";
+'use strict';
 
 var emptyFunction = require('emptyFunction');
 var LinkPropTypes = require('ReactLink').PropTypes;
@@ -40,7 +40,7 @@ function typeCheckPass(declaration, value) {
     'testComponent',
     ReactPropTypeLocations.prop
   );
-  expect(error).toBe(undefined);
+  expect(error).toBe(null);
 }
 
 describe('ReactLink', function() {
@@ -95,7 +95,7 @@ describe('ReactLink', function() {
       {value: 42, requestChange: emptyFunction}
     );
     typeCheckPass(
-      LinkPropTypes.link(React.PropTypes.renderable),
+      LinkPropTypes.link(React.PropTypes.node),
       {value: 42, requestChange: emptyFunction}
     );
   });
