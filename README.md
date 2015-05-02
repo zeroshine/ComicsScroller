@@ -1,11 +1,13 @@
 # ComicsScroller
-ComicsScroller is a chrome extension which makes the comics website shows all images of one chapter in the page. And it will append all the images in the next chapter in the end of pages automatically when user scrolls to the bottom of the page. 
+ComicsScroller is a chrome extension which makes the comics website shows all images of one chapter in the page. And it will append all the images in the next chapter in the end of pages automatically when user scrolls to the bottom of the page. It also can subscribe comics and notify you when there is an update.  
 
 
 # Support Websites
-http://www.8comic.com/  
-http://comic.sfacg.com/  
-http://tel.dm5.com/  
+http://www.8comic.com/
+http://comic.sfacg.com/
+http://tel.dm5.com/
+http://www.dm5.com/
+http://www.manben.com/  
 
 # Chrome Web Store
 https://chrome.google.com/webstore/detail/comics-scroller/mccpalfmlnjadfnojmphffidnbemnkec
