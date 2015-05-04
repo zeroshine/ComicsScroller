@@ -1,6 +1,32 @@
 var ObjectAssign=require('object-assign');
 var comics={
-	baseURL:"http://comic.sfacg.com",
+	regex: /http\:\/\/comic\.sfacg\.com\/(HTML\/\w*\/\w*\/.*)/,
+
+	baseURL:"http://comic.sfacg.com/",
+
+	handleUrlHash:function(){
+		var params_str=window.location.hash;
+	    this.site= /site\/(\w*)\//.exec(params_str)[1];
+	    this.pageURL=/chapter\/(HTML\/\w*\/)/.exec(params_str)[1];   
+	    this.chapterURL=this.baseURL+(/chapter\/(.*)$/.exec(params_str)[1]);
+	    this.indexURL=this.baseURL+this.pageURL;
+    	if(!(/#$/.test(params_str))){
+	      console.log('page back');
+	      document.getElementById("comics_panel").innerHTML="";
+	      var index=-1;
+	      for(var i=0;i<this.state.menuItems.length;++i){
+	        if(this.state.menuItems[i].payload===this.chapterURL&&index===-1){
+	          index=i;
+	          this.lastIndex=index;
+	          this._getImage(index,this.chapterURL);
+	          this.setState({selectedIndex:index,chapter:this.state.menuItems[index].text,pageratio:""});
+	          break;
+	        }
+	      }
+	    }else{
+	      window.history.replaceState('',document.title,"#/site/sf/chapter/"+(/chapter\/(.*\/)/.exec(params_str)[1]));
+	    }  
+	},
 
 	getChapter:function(doc){
 		var nl=doc.querySelectorAll(".serialise_list>li>a");

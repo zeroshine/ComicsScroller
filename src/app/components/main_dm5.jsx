@@ -26,20 +26,16 @@ var handler = function(details) {
 chrome.webRequest.onBeforeSendHeaders.addListener(handler, {urls: ["http://www.manben.com/*"]},['requestHeaders', 'blocking']);
 
 
+var hasAddedListener=false;
+
 
 var Main = React.createClass({
   
   mixins:[Mixins,Comics],  
-
   componentDidMount: function() {
     // ChapterStore.addListener("update",this._updateChapter);
-    var params_str=window.location.search.substring(1);
-    var params=params_str.split('&');
-    this.site= /site\=(.*)/.exec(params[0])[1];
-    this.pageURL=/chapter\=(.*)\/(\w*)\/$/.exec(params[1])[1];   
-    this.chapterURL=this.baseURL+(/chapter\=(.*)$/.exec(params[1])[1]);  
-
-    ChapterStore.addListener("scroll",this._updateInfor);
+    this.handleUrlHash();
+    this._getImage(-1,this.chapterURL);
     var req=new XMLHttpRequest();
     req.open("GET",this.chapterURL);
     req.responseType="document";
@@ -49,24 +45,33 @@ var Main = React.createClass({
       this._getChromeStore(); 
     }.bind(this);
     req.send();
+
+    if(!hasAddedListener){
+      ChapterStore.addListener("scroll",this._updateInfor);
+      window.addEventListener("hashchange",function(e){
+        this.handleUrlHash();
+      }.bind(this));
+      hasHashChangeListener=true;
+    }
     // this._getChapter();
   },
   _onMenuItemClick: function(e, index, item) {
     var panel=document.getElementById("comics_panel");
     var menuItems=this._cloneMenuItems({isMarked:true,text:true});
-    if(this.markedItems.indexOf(menuItems[index].payload)===-1){
+    if(!this.markedItems.has(menuItems[index].payload)){
       menuItems[index].isMarked=true;
-      this.markedItems.push(menuItems[index].payload);
+      this.markedItems=this.markedItems.add(menuItems[index].payload);
     }   
     this.setState({menuItems:menuItems,selectedIndex:index,chapter:menuItems[index].text},function(){this._saveChromeStoreReaded()}.bind(this));
     this.lastIndex=index;
-    panel.innerHTML="";
-    this._getImage(index,item.payload);
+    // panel.innerHTML="";
+    // this._getImage(index,item.payload);
+    this._updateHash(menuItems[index].payload,'');
     if(!Echo.hadInited){
       Echo.init({
         offsetBottom: 2500,
-        throttle: 50,
-        unload: false
+        throttle: 200,
+        unload: true
       }); 
     }else{
       Echo.run();
@@ -79,29 +84,30 @@ var Main = React.createClass({
     creq.withCredentials = true;
     creq.onload=function(){
       var doc=creq.response;
-      var nl = this.getChapter(doc);
-      this.title=this.getTitleName(doc);
-      this.iconUrl=this.getCoverImg(doc);
+      var nl = this.getChapter(doc);      
       var array=[];
-      var index=0;
+      var index=-1;
       for(var i=0;i<nl.length;++i){
         var item={};
         item.payload=nl[i].href;
-        if(item.payload===this.chapterURL){
+        if(item.payload===this.chapterURL&&index===-1){
           index=i;
-          this._getImage(index,item.payload);
+          this.setImageIndex(index);
           item.isMarked=true;
-          if(this.markedItems.indexOf(item.payload)>=0){
-            this.markedItems.push(item.payload);
+          if(!this.markedItems.has(item.payload)){
+            this.markedItems=this.markedItems.add(item.payload);
           }
         }
         item.text=nl[i].textContent;
-        if(this.markedItems.indexOf(item.payload)>=0){
+        if(this.markedItems.has(item.payload)){
           item.isMarked=true;  
         }
         array.push(item);
       }
-      this.setState({menuItems:array,selectedIndex:index,chapter:array[index].text,comicname:this.getTitleName(doc)},function(){this._saveChromeStoreReaded();}.bind(this));
+      this.title=this.getTitleName(doc);
+      this.iconUrl=this.getCoverImg(doc);
+      document.title=this.title+" "+array[index].text;
+      this.setState({menuItems:array,selectedIndex:index,chapter:array[index].text,comicname:this.title},function(){this._saveChromeStoreReaded();}.bind(this));
       this.lastIndex=index;
     }.bind(this);
     creq.send();
@@ -119,7 +125,7 @@ var Main = React.createClass({
           Echo.init({
             offset: 2500,
             throttle: 200,
-            unload: false,
+            unload: true,
             imgRender:  function(elem){
                 var req=new XMLHttpRequest();
                 req.open("GET",elem.getAttribute("data-echo"),true);
@@ -133,7 +139,7 @@ var Main = React.createClass({
                       elem.src=d[0];
                     }
                     elem.removeAttribute('data-echo');
-                    elem.removeAttribute('style');
+                    // elem.removeAttribute('style');
                   }
                 })(elem);
                 req.send();
@@ -145,7 +151,15 @@ var Main = React.createClass({
       }  
     })(index,req,this);
     req.send();
+  },
+  
+  _updateHash:function(url,type){
+    var chapterHash="chapter\/"+Comics.regex.exec(url)[1];
+    var str=window.location.hash;
+    str=str.replace(/chapter\/.*$/,chapterHash)+type;
+    window.location.hash=str;
   }
+
 });
 
 module.exports = Main;

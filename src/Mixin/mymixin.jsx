@@ -1,5 +1,6 @@
 // var React = require('react');
 var mui = require('material-ui');
+var Immutable = require('immutable');
 var AppBar =mui.AppBar;
 var AppCanvas=mui.AppCanvas;
 var IconButton=mui.IconButton;
@@ -14,7 +15,6 @@ var Echo=require('../app/echo');
 var MyMixin={
 
   getInitialState: function(){
-    console.log('initial state');
     return {menuItems:[],selectedIndex:null,comicname:"",pageratio:"",chapter:"",starIsMarked:false}
   },    
   
@@ -26,6 +26,7 @@ var MyMixin={
         className="github-icon-button"
         iconClassName="icon-github"
         tooltip="Github"
+        target="_blank"
         href="https://github.com/zeroshine/ComicsScroller"
         linkButton={true} />
     );
@@ -46,28 +47,36 @@ var MyMixin={
   },
 
   appendImage:function(index){
-      console.log('appendImage');
       for(var i=0;i<this.pageMax;++i){
         var img=new Image();
+        img.src="../img/Transparent.gif";
         img.setAttribute("data-echo",this.images[i]);
         img.setAttribute("data-num",i+1);
         img.setAttribute("data-chapter",index);
         img.style.width="900px";
         img.style.height="1300px";
+        img.style.borderWidth="1px";
+        img.style.borderColor="white";
+        img.style.borderStyle="solid";
         img.setAttribute("data-pageMax",this.pageMax);
-        img.src="";
         img.className="comics_img";
         document.getElementById("comics_panel").appendChild(img);
       }
-      var chapterend=document.createElement("div");
-      chapterend.style.width="100%";
-      chapterend.style.height="50px";
-      chapterend.style.marginBottom="100px";
-      chapterend.style.borderBottom="3px solid white";
-      document.getElementById("comics_panel").appendChild(chapterend);
+      var chapterEnd=document.createElement("div");
+      chapterEnd.className="comics_img_end";
+      chapterEnd.textContent="本話結束";
+      document.getElementById("comics_panel").appendChild(chapterEnd);
+  },
+
+  setImageIndex:function(index){
+    console.log('set image index',index);
+    var imgs=document.querySelectorAll('img[data-chapter="-1"]');
+    for(var i=0;i<imgs.length;++i){
+      imgs[i].setAttribute("data-chapter",index);
+    }
   },  
 
-  markedItems: new Set(),
+  markedItems: Immutable.Set(),
 
   collectedItems: [],
 
@@ -85,20 +94,20 @@ var MyMixin={
 
   _updateInfor: function(num,pageratio){
     var n=parseInt(num);
+    if(n===-1) return;
     if(n!==this.state.selectedIndex){      
       var menuItems=this._cloneMenuItems({isMarked:true,text:true});
-      if(this.markedItems.indexOf(menuItems[n].payload)===-1){
+      if(!this.markedItems.has(this.state.menuItems[n].payload)){
         menuItems[n].isMarked=true;
-        this.markedItems.push(menuItems[n].payload);
-        //this._saveChromeStoreReaded();
+        this.markedItems=this.markedItems.add(menuItems[n].payload);
       }
+      this._updateHash(menuItems[n].payload,"#");
       // console.log('_updateInfor',this.state.menuItems[n].text);      
       this.setState({menuItems:menuItems,selectedIndex: n,chapter:this.state.menuItems[n].text},function(){this._saveChromeStoreReaded()}.bind(this));
     }
-    if(typeof(this.state.menuItems[n].num)==="undefined"&&pageratio!==this.state.menuItems[n].number){
+    if(typeof(this.state.menuItems[n].number)==="undefined"||pageratio!==this.state.menuItems[n].number){
       var menuItems=this._cloneMenuItems({isMarked:true,text:true});
       menuItems[n].number=pageratio;
-      console.log('_updateInfor2',this.state.menuItems[n].text);
       this.setState({menuItems:menuItems,pageratio:pageratio});
     }
     if(n===this.lastIndex){
@@ -107,16 +116,13 @@ var MyMixin={
       }        
     }
   },
-
+  
   _starClick:function(){
-    console.log('star click');
     var array=this.collectedItems.filter(function(obj){ return obj.url===this.indexURL}.bind(this));
     if(array.length===0){      
       this._saveChromeStoreCollected();
-      console.log('star is marked');
       this.setState({starIsMarked:true});  
     }else if(array.length>=0){
-      console.log('star no marked');
       this._removeChromeStoreCollected();
       this.setState({starIsMarked:false});  
     }
@@ -142,10 +148,10 @@ var MyMixin={
     }.bind(this));
 
     chrome.storage.local.get('readed',function(items){
-      this.markedItems=[];
       for(var i=0;i<items.readed.length;++i){
         if(items.readed[i].url===this.indexURL){
-          this.markedItems=items.readed[i].markedPayload;    
+          this.markedItems=Immutable.Set(items.readed[i].markedPayload);  
+          // console.log('init this markedItems',this.markedItems.toArray);  
         }
       }
       this._getChapter();
@@ -159,7 +165,8 @@ var MyMixin={
       obj.site=this.site;
       obj.iconUrl=this.iconUrl;
       obj.title=this.title;
-      obj.markedPayload=this.markedItems;
+      // console.log(this.markedItems,this.markedItems.toArray());
+      obj.markedPayload=this.markedItems.toArray();
       obj.menuItems=this.state.menuItems;
       obj.lastReaded=objectAssign({},this.state.menuItems[this.state.selectedIndex]);
       var array=[];
@@ -170,7 +177,6 @@ var MyMixin={
       }
       array.push(obj);
       items.readed=array;
-      console.log('_saveChromeStoreReaded',items);
       chrome.storage.local.set(items);
     }.bind(this));
     chrome.storage.local.get('collected',function(items){
@@ -178,10 +184,9 @@ var MyMixin={
         if(items.collected[i].url===this.indexURL){
           items.collected[i].lastReaded=objectAssign({},this.state.menuItems[this.state.selectedIndex]);    
           items.collected[i].menuItems=this.state.menuItems;
-          items.collected[i].markedPayload=this.markedItems;
+          items.collected[i].markedPayload=this.markedItems.toArray();
         }
       }
-      console.log('items',items);
       chrome.storage.local.set(items);
     }.bind(this));    
   },
@@ -193,7 +198,8 @@ var MyMixin={
       obj.site=this.site;
       obj.iconUrl=this.iconUrl;
       obj.title=this.title;
-      obj.markedPayload=this.markedItems;
+      // console.log(this.markedItems,this.markedItems.toSeq().toArray());
+      obj.markedPayload=this.markedItems.toArray();
       obj.menuItems=this.state.menuItems;
       obj.lastReaded=objectAssign({},this.state.menuItems[this.state.selectedIndex]);
       var urlInItems=false;
@@ -207,7 +213,6 @@ var MyMixin={
         this.collectedItems.push(obj);
       }
       items.collected=this.collectedItems;
-      console.log('items',items);
       chrome.storage.local.set(items);
     }.bind(this));
   },

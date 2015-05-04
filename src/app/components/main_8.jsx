@@ -10,38 +10,41 @@ var Mixins=require('../../Mixin/mymixin.jsx');
 var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
 
+var hasAddedListener=false;
+
 var Main = React.createClass({
   mixins:[Mixins,Comics],
 
   componentDidMount: function() {
     // ChapterStore.addListener("update",this._updateChapter);
-    var params_str=window.location.search.substring(1);
-    var params=params_str.split('&');
-    this.site= /site\=(.*)/.exec(params[0])[1];
-    this.pageURL=/chapter\=.*-(\d*\.html)\?/.exec(params[1])[1];   
-    this.chapterNum=/chapter\=.*\?ch\=(\d*)$/.exec(params[1])[1];
-    this.prefixURL=/chapter\=(.*\?ch\=)\d*$/.exec(params[1])[1];;  
-    this.indexURL=this.comicspageURL+this.pageURL;
-
-    ChapterStore.addListener("scroll",this._updateInfor);
+    this.handleUrlHash();
+    this._getImage(-1,this.chapterNum);
     this._getChromeStore();
+    if(!hasAddedListener){
+      ChapterStore.addListener("scroll",this._updateInfor);
+      window.addEventListener("hashchange",function(e){
+        this.handleUrlHash();
+      }.bind(this));
+      hasAddedListener=true;
+    }
   },
   _onMenuItemClick: function(e, index, item) {
     var panel=document.getElementById("comics_panel");
     var menuItems=this._cloneMenuItems({isMarked:true,text:true});
-    if(this.markedItems.indexOf(menuItems[index].payload)===-1){
+    if(!this.markedItems.has(menuItems[index].payload)){
       menuItems[index].isMarked=true;
-      this.markedItems.push(menuItems[index].payload);      
+      this.markedItems=this.markedItems.add(menuItems[index].payload);      
     }   
     this.setState({menuItems:menuItems,selectedIndex:index,chapter:menuItems[index].text},function(){this._saveChromeStoreReaded()}.bind(this));
     this.lastIndex=index;
-    panel.innerHTML="";
-    this._getImage(index,item.payload);
+    // panel.innerHTML="";
+    // this._getImage(index,item.payload);
+    this._updateHash(menuItems[index].payload,'');
     if(!Echo.hadInited){
       Echo.init({
-        offsetBottom: 2500,
-        throttle: 50,
-        unload: false
+        offset: 2500,
+        throttle: 200,
+        unload: true
       }); 
     }else{
       Echo.run();
@@ -55,44 +58,44 @@ var Main = React.createClass({
     creq.onload=function(){
       var doc=creq.response;
       var nl = this.getChapter(doc);
-      this.title=this.getTitleName(doc);
-      this.iconUrl=this.getCoverImg(doc);
       var array=[];
-      var index=0;
+      var index=-1;
       var item={};
       item.payload= this.getChapterUrl(nl[nl.length-2].getAttribute("onclick"));
       item.text=nl[nl.length-1].textContent;
-      if(item.payload===this.baseURL+this.prefixURL+this.chapterNum){
+      if(item.payload===this.baseURL+this.prefixURL+this.chapterNum&&index===-1){
         index=0;
+        this.setImageIndex(index);
         item.isMarked=true;
-        this._getImage(index,this.chapterNum);
-        if(this.markedItems.indexOf(item.payload)===-1){
-          this.markedItems.push(item.payload);
-          this._saveChromeStoreReaded();
+        if(!this.markedItems.has(item.payload)){
+          this.markedItems=this.markedItems.add(item.payload);
         }
       }
-      if(this.markedItems.indexOf(item.payload)>=0){
+      if(this.markedItems.has(item.payload)){
         item.isMarked=true;  
       }
       array.push(item);
       for(var i=nl.length-3;i>=0;--i){
         var item={};
         item.payload=this.getChapterUrl(nl[i].getAttribute("onclick"));
-        if(item.payload===this.baseURL+this.prefixURL+this.chapterNum){
+        if((item.payload===this.baseURL+this.prefixURL+this.chapterNum)&&index===-1){
           index=nl.length-i-2;
-          this._getImage(index,this.chapterNum);
+          this.setImageIndex(index);
           item.isMarked=true;
-          if(this.markedItems.indexOf(item.payload)>=0){
-            this.markedItems.push(item.payload);
+          if(!this.markedItems.has(item.payload)){
+            this.markedItems=this.markedItems.add(item.payload);
           }
         }
         item.text=nl[i].textContent.trim();
-        if(this.markedItems.indexOf(item.payload)>=0){
+        if(this.markedItems.has(item.payload)){
           item.isMarked=true;  
         }
         array.push(item);
       }
-      this.setState({menuItems:array,selectedIndex:index,chapter:array[index].text,comicname:this.getTitleName(doc)},function(){this._saveChromeStoreReaded();}.bind(this));
+      this.title=this.getTitleName(doc);
+      this.iconUrl=this.getCoverImg(doc);
+      document.title=this.title+" "+array[index].text;
+      this.setState({menuItems:array,selectedIndex:index,chapter:array[index].text,comicname:this.title},function(){this._saveChromeStoreReaded();}.bind(this));
       this.lastIndex=index;
       
     }.bind(this);
@@ -112,8 +115,8 @@ var Main = React.createClass({
         if(!Echo.hadInited){
           Echo.init({
             offset: 2500,
-            throttle: 50,
-            unload: false
+            throttle: 200,
+            unload: true
           }); 
         }else{
           Echo.run();
@@ -121,7 +124,15 @@ var Main = React.createClass({
       }
     })(index,req,this);
     req.send();
-  }  
+  },
+
+  _updateHash:function(url,type){
+    var chapterHash="chapter\/"+Comics.regex.exec(url)[1];
+    var str=window.location.hash;
+    str=str.replace(/chapter\/.*$/,chapterHash)+type;
+    window.location.hash=str;
+  }
+  
 });
 
 module.exports = Main;

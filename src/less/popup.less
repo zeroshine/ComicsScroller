@@ -12,7 +12,7 @@ html,body{
   // margin: 2px;
   height:400px;
   width:500px;
-  overflow-y: scroll;
+  overflow-y: auto;
   // padding-left:10px;
   // padding-right: 10px;
   background-color: @grey-200; 
@@ -29,7 +29,7 @@ html,body{
 .mui-tabs-container {
   .mui-tab-template {
         height:352px;
-        overflow-y: scroll;
+        overflow-y: auto;
   }
 }
 
@@ -37,28 +37,40 @@ html,body{
 
 .material-card{
 	vertical-align:top;
-	height: 105px;
+	height: 120px;
 	margin:10px;
 	background-color: @grey-50;
 	img{
-		height:100px;
-		width: 100px;
+		height:120px;
+		width: 120px;
 		float: left;
 	}
 	.material-card-infor{
 		text-align: top;
 		display: inline-block;
-		// height:128px;
+		width: 300px;
+    // height:128px;
 		float: left;
 		margin-left:10px;
 		margin-top:0px;
+    .card-readed-link{
+      padding: 0px;
+      margin: 0px;
+    }
 		.card-readed-link:hover{
 			color:red;
 			cursor: pointer;
 		}
 		.card-site-link{
-			color:@grey-700;
+			padding: 0px;
+      margin: 0px;
+      color:@grey-700;
 		}
+    .card-title-link{
+      padding: 0px;
+      margin: 0px;
+      cursor: pointer;
+    }
 		.card-title-link:hover{
 			color:blue;
 			cursor: pointer;
@@ -76,7 +88,8 @@ html,body{
   position: relative;
   width: 30px;
   float: right;
-  margin-top: 5px;
+  // margin-top: 12px;
+  margin-right: 0px;
 }
 
 .trash > span {

@@ -1,11 +1,39 @@
 var ObjectAssign=require('object-assign');
 var comics={
+	regex: /http\:\/\/new\.comicvip\.com\/show\/(.*-\d*.html\?ch=\d*)/,
+
 	baseURL: "http://new.comicvip.com/show/",
 	
 	comicspageURL: "http://www.comicvip.com/html/",	
 
+	handleUrlHash:function(){
+		var params_str=window.location.hash;
+	    this.site= /site\/(\w*)/.exec(params_str)[1];
+	    this.pageURL=/chapter\/.*-(\d*\.html)\?/.exec(params_str)[1];   
+	    this.chapterNum=/chapter\/.*\?ch\=(\d*)/.exec(params_str)[1];
+	    this.prefixURL=/chapter\/(.*\?ch\=)\d*/.exec(params_str)[1];;  
+	    this.indexURL=this.comicspageURL+this.pageURL;
+    	if(!(/#$/.test(params_str))){
+	      console.log('page back');
+	      document.getElementById("comics_panel").innerHTML="";
+	      var index=-1;
+	      for(var i=0;i<this.state.menuItems.length;++i){
+	        if(this.state.menuItems[i].payload===this.baseURL+this.prefixURL+this.chapterNum&&index===-1){
+	          index=i;
+	          this.lastIndex=index;
+	          this._getImage(index,this.chapterNum);
+	          this.setState({selectedIndex:index,chapter:this.state.menuItems[index].text,pageratio:""});
+	          break;
+	        }
+	      }
+	    }else{
+	      console.log("replace with","#/site/comics8/chapter/"+(/chapter\/(.*)#$/.exec(params_str)[1]));	
+	      window.history.replaceState('',document.title,"#/site/comics8/chapter/"+(/chapter\/(.*)#$/.exec(params_str)[1]));
+	    }  
+	},
+
 	getChapter: function(doc){
-		return doc.querySelectorAll(".ch , #lch");
+		return doc.querySelectorAll(".Vol , .ch , #lch");
 	},
 
 	getChapterUrl:function(str){
@@ -152,7 +180,7 @@ var comics={
 					iconUrl:imgUrl,
 					lastReaded:item
 				});
-				   chrome.notifications.create(item.payload,{
+				chrome.notifications.create(item.payload,{
 					type:"image",
 					iconUrl:'img/comics-64.png',
 					title:"Comics Update",

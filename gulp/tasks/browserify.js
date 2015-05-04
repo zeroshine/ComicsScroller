@@ -43,7 +43,11 @@ gulp.task('browserify', function(callback) {
             sequences: true,
             dead_code: true,
             booleans: true,
-            drop_console: true
+            drop_console: true,
+            properties: true,
+            loops:true,
+            if_return:true,
+            comparisons:true
           }
         }, 'uglifyify')
 

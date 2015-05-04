@@ -10,6 +10,7 @@
 
 @menu-item-selected-text-color: @cyan-700;
 // @menu-item-data-height: 24px;
+@desktop-left-nav-menu-item-height: auto;
 @desktop-keyline-increment:48px;
 @desktop-gutter: 18px;
 @desktop-left-nav-menu-item-height: 42px;
@@ -17,7 +18,7 @@
 //Your custom app styles
 html,body{
   margin: 0px;
-  height:100%;
+  height:auto;
 }
 
 .logo {
@@ -39,28 +40,44 @@ html,body{
   background-color: #2a2a2a;
   // color: #C0c0c0;
   min-height: 100vh;
+  height: 100%;
 }
 
 .comics_img{
   display:block;
   background: none ;
   max-width: 100%;
-  font-family: Arial, sans-serif;
   font-size: 30px;
   text-align: center;
   /*max-height: 92vh;*/
   margin: auto;
   /*margin-top: 40px;*/
-  padding-top: 10px;
-  padding-bottom: 50px;
+  margin-top: 10px;
+  margin-bottom: 50px;
   background: #2a2a2a url(http://i.imgur.com/msdpdQm.gif) no-repeat center center;
   /*vertical-align: middle;*/
 
 }
 
+.comics_img_end{
+  display: block;
+  text-align: center;
+  line-height: 48px;
+  color: #fff;
+  opacity: .6;
+  font-size: 40px;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif;
+  margin: auto;
+  width: 900px;
+  /*margin-top: 40px;*/
+  margin-top: 10px;
+  margin-bottom: 50px;
+}
+
 
 .mui-left-nav-menu {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .mui-menu-item {
@@ -104,6 +121,6 @@ html,body{
   .mui-menu{
     width:100%;
     height:100%;
-    overflow-y: scroll;
+    overflow-y: auto;
   } 
 }
