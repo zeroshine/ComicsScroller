@@ -39,6 +39,7 @@ var Main = React.createClass({
     this.lastIndex=index;
     // panel.innerHTML="";
     // this._getImage(index,item.payload);
+    document.title=this.title+" "+this.state.menuItems[index].text;
     this._updateHash(menuItems[index].payload,'');
     if(!Echo.hadInited){
       Echo.init({

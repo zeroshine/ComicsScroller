@@ -1,15 +1,16 @@
 var ObjectAssign=require('object-assign');
 var comics={
-	regex: /http\:\/\/comic\.sfacg\.com\/(HTML\/\w*\/\w*\/.*)/,
+	regex: /http\:\/\/comic\.sfacg\.com\/(HTML\/[^\/]+\/.+)$/,
 
 	baseURL:"http://comic.sfacg.com/",
 
 	handleUrlHash:function(){
 		var params_str=window.location.hash;
 	    this.site= /site\/(\w*)\//.exec(params_str)[1];
-	    this.pageURL=/chapter\/(HTML\/\w*\/)/.exec(params_str)[1];   
+	    this.pageURL=/chapter\/(HTML\/[^\/]+\/)/.exec(params_str)[1];   
 	    this.chapterURL=this.baseURL+(/chapter\/(.*)$/.exec(params_str)[1]);
 	    this.indexURL=this.baseURL+this.pageURL;
+	    console.log("chapterURL",this.chapterURL);
     	if(!(/#$/.test(params_str))){
 	      console.log('page back');
 	      document.getElementById("comics_panel").innerHTML="";
@@ -24,7 +25,7 @@ var comics={
 	        }
 	      }
 	    }else{
-	      window.history.replaceState('',document.title,"#/site/sf/chapter/"+(/chapter\/(.*\/)/.exec(params_str)[1]));
+	      window.history.replaceState('',document.title,"#/site/sf/chapter/"+(/chapter\/(.*\/)$/.exec(params_str)[1]));
 	    }  
 	},
 

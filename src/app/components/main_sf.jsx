@@ -41,6 +41,7 @@ var Main = React.createClass({
     this.lastIndex=index;
     // panel.innerHTML="";
     // this._getImage(index,item.payload);
+    document.title=this.title+" "+this.state.menuItems[index].text;
     this._updateHash(menuItems[index].payload,'');
     if(!Echo.hadInited){
       Echo.init({
@@ -65,6 +66,7 @@ var Main = React.createClass({
       for(var i=0;i<nl.length;++i){
         var item={};
         item.payload=nl[i].href;
+        // console.log(nl[i].href,this.chapterURL);
         if(item.payload===this.chapterURL&&index===-1){
           index=i;
           this.setImageIndex(index);

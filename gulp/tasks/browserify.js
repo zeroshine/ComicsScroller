@@ -36,20 +36,20 @@ gulp.task('browserify', function(callback) {
       bundleLogger.start(bundleConfig.outputName);
 
       return bundler
-        .transform({
-          global: true,
-          mangle: true,
-          compress: {
-            sequences: true,
-            dead_code: true,
-            booleans: true,
-            drop_console: true,
-            properties: true,
-            loops:true,
-            if_return:true,
-            comparisons:true
-          }
-        }, 'uglifyify')
+        // .transform({
+        //   global: true,
+        //   mangle: true,
+        //   compress: {
+        //     sequences: true,
+        //     dead_code: true,
+        //     booleans: true,
+        //     drop_console: true,
+        //     properties: true,
+        //     loops:true,
+        //     if_return:true,
+        //     comparisons:true
+        //   }
+        // }, 'uglifyify')
 
         // .external("sdk/simple-storage")
         

@@ -103,6 +103,7 @@ var MyMixin={
       }
       this._updateHash(menuItems[n].payload,"#");
       // console.log('_updateInfor',this.state.menuItems[n].text);      
+      document.title=this.title+" "+this.state.menuItems[n].text;
       this.setState({menuItems:menuItems,selectedIndex: n,chapter:this.state.menuItems[n].text},function(){this._saveChromeStoreReaded()}.bind(this));
     }
     if(typeof(this.state.menuItems[n].number)==="undefined"||pageratio!==this.state.menuItems[n].number){

@@ -15,29 +15,23 @@ var update={
 };
 
 var redirectLocal = function(tabId,changeInfo,tab){
-	// console.log("fired");
-	var urlRegEX_ali=/http\:\/\/www\.158c\.com(\/comic\/\d*\/\d*\.html)/;
-	var urlRegEX_8comics=/http\:\/\/new\.comicvip\.com\/show\/(.*-\d*.html\?ch=\d*)/;
-	var urlRegEX_sf=/http\:\/\/comic\.sfacg\.com\/(HTML\/\w*\/\w*\/.*)/;
-	var urlRegEX_manben=/http\:\/\/www\.manben\.com\/(m\d*\/)/;
-	var urlRegEX_dm5=/http\:\/\/(tel||www)\.dm5\.com\/(m\d*\/)/;
 	if(Comics_8.regex.test(tab.url)&&changeInfo.status==='loading'){
 		console.log("8 comics fired");
-		var chapter=urlRegEX_8comics.exec(tab.url)[1];
+		var chapter=Comics_8.regex.exec(tab.url)[1];
 		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"/#/site/comics8/chapter/"+chapter});
 		ga('send', 'event', "8comics view");
 	}else if(Comics_sf.regex.test(tab.url)&&changeInfo.status==='loading'){
 		console.log("sf fired");
-		var chapter=urlRegEX_sf.exec(tab.url)[1];
+		var chapter=Comics_sf.regex.exec(tab.url)[1];
 		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"/#/site/sf/chapter/"+chapter});
 		ga('send', 'event', "sf view");
 	}else if((Comics_dm5.regex.test(tab.url)||Comics_dm5.dm5regex.test(tab.url))&&changeInfo.status==='loading'){
 		console.log("dm5 fired");
 		var chapter=""
-		if(urlRegEX_dm5.test(tab.url)){
-			chapter=urlRegEX_dm5.exec(tab.url)[2];
+		if(Comics_dm5.dm5regex.test(tab.url)){
+			chapter=Comics_dm5.dm5regex.exec(tab.url)[2];
 		}else{
-			chapter=urlRegEX_manben.exec(tab.url)[1];
+			chapter=Comics_dm5.regex.exec(tab.url)[1];
 		}
 		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"/#/site/dm5/chapter/"+chapter});
 		ga('send', 'event', "dm5 view");
