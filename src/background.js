@@ -18,12 +18,12 @@ var redirectLocal = function(tabId,changeInfo,tab){
 	if(Comics_8.regex.test(tab.url)&&changeInfo.status==='loading'){
 		console.log("8 comics fired");
 		var chapter=Comics_8.regex.exec(tab.url)[1];
-		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"/#/site/comics8/chapter/"+chapter});
+		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"#/site/comics8/chapter/"+chapter});
 		ga('send', 'event', "8comics view");
 	}else if(Comics_sf.regex.test(tab.url)&&changeInfo.status==='loading'){
 		console.log("sf fired");
 		var chapter=Comics_sf.regex.exec(tab.url)[1];
-		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"/#/site/sf/chapter/"+chapter});
+		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"#/site/sf/chapter/"+chapter});
 		ga('send', 'event', "sf view");
 	}else if((Comics_dm5.regex.test(tab.url)||Comics_dm5.dm5regex.test(tab.url))&&changeInfo.status==='loading'){
 		console.log("dm5 fired");
@@ -33,7 +33,7 @@ var redirectLocal = function(tabId,changeInfo,tab){
 		}else{
 			chapter=Comics_dm5.regex.exec(tab.url)[1];
 		}
-		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"/#/site/dm5/chapter/"+chapter});
+		chrome.tabs.update(tab.id,{url: chrome.extension.getURL("reader.html")+"#/site/dm5/chapter/"+chapter});
 		ga('send', 'event', "dm5 view");
 	}
 };
