@@ -1,3 +1,4 @@
+require('./less/popup.less');
 var React = require('react');
 var mui=require('material-ui');
 var Paper=mui.Paper;

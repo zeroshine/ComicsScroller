@@ -92,15 +92,27 @@
     var optionToInt = function (opt, fallback) {
       return parseInt(opt || fallback, 10);
     };
+    var ofvalue=2500;
+    var throvalue=500;
+    var unlaodvalue=false;
     offset = {
-      t: optionToInt(opts.offsetTop, offsetVertical),
-      b: optionToInt(opts.offsetBottom, offsetVertical),
-      l: optionToInt(opts.offsetLeft, offsetHorizontal),
-      r: optionToInt(opts.offsetRight, offsetHorizontal)
+      t: ofvalue,
+      b: ofvalue,
+      l: 0,
+      r: 0
     };
-    delay = optionToInt(opts.throttle, 250);
-    useDebounce = opts.debounce !== false;
-    unload = !!opts.unload;
+    // offset = {
+    //   t: optionToInt(opts.offsetTop, offsetVertical),
+    //   b: optionToInt(opts.offsetBottom, offsetVertical),
+    //   l: optionToInt(opts.offsetLeft, offsetHorizontal),
+    //   r: optionToInt(opts.offsetRight, offsetHorizontal)
+    // };
+    delay = optionToInt(throvalue, 250);
+    // delay = optionToInt(opts.throttle, 250);
+    useDebounce = true;
+    // useDebounce = opts.debounce !== false;
+    unload = unlaodvalue;
+    // unload = !!opts.unload;
     callback = opts.callback || callback;
     update=opts.update || update;
     imgRender=opts.imgRender || imgRender;
@@ -111,6 +123,7 @@
     if (document.addEventListener) {
       window.addEventListener('scroll', debounceOrThrottle, false);
       window.addEventListener('load', debounceOrThrottle, false);
+
     } else {
       window.attachEvent('onscroll', debounceOrThrottle);
       window.attachEvent('onload', debounceOrThrottle);

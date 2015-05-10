@@ -1,8 +1,10 @@
 var React = require('react');
-var Classable = require('../mixins/classable');
-var FontIcon = require('../font-icon');
+var Classable = require('material-ui').Mixins.Classable;
+// var Classable = require('../mixins/classable');
+var FontIcon = require('material-ui').FontIcon;
+// var FontIcon = require('../font-icon');
 var Toggle = require('../toggle');
-var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
+
 var Types = {
   LINK: 'LINK',
   SUBHEADER: 'SUBHEADER',
@@ -11,7 +13,7 @@ var Types = {
 
 var MenuItem = React.createClass({
 
-  mixins: [Classable,PureRenderMixin],
+  mixins: [Classable],
 
   propTypes: {
     index: React.PropTypes.number.isRequired,
@@ -41,9 +43,9 @@ var MenuItem = React.createClass({
 
   render: function() {
     var classes = this.getClasses('mui-menu-item', {
-      'mui-is-marked': this.props.isMarked,
       'mui-is-selected': this.props.selected,
-      'mui-is-disabled': this.props.disabled
+      'mui-is-disabled': this.props.disabled,
+      'mui-is-marked':this.props.isMarked
     });
     var icon;
     var data;

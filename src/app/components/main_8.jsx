@@ -6,6 +6,7 @@ var React = require('react');
 var Comics=require('../comics_8.js');
 var Echo=require('../echo');
 var Mixins=require('../../Mixin/mymixin.jsx');
+var StoreMixin=require('../../Mixin/storemixin.jsx');
 
 var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
@@ -13,13 +14,13 @@ var ChapterStore=require('../../store/chapterStore.js');
 var hasAddedListener=false;
 
 var Main = React.createClass({
-  mixins:[Mixins,Comics],
+  mixins:[StoreMixin,Mixins,Comics],
 
   componentDidMount: function() {
     // ChapterStore.addListener("update",this._updateChapter);
     this.handleUrlHash();
     this._getImage(-1,this.chapterNum);
-    this._getChromeStore();
+    this._getStore();
     if(!hasAddedListener){
       ChapterStore.addListener("scroll",this._updateInfor);
       window.addEventListener("hashchange",function(e){
@@ -35,18 +36,14 @@ var Main = React.createClass({
       menuItems[index].isMarked=true;
       this.markedItems=this.markedItems.add(menuItems[index].payload);      
     }   
-    this.setState({menuItems:menuItems,selectedIndex:index,chapter:menuItems[index].text},function(){this._saveChromeStoreReaded()}.bind(this));
+    this.setState({menuItems:menuItems,selectedIndex:index,chapter:menuItems[index].text},function(){this._saveStoreReaded()}.bind(this));
     this.lastIndex=index;
     // panel.innerHTML="";
     // this._getImage(index,item.payload);
     document.title=this.title+" "+this.state.menuItems[index].text;
     this._updateHash(menuItems[index].payload,'');
     if(!Echo.hadInited){
-      Echo.init({
-        offset: 2500,
-        throttle: 200,
-        unload: true
-      }); 
+      Echo.init(); 
     }else{
       Echo.run();
     }    
@@ -96,7 +93,7 @@ var Main = React.createClass({
       this.title=this.getTitleName(doc);
       this.iconUrl=this.getCoverImg(doc);
       document.title=this.title+" "+array[index].text;
-      this.setState({menuItems:array,selectedIndex:index,chapter:array[index].text,comicname:this.title},function(){this._saveChromeStoreReaded();}.bind(this));
+      this.setState({menuItems:array,selectedIndex:index,chapter:array[index].text,comicname:this.title},function(){this._saveStoreReaded();}.bind(this));
       this.lastIndex=index;
       
     }.bind(this);
@@ -114,11 +111,7 @@ var Main = React.createClass({
         var doc=req.response;
         self.setImages(index, doc);
         if(!Echo.hadInited){
-          Echo.init({
-            offset: 2500,
-            throttle: 200,
-            unload: true
-          }); 
+          Echo.init(); 
         }else{
           Echo.run();
         }

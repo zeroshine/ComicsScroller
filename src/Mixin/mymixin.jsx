@@ -7,7 +7,7 @@ var IconButton=mui.IconButton;
 var TagIconButton=require('../app/components/TagIconButton.jsx');
 var LeftNav=require('../app/components/app-left-nav.jsx');
 var Menu = mui.Menu;
-var ChapterMenu=require('../app/components/chapter-menu.jsx');  
+// var ChapterMenu=require('../app/components/chapter-menu.jsx');  
 var objectAssign=require('object-assign');
 
 var Echo=require('../app/echo');
@@ -46,7 +46,13 @@ var MyMixin={
     this.refs.leftNav.toggle();
   },
 
+  chapterUpdateIndex: -1,
+  
   appendImage:function(index){
+      if(index===-1){
+        index=this.chapterUpdateIndex;
+        this.chapterUpdateIndex=-2;
+      }
       for(var i=0;i<this.pageMax;++i){
         var img=new Image();
         img.src="../img/Transparent.gif";
@@ -69,10 +75,14 @@ var MyMixin={
   },
 
   setImageIndex:function(index){
-    console.log('set image index',index);
-    var imgs=document.querySelectorAll('img[data-chapter="-1"]');
-    for(var i=0;i<imgs.length;++i){
-      imgs[i].setAttribute("data-chapter",index);
+    if(this.chapterUpdateIndex===-1){
+      this.chapterUpdateIndex=index;
+    }else if(this.chapterUpdateIndex===-2){
+      var imgs=document.querySelectorAll('img[data-chapter=\"-1\"]');
+      for(var i=0;i<imgs.length;++i){
+        imgs[i].setAttribute("data-chapter",index);
+      }
+      this.chapterUpdateIndex=-1;  
     }
   },  
 
@@ -104,7 +114,7 @@ var MyMixin={
       this._updateHash(menuItems[n].payload,"#");
       // console.log('_updateInfor',this.state.menuItems[n].text);      
       document.title=this.title+" "+this.state.menuItems[n].text;
-      this.setState({menuItems:menuItems,selectedIndex: n,chapter:this.state.menuItems[n].text},function(){this._saveChromeStoreReaded()}.bind(this));
+      this.setState({menuItems:menuItems,selectedIndex: n,chapter:this.state.menuItems[n].text},function(){this._saveStoreReaded()}.bind(this));
     }
     if(typeof(this.state.menuItems[n].number)==="undefined"||pageratio!==this.state.menuItems[n].number){
       var menuItems=this._cloneMenuItems({isMarked:true,text:true});
@@ -121,109 +131,12 @@ var MyMixin={
   _starClick:function(){
     var array=this.collectedItems.filter(function(obj){ return obj.url===this.indexURL}.bind(this));
     if(array.length===0){      
-      this._saveChromeStoreCollected();
+      this._saveStoreCollected();
       this.setState({starIsMarked:true});  
     }else if(array.length>=0){
-      this._removeChromeStoreCollected();
+      this._removeStoreCollected();
       this.setState({starIsMarked:false});  
     }
-  },
-  
-  _getChromeStore:function(){
-  	   
-    chrome.storage.local.get('collected',function(items){      
-      this.collectedItems=items.collected;
-      var array= this.collectedItems.filter(function(obj){return obj.url===this.indexURL}.bind(this))
-      if(array.length>0){
-        this.setState({starIsMarked:true});
-      } 
-    }.bind(this));
-
-    chrome.storage.local.get('update',function(items){      
-      var updateItems=items.update;
-      var array= updateItems.filter(function(obj){return obj.url!==this.indexURL}.bind(this)) 
-      items.update=array;
-      var badgeText=(array.length===0)?"":array.length.toString()
-      chrome.browserAction.setBadgeText({text:badgeText});
-      chrome.storage.local.set(items);  
-    }.bind(this));
-
-    chrome.storage.local.get('readed',function(items){
-      for(var i=0;i<items.readed.length;++i){
-        if(items.readed[i].url===this.indexURL){
-          this.markedItems=Immutable.Set(items.readed[i].markedPayload);  
-          // console.log('init this markedItems',this.markedItems.toArray);  
-        }
-      }
-      this._getChapter();
-    }.bind(this));
-  },
-  _saveChromeStoreReaded:function(){
-  	chrome.storage.local.get('readed',function(items){
-      // menuItems=this._cloneMenuItems({isMarked:false,text:true});
-      var obj={};
-      obj.url=this.indexURL;
-      obj.site=this.site;
-      obj.iconUrl=this.iconUrl;
-      obj.title=this.title;
-      // console.log(this.markedItems,this.markedItems.toArray());
-      obj.markedPayload=this.markedItems.toArray();
-      obj.menuItems=this.state.menuItems;
-      obj.lastReaded=objectAssign({},this.state.menuItems[this.state.selectedIndex]);
-      var array=[];
-      for(var i=0;i<items.readed.length;++i){
-        if(items.readed[i].url!==this.indexURL){
-          array.push(items.readed[i]);    
-        }
-      }
-      array.push(obj);
-      items.readed=array;
-      chrome.storage.local.set(items);
-    }.bind(this));
-    chrome.storage.local.get('collected',function(items){
-      for(var i=0;i<items.collected.length;++i){
-        if(items.collected[i].url===this.indexURL){
-          items.collected[i].lastReaded=objectAssign({},this.state.menuItems[this.state.selectedIndex]);    
-          items.collected[i].menuItems=this.state.menuItems;
-          items.collected[i].markedPayload=this.markedItems.toArray();
-        }
-      }
-      chrome.storage.local.set(items);
-    }.bind(this));    
-  },
-  
-  _saveChromeStoreCollected:function(){
-  	chrome.storage.local.get('collected',function(items){
-      var obj={};
-      obj.url=this.indexURL;
-      obj.site=this.site;
-      obj.iconUrl=this.iconUrl;
-      obj.title=this.title;
-      // console.log(this.markedItems,this.markedItems.toSeq().toArray());
-      obj.markedPayload=this.markedItems.toArray();
-      obj.menuItems=this.state.menuItems;
-      obj.lastReaded=objectAssign({},this.state.menuItems[this.state.selectedIndex]);
-      var urlInItems=false;
-      for(var i=0;i<this.collectedItems.length;++i){
-        if(this.collectedItems[i].url===this.indexURL){
-          this.collectedItems[i]=obj;
-          urlInItems=true;    
-        }
-      }
-      if(!urlInItems){
-        this.collectedItems.push(obj);
-      }
-      items.collected=this.collectedItems;
-      chrome.storage.local.set(items);
-    }.bind(this));
-  },
-  
-  _removeChromeStoreCollected:function(){
-    chrome.storage.local.get('collected',function(items){
-      this.collectedItems=this.collectedItems.filter(function(obj){return obj.url!==this.indexURL}.bind(this));
-      items['collected']=this.collectedItems;
-      chrome.storage.local.set(items);
-    }.bind(this));
   }
 
 }

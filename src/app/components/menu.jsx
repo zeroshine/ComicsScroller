@@ -1,13 +1,15 @@
 var React = require('react');
-var CssEvent = require('../utils/css-event');
-var Dom = require('../utils/dom');
-var KeyLine = require('../utils/key-line');
-var Classable = require('../mixins/classable');
-var ClickAwayable = require('../mixins/click-awayable');
-var Paper = require('../paper');
-var MenuItem = require('./menu-item');
-var LinkMenuItem = require('./link-menu-item');
-var SubheaderMenuItem = require('./subheader-menu-item');
+var CssEvent = require('material-ui').Utils.CssEvent;
+var Dom = require('material-ui').Utils.Dom;
+var KeyLine = require('material-ui').Utils.KeyLine;
+// var Classable = require('../mixins/classable');
+var Classable = require('material-ui').Mixins.Classable;
+// var ClickAwayable = require('../mixins/click-awayable');
+var ClickAwayable = require('material-ui').Mixins.ClickAwayable;
+var Paper = require('material-ui').Paper;
+var MenuItem = require('./menu.jsx');
+// var LinkMenuItem = require('./link-menu-item');
+// var SubheaderMenuItem = require('./subheader-menu-item');
 
 /***********************
 * Nested Menu Component
@@ -185,26 +187,26 @@ var Menu = React.createClass({
 
       switch (menuItem.type) {
 
-        case MenuItem.Types.LINK:
-          itemComponent = (
-            <LinkMenuItem 
-              key={i}
-              index={i}
-              payload={menuItem.payload}
-              target={menuItem.target}
-              text={menuItem.text}
-              disabled={isDisabled} />
-          );
-          break;
+        // case MenuItem.Types.LINK:
+        //   itemComponent = (
+        //     <LinkMenuItem 
+        //       key={i}
+        //       index={i}
+        //       payload={menuItem.payload}
+        //       target={menuItem.target}
+        //       text={menuItem.text}
+        //       disabled={isDisabled} />
+        //   );
+        //   break;
 
-        case MenuItem.Types.SUBHEADER:
-          itemComponent = (
-            <SubheaderMenuItem 
-              key={i}
-              index={i}
-              text={menuItem.text} />
-          );
-          break;
+        // case MenuItem.Types.SUBHEADER:
+        //   itemComponent = (
+        //     <SubheaderMenuItem 
+        //       key={i}
+        //       index={i}
+        //       text={menuItem.text} />
+        //   );
+        //   break;
 
         case MenuItem.Types.NESTED:
           itemComponent = (

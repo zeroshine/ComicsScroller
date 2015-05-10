@@ -1,0 +1,12 @@
+{
+  "title": "ComicsScroller",
+  "name": "comicsscroller",
+  "version": "0.0.0",
+  "description": "an add-on give you a better experience on chinese comics website",
+  "main": "index.js",
+  "author": "Guan-Lin Chen",
+  "engines": {
+    "firefox": ">=38.0a1"
+  },
+  "license": "MIT"
+}

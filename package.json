@@ -20,6 +20,8 @@
     ]
   },
   "devDependencies": {
+    "babel-core": "^5.2.16",
+    "babel-loader": "^5.0.0",
     "browser-sync": "^1.8.1",
     "browserify": "^7.0.3",
     "gulp": "^3.8.10",
@@ -33,9 +35,11 @@
     "require-dir": "^0.1.0",
     "underscore": "^1.7.0",
     "vinyl-source-stream": "^1.0.0",
-    "watchify": "^2.2.1"
+    "watchify": "^2.2.1",
+    "webpack": "^1.8.11"
   },
   "dependencies": {
+    "extract-text-webpack-plugin": "^0.7.1",
     "material-ui": "^0.7.5",
     "react": "^0.13.2",
     "react-tap-event-plugin": "^0.1.6"

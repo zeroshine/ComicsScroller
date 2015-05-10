@@ -3,7 +3,7 @@ var React = require('react');
 var Comics=require('../comics_dm5.js');
 var Echo=require('../echo');
 var Mixins=require('../../Mixin/mymixin.jsx');
-
+var StoreMixin=require('../../Mixin/storemixin.jsx');
 var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
 
@@ -31,7 +31,7 @@ var hasAddedListener=false;
 
 var Main = React.createClass({
   
-  mixins:[Mixins,Comics],  
+  mixins:[StoreMixin,Mixins,Comics],  
   componentDidMount: function() {
     // ChapterStore.addListener("update",this._updateChapter);
     this.handleUrlHash();
@@ -42,7 +42,7 @@ var Main = React.createClass({
     req.onload=function(){
       var doc=req.response;
       this.indexURL=doc.querySelector("#index_right > div.lan_kk2 > div:nth-child(1) > dl > dt.red_lj > a").href;
-      this._getChromeStore(); 
+      this._getStore(); 
     }.bind(this);
     req.send();
 
@@ -51,7 +51,7 @@ var Main = React.createClass({
       window.addEventListener("hashchange",function(e){
         this.handleUrlHash();
       }.bind(this));
-      hasHashChangeListener=true;
+      hasAddedListener=true;
     }
     // this._getChapter();
   },
@@ -62,7 +62,7 @@ var Main = React.createClass({
       menuItems[index].isMarked=true;
       this.markedItems=this.markedItems.add(menuItems[index].payload);
     }   
-    this.setState({menuItems:menuItems,selectedIndex:index,chapter:menuItems[index].text},function(){this._saveChromeStoreReaded()}.bind(this));
+    this.setState({menuItems:menuItems,selectedIndex:index,chapter:menuItems[index].text},function(){this._saveStoreReaded()}.bind(this));
     this.lastIndex=index;
     // panel.innerHTML="";
     // this._getImage(index,item.payload);
@@ -108,7 +108,7 @@ var Main = React.createClass({
       this.title=this.getTitleName(doc);
       this.iconUrl=this.getCoverImg(doc);
       document.title=this.title+" "+array[index].text;
-      this.setState({menuItems:array,selectedIndex:index,chapter:array[index].text,comicname:this.title},function(){this._saveChromeStoreReaded();}.bind(this));
+      this.setState({menuItems:array,selectedIndex:index,chapter:array[index].text,comicname:this.title},function(){this._saveStoreReaded();}.bind(this));
       this.lastIndex=index;
     }.bind(this);
     creq.send();

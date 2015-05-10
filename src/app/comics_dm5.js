@@ -17,7 +17,9 @@ var comics={
 	          index=i;
 	          this.lastIndex=index;
 	          this._getImage(index,this.chapterURL);
-	          this.setState({selectedIndex:index,chapter:this.state.menuItems[index].text,pageratio:""});
+	          this.setState({selectedIndex:index,chapter:this.state.menuItems[index].text,pageratio:""},function(){
+	          	this._saveStoreReaded();
+	          }.bind(this));
 	          break;
 	        }
 	      }
