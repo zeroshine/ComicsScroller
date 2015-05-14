@@ -3,10 +3,10 @@ var Classable = require('./mixins/classable');
 var IconButton = require('./icon-button');
 var NavigationMenu = require('./svg-icons/navigation-menu');
 var Paper = require('./paper');
-
+var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 var AppBar = React.createClass({
 
-  mixins: [Classable],
+  mixins: [PureRenderMixin,Classable],
 
   propTypes: {
     onMenuIconButtonTouchTap: React.PropTypes.func,

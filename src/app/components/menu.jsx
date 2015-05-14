@@ -2,12 +2,10 @@ var React = require('react');
 var CssEvent = require('material-ui').Utils.CssEvent;
 var Dom = require('material-ui').Utils.Dom;
 var KeyLine = require('material-ui').Utils.KeyLine;
-// var Classable = require('../mixins/classable');
 var Classable = require('material-ui').Mixins.Classable;
-// var ClickAwayable = require('../mixins/click-awayable');
 var ClickAwayable = require('material-ui').Mixins.ClickAwayable;
 var Paper = require('material-ui').Paper;
-var MenuItem = require('./menu.jsx');
+var MenuItem = require('./menu-item.jsx');
 // var LinkMenuItem = require('./link-menu-item');
 // var SubheaderMenuItem = require('./subheader-menu-item');
 
@@ -169,7 +167,7 @@ var Menu = React.createClass({
       isMarked;
     //This array is used to keep track of all nested menu refs
     this._nestedChildren = [];
-    console.log("test");
+    console.log("test",this.props.menuItems);
     for (var i=0; i < this.props.menuItems.length; i++) {
       menuItem = this.props.menuItems[i];
       isSelected = i === this.props.selectedIndex;

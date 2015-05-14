@@ -14,11 +14,23 @@ injectTapEventPlugin();
 var Card=React.createClass({
 	render:function(){
 		console.log('this.props.indexURL',this.props.indexURL);
+		
+		switch(this.props.site){
+			case 'sf':
+				this.siteurl="http://comic.sfacg.com"
+				break;
+			case 'dm5':
+				this.siteurl="http://www.manben.com"
+				break;
+			case 'comics8':
+				this.siteurl="http://www.8comic.com/"
+		}
 		return(
 			<Paper className={'material-card'} key={this.props.index} zDepth={2}>
 				<img src={this.props.iconUrl} /> 
 				<div className={'material-card-infor'}>
 					<h3 className={'card-title-link'} onClick={this._openIndex}>{this.props.title} </h3>	
+					<h5 className={'card-site-link'} onClick={this._openSite} >{this.props.site}</h5>
 					<h5 className={'card-readed-link'} onClick={this._openPage}>{this.props.str+' '+this.props.lastReaded.text}</h5>				
 				</div>
 				<div className={'trash'}  onClick={this._removeElemet} >
@@ -31,6 +43,9 @@ var Card=React.createClass({
 	},
 	_removeElemet:function(e){
 		this.props.removeElemet(e,this.props.index);
+	},
+	_openSite:function(){
+		chrome.tabs.create({url:this.siteurl});
 	},
 	_openPage:function(){
 		chrome.tabs.create({url:this.props.lastReaded.payload});
@@ -117,6 +132,7 @@ var Cards=React.createClass({
 				iconUrl={item.iconUrl} 
 				lastReaded={item.lastReaded} 
 				removeElemet={this._removeHistory} 
+				site={item.site}
 				indexURL={item.url}/>);
 			children.push(CardItem);
 		}
@@ -134,6 +150,7 @@ var Cards=React.createClass({
 				iconUrl={item.iconUrl} 
 				lastReaded={item.lastReaded} 
 				removeElemet={this._removeUpdate} 
+				site={item.site}
 				indexURL={item.url}/>);
 			children.push(CardItem);
 		}

@@ -34,7 +34,7 @@ html,body{
   background-color: @primary-1-color;
   padding-left: @desktop-gutter;
   padding-top: 0;
-  margin-bottom: @desktop-gutter-mini;
+  margin-bottom: 0px;
 }
 
 #comics_panel{
@@ -81,28 +81,67 @@ html,body{
 
 
 .mui-left-nav-menu {
-  overflow-y: auto;
-}
-
-.mui-menu-item {
-  &.mui-is-marked{
-    color: @grey-500;
-    background-color: @grey-200;
-    &.mui-is-selected{
-      color: @menu-item-selected-text-color;
+  height: 100%;
+  .mui-menu{
+    overflow-y: auto;
+    height: calc(~'100% - 48px');
+    .mui-menu-item {
+      &.mui-is-marked{
+        color: @grey-500;
+        background-color: @grey-200;
+        &.mui-is-selected{
+          color: @menu-item-selected-text-color;
+        }
+      }
     }
   }
+
 }
+
+
 
 .mui-app-canvas {
   height: 100%;
-  .mui-app-bar {
+  // .mui-app-bar:hover {
+  //   opacity: 1;
+  //   .github-icon-button {
+  //     float: right;
+      
+  //     // margin-right: -8px;
+  //   }
+  //   .tag-icon-button {
+  //     float: right;
+  //     // margin-right: 8px;
+  //   }
+  //   .right-icon-button {
+  //     float: right;
+  //     // margin-right: 8px;
+  //   }
+  //   .left-icon-button {
+  //     float: right;
+  //     // margin-right: 8px;
+  //   }
+  // }
+  .mui-app-bar{
+    opacity: 1;
+    min-height:@app-bar-height;
+    .mui-app-bar-title {
+      line-height: @app-bar-height;
+    }
     .github-icon-button {
       float: right;
       
       // margin-right: -8px;
     }
     .tag-icon-button {
+      float: right;
+      // margin-right: 8px;
+    }
+    .right-icon-button {
+      float: right;
+      // margin-right: 8px;
+    }
+    .left-icon-button {
       float: right;
       // margin-right: 8px;
     }
@@ -127,4 +166,13 @@ html,body{
     height:100%;
     overflow-y: auto;
   } 
+}
+
+.mui-icon-button {
+  &.mui-is-disabled {
+    * {
+      color: @grey-700;
+      fill: @grey-700;
+    }
+  }
 }

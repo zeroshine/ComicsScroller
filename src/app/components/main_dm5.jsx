@@ -6,6 +6,7 @@ var Mixins=require('../../Mixin/mymixin.jsx');
 var StoreMixin=require('../../Mixin/storemixin.jsx');
 var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
+var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 
 var handler = function(details) {
   var isRefererSet = false;
@@ -31,7 +32,7 @@ var hasAddedListener=false;
 
 var Main = React.createClass({
   
-  mixins:[StoreMixin,Mixins,Comics],  
+  mixins:[PureRenderMixin,StoreMixin,Mixins,Comics],  
   componentDidMount: function() {
     // ChapterStore.addListener("update",this._updateChapter);
     this.handleUrlHash();
@@ -62,21 +63,27 @@ var Main = React.createClass({
       menuItems[index].isMarked=true;
       this.markedItems=this.markedItems.add(menuItems[index].payload);
     }   
-    this.setState({menuItems:menuItems,selectedIndex:index,chapter:menuItems[index].text},function(){this._saveStoreReaded()}.bind(this));
+    this.setState({
+      menuItems:menuItems,
+      rightDisable:index===0,
+      leftDisable:index===this.state.menuItems.length-1,
+      selectedIndex:index,
+      chapter:menuItems[index].text},
+      function(){this._saveStoreReaded()}.bind(this));
     this.lastIndex=index;
     // panel.innerHTML="";
     // this._getImage(index,item.payload);
     document.title=this.title+" "+this.state.menuItems[index].text;
     this._updateHash(menuItems[index].payload,'');
-    if(!Echo.hadInited){
-      Echo.init({
-        offsetBottom: 2500,
-        throttle: 200,
-        unload: true
-      }); 
-    }else{
-      Echo.run();
-    }    
+    // if(!Echo.hadInited){
+    //   Echo.init({
+    //     offsetBottom: 2500,
+    //     throttle: 200,
+    //     unload: true
+    //   }); 
+    // }else{
+    //   Echo.run();
+    // }    
   },
   _getChapter: function(){    
     var creq=new XMLHttpRequest();
@@ -108,7 +115,13 @@ var Main = React.createClass({
       this.title=this.getTitleName(doc);
       this.iconUrl=this.getCoverImg(doc);
       document.title=this.title+" "+array[index].text;
-      this.setState({menuItems:array,selectedIndex:index,chapter:array[index].text,comicname:this.title},function(){this._saveStoreReaded();}.bind(this));
+      this.setState({menuItems:array,
+        selectedIndex:index,
+        rightDisable:index===0,
+        leftDisable:index===array.length-1,
+        chapter:array[index].text,
+        comicname:this.title},
+        function(){this._saveStoreReaded();}.bind(this));
       this.lastIndex=index;
     }.bind(this);
     creq.send();
@@ -119,48 +132,71 @@ var Main = React.createClass({
     req.open("GET",url,true);
     req.responseType="document";
     req.withCredentials = true;
+    // this.echo=Echo;
     req.onload=(function(index,req,self){
       return function(){
         self.setImages(index,req);
-        if(!Echo.hadInited){
-          Echo.init({
-            offset: 2500,
-            throttle: 200,
-            unload: true,
-            imgRender:  function(elem){
-                var req=new XMLHttpRequest();
-                req.open("GET",elem.getAttribute("data-echo"),true);
-                req.withCredentials = true;
-                req.onload=(function(elem){
-                  return function(){
-                    eval(req.response);
-                    if (typeof (hd_c) != "undefined" && hd_c.length > 0 && typeof (isrevtt) != "undefined") {
-                      elem.src=hd_c[0];
-                    }else{
-                      elem.src=d[0];
-                    }
-                    elem.removeAttribute('data-echo');
-                    // elem.removeAttribute('style');
-                  }
-                })(elem);
-                req.send();
-            }
-          }); 
-        }else{
-          Echo.run();
-        }
+        
       }  
     })(index,req,this);
     req.send();
   },
-  
+
   _updateHash:function(url,type){
     var chapterHash="chapter\/"+Comics.regex.exec(url)[1];
     var str=window.location.hash;
     str=str.replace(/chapter\/.*$/,chapterHash)+type;
     window.location.hash=str;
-  }
+  },
 
+  appendImage:function(index){
+    if(index===-1){
+      index=this.chapterUpdateIndex;
+      this.chapterUpdateIndex=-2;
+    }
+    for(var i=0;i<this.pageMax;++i){
+      var img=new Image();
+      img.src="../img/Transparent.gif";
+      img.setAttribute("data-echo",this.images[i]);
+      img.setAttribute("data-num",i+1);
+      img.setAttribute("data-chapter",index);
+      img.style.width="900px";
+      img.style.height="1300px";
+      img.style.borderWidth="1px";
+      img.style.borderColor="white";
+      img.style.borderStyle="solid";
+      img.setAttribute("data-pageMax",this.pageMax);
+      img.className="comics_img";
+      document.getElementById("comics_panel").appendChild(img);
+    }
+    var chapterEnd=document.createElement("div");
+    chapterEnd.className="comics_img_end";
+    chapterEnd.textContent="本話結束";
+    document.getElementById("comics_panel").appendChild(chapterEnd);
+    if(!Echo.hadInited){
+      Echo.init({
+        imgRender:function(elem){
+          var req=new XMLHttpRequest();
+          req.open("GET",elem.getAttribute("data-echo"),true);
+          req.withCredentials = true;
+          req.onload=(function(elem,req){
+            return function(){
+              eval(req.response);
+              if (typeof (hd_c) != "undefined" && hd_c.length > 0 && typeof (isrevtt) != "undefined") {
+                elem.src=hd_c[0];
+              }else{
+                elem.src=d[0];
+              }
+              elem.removeAttribute('data-echo');
+            }
+          })(elem,req);
+          req.send();
+        }
+      });
+    }else{
+      Echo.render();
+    }
+  }
 });
 
 module.exports = Main;

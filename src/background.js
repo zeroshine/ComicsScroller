@@ -1,4 +1,5 @@
-var ObjectAssign=require('object-assign');
+// var ObjectAssign=require('object-assign');
+// require("babel/polyfill");
 var Comics_sf=require('./app/comics_sf.js');
 var Comics_8=require('./app/comics_8.js');
 var Comics_dm5=require('./app/comics_dm5.js');
@@ -79,17 +80,17 @@ var comicsQuery = function(){
 chrome.tabs.onUpdated.addListener(redirectLocal);
 
 chrome.storage.local.get('readed',function(items){
-  var readedItem = ObjectAssign(readed,items);
+  var readedItem = Object.assign(readed,items);
   chrome.storage.local.set(readedItem);
 });
 
 chrome.storage.local.get('update',function(items){
-  var updateItem = ObjectAssign(update,items);
+  var updateItem = Object.assign(update,items);
   chrome.storage.local.set(updateItem);
 });
 
 chrome.storage.local.get('collected',function(items){
-  var collectedItem = ObjectAssign(collected,items);
+  var collectedItem = Object.assign(collected,items);
   // console.log(collectedItem);
   chrome.storage.local.set(collectedItem,function(){
   	// comicsQuery();

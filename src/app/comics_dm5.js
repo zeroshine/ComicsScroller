@@ -7,7 +7,7 @@ var comics={
 
 	handleUrlHash:function(){
 		var params_str=window.location.hash;
-    	this.site= /site\/(.*)/.exec(params_str)[1];
+    	this.site= /site\/(.*)\/chapter/.exec(params_str)[1];
     	this.chapterURL=this.baseURL+(/chapter\/(.*\/)/.exec(params_str)[1]);
     	if(!(/#$/.test(params_str))){
 	      document.getElementById("comics_panel").innerHTML="";
@@ -17,9 +17,14 @@ var comics={
 	          index=i;
 	          this.lastIndex=index;
 	          this._getImage(index,this.chapterURL);
-	          this.setState({selectedIndex:index,chapter:this.state.menuItems[index].text,pageratio:""},function(){
-	          	this._saveStoreReaded();
-	          }.bind(this));
+	          // this.setState({selectedIndex:index,
+	          // 	chapter:this.state.menuItems[index].text,
+	          // 	pageratio:"",
+	          // 	rightDisable:index===0,
+	          // 	leftDisable:index===this.state.menuItems.length-1},
+	          // 	function(){
+	          // 		this._saveStoreReaded();
+	          // 	}.bind(this));
 	          break;
 	        }
 	      }
@@ -59,7 +64,6 @@ var comics={
 	   	var title=this.getTitleName(doc);
 	   	var imgUrl=this.getCoverImg(doc);
       	var array=[];
-      	var obj={};
       	for(var i=0;i<nl.length;++i){
 		  	var item={};
 	       	item.payload=nl[i].href;
@@ -73,13 +77,13 @@ var comics={
     			}
     		}
 		    if(urlInChapter===false&&chapters.length>0){
-				ObjectAssign(obj,{
+				var obj={
 					url:indexURL,
 					title:title,
 					site:'dm5',
 					iconUrl:imgUrl,
 					lastReaded:item
-				});
+				};
 		    	chrome.notifications.create(item.payload,{
 					type:"image",
 					iconUrl:'img/comics-64.png',

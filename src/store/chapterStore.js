@@ -1,8 +1,9 @@
+// require("babel/polyfill");
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+// var assign = require('object-assign');
 
-var chapterStore = assign({}, EventEmitter.prototype, {
+var chapterStore = Object.assign({}, EventEmitter.prototype, {
   addListener: function(event,callback){
     this.on(event,callback);
   },
@@ -10,7 +11,7 @@ var chapterStore = assign({}, EventEmitter.prototype, {
     this.removeListener(event,callback);
   },
   emitUpdate: function() {
-    console.log("emmitUpdate");
+    // console.log("emmitUpdate");
     this.emit("update");
   },
   emitScroll: function(text,pageratio){

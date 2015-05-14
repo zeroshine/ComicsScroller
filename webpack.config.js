@@ -14,8 +14,9 @@ module.exports={
 	module:{
 		loaders:[{
 			test:/\.jsx?$/,
-			loader: 'babel',
-			query: {compact: false,blacklist: ["useStrict"]}
+			loader: 'babel-loader',
+			exclude: /node_modules/,
+			query: {stage:1,compact: false,blacklist: ["useStrict"],optional:["runtime"]}
 		},{
 			test:/\.less$/,
 			loader: ExtractTextPlugin.extract('style-loader','css-loader!less-loader')
@@ -31,20 +32,6 @@ module.exports={
 	},
 	plugins: [
         new ExtractTextPlugin('css/[name].css'),
-  //       new webpack.optimize.UglifyJsPlugin({
-		//       mangle: true,
-	 //          sourcemap:false,
-	 //          compress: {
-	 //            sequences: true,
-	 //            dead_code: true,
-	 //            booleans: true,
-	 //            drop_console: true,
-	 //            properties: true,
-	 //            loops:true,
-	 //            if_return:true,
-	 //            comparisons:true,
-	 //            warnings:false
-	 //          }
-		// })
-    ]
+    ],
+    devtool:"#inline-source-map"
 }

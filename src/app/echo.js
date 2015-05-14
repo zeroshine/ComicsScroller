@@ -1,69 +1,33 @@
-/*! echo.js v1.6.0 | (c) 2015 @toddmotto | https://github.com/toddmotto/echo */
+/*! modify from echo.js v1.6.0 | (c) 2015 @toddmotto | https://github.com/toddmotto/echo */
   'use strict';
 
   var chapterAction=require("../actions/chapterAction.js");
 
   var echo = {};
 
-  var callback = function () {};
-
-  var update = function () {};
-
   var imgRender=function(elem) {
-    return (function(){
       elem.src = elem.getAttribute('data-echo');
       elem.removeAttribute('data-echo');
-      // elem.removeAttribute('style');
-    })(elem);
   };
 
-  var offset, poll, delay, useDebounce, unload;
+  // var offset=5000;
+
+  var delay=500;
+
+  var useDebounce=false;
 
   echo.hadInited=false;
 
-  var inView = function (element, view) {
-    var box = element.getBoundingClientRect();
-    return (box.right >= view.l && box.bottom >= view.t && box.left <= view.r && box.top <= view.b);
-  };
+  var checkView, setInViewInfor, scrollRender, panel, poll,update ;
 
-  var checkView, setInViewInfor, scrollRender;
-
-  var checkView =function(element,view){
-    var box=element.getBoundingClientRect();
-    return (box.bottom >= view.t && box.top <= view.b);
-  };
-
-  var setInViewInfor=function(){
-    // console.log("setInViewInfor");
-    var nodes = document.querySelectorAll('img[data-num]');
-    var length = nodes.length;
-    var src, elem;
-    var view = {
-      t: 0,
-      b: (window.innerHeight || document.documentElement.clientHeight)
-    };
-    var oview = {
-      t: 0 - offset.t,
-      b: (window.innerHeight || document.documentElement.clientHeight) + offset.b
-    };
-    for (var i = 0; i < length; i++) {
-      elem=nodes[i];
-      if(checkView(elem,view)){
-        // console.log("elem "+elem.getAttribute("data-chapter"));
-        chapterAction.scroll(elem.getAttribute("data-chapter"),elem.getAttribute("data-num")+'/'+elem.getAttribute("data-pageMax"));
-      }
-      if(checkView(elem, oview)){
-        if(elem.naturalHeight>0){
-          if(elem.naturalWidth>1000){
-            // console.log('elem',elem.getAttribute('data-num'));
-            elem.removeAttribute('style');
-            var h=window.innerHeight-58;
-            elem.style.maxHeight=h.toString()+'px';
-            elem.style.width="80%";
-          }
-        }  
-      }
-    }
+  // var view = {
+  //   t: 0 - offset,
+  //   b: window.innerHeight + offset,
+  // };
+  
+  var windowView={
+    t:0,
+    b:window.innerHeight
   };
 
   var debounceOrThrottle = function () {
@@ -72,125 +36,123 @@
     }
     clearTimeout(poll);
     poll = setTimeout(function(){
-      // console.log("poll");
-      setInViewInfor();
-      // console.log(scrollRender);
-      if(scrollRender){
-        // console.log("poll render");
-        echo.render();  
-      }
+      echo.render();  
       poll = null;
     }, delay);
   };
-  
+  var bSeachElem=function(nodes,begin,end){
+    var index=Math.floor((begin+end)/2);
+    // console.log(begin,end,index);
+    if(begin===end) return index;
+    var box=nodes[index].getBoundingClientRect(); 
+    if(box.bottom<windowView.t){
+      return bSeachElem(nodes,index,end);
+    }else if(box.top>windowView.b){
+      return bSeachElem(nodes,begin,index);
+    }else if(box.bottom >= windowView.t && box.top <= windowView.b){
+      return index;
+    }
+  };
   echo.init = function (opts) {
-    scrollRender=true;
+    // scrollRender=true;
+    console.log("echo init");
     opts = opts || {};
-    var offsetAll = opts.offset || 0;
-    var offsetVertical = opts.offsetVertical || offsetAll;
-    var offsetHorizontal = opts.offsetHorizontal || offsetAll;
-    var optionToInt = function (opt, fallback) {
-      return parseInt(opt || fallback, 10);
-    };
-    var ofvalue=2500;
-    var throvalue=500;
-    var unlaodvalue=false;
-    offset = {
-      t: ofvalue,
-      b: ofvalue,
-      l: 0,
-      r: 0
-    };
-    // offset = {
-    //   t: optionToInt(opts.offsetTop, offsetVertical),
-    //   b: optionToInt(opts.offsetBottom, offsetVertical),
-    //   l: optionToInt(opts.offsetLeft, offsetHorizontal),
-    //   r: optionToInt(opts.offsetRight, offsetHorizontal)
-    // };
-    delay = optionToInt(throvalue, 250);
-    // delay = optionToInt(opts.throttle, 250);
-    useDebounce = true;
-    // useDebounce = opts.debounce !== false;
-    unload = unlaodvalue;
-    // unload = !!opts.unload;
-    callback = opts.callback || callback;
-    update=opts.update || update;
+    // panel=document.getElementById('comics_panel');
     imgRender=opts.imgRender || imgRender;
-    // setInViewInfor=opts.setInViewInfor || setInViewInfor;
     echo.hadInited=true;
     echo.render();
-    setInViewInfor();
-    if (document.addEventListener) {
-      window.addEventListener('scroll', debounceOrThrottle, false);
-      window.addEventListener('load', debounceOrThrottle, false);
-
-    } else {
-      window.attachEvent('onscroll', debounceOrThrottle);
-      window.attachEvent('onload', debounceOrThrottle);
-    }
+    window.addEventListener('scroll', debounceOrThrottle, false);
+    // window.addEventListener('load', debounceOrThrottle, false);
   };
-
   echo.render = function () {
-    var nodes = document.querySelectorAll('img[data-echo], [data-echo-background]');
-    var length = nodes.length;
-    var src, elem;
-    var view = {
-      l: 0 - offset.l,
-      t: 0 - offset.t,
-      b: (window.innerHeight || document.documentElement.clientHeight) + offset.b,
-      r: (window.innerWidth || document.documentElement.clientWidth) + offset.r
-    };
-    for (var i = 0; i < length; i++) {
-      elem = nodes[i];
-
-      if (checkView(elem, view)) {
-        if (unload) {
-          elem.setAttribute('data-echo-placeholder', elem.src);
+    panel=document.getElementById('comics_panel');
+    var nodes = panel.children;
+    // var length = nodes.length;
+    // var renderstatus=false;
+    // var inforstatus=false;   
+    // for (var i = 0; i < nodes.length; ++i) {
+    //   var elem = nodes[i];
+    //   if(elem.getAttribute('data-echo')){
+    //     imgRender(elem);
+    //   }
+    //   var box=elem.getBoundingClientRect(); 
+            
+    // }
+    var index=bSeachElem(nodes, 0, nodes.length-1);
+    var elem=nodes[index];
+    if(elem.getAttribute('data-echo')) imgRender(elem);
+    if(elem.getAttribute('data-num')){
+      chapterAction.scroll(elem.getAttribute("data-chapter"),elem.getAttribute("data-num")+'/'+elem.getAttribute("data-pageMax"));  
+    }
+    if(!elem.style.maxHeight && elem.naturalWidth/elem.naturalHeight>1){
+      var h=window.innerHeight-58;
+      elem.style.maxHeight=h.toString()+'px';
+      elem.style.width="80%";
+    }   
+    
+    for(var i=1;i<=5;++i){
+      if(index-i>=0){
+        var elem=nodes[index-i];
+        if(!elem.style.maxHeight&&elem.naturalWidth/elem.naturalHeight>1){
+          var h=window.innerHeight-58;
+          elem.style.maxHeight=h.toString()+'px';
+          elem.style.width="80%";
         }
-        if (elem.getAttribute('data-echo-background') !== null) {
-          elem.style.backgroundImage = "url(" + elem.getAttribute('data-echo-background') + ")";
-        }
-        else {
-          imgRender(elem);
-          //elem.src = elem.getAttribute('data-echo');
-        }
-        if (!unload) {
-          elem.removeAttribute('data-echo');
-          // elem.removeAttribute('data-echo-background');
-        }
-        callback(elem, 'load');
+        if(elem.getAttribute('data-echo')) imgRender(elem);
       }
-      else if (unload && !!(src = elem.getAttribute('data-echo-placeholder'))) {
-        if (elem.getAttribute('data-echo-background') !== null) {
-          elem.style.backgroundImage = "url(" + src + ")";
+      if(index+i<nodes.length){
+        var elem=nodes[index+i];
+        if(!elem.style.maxHeight && elem.naturalWidth/elem.naturalHeight>1){
+          var h=window.innerHeight-58;
+          elem.style.maxHeight=h.toString()+'px';
+          elem.style.width="80%";
         }
-        else {
-          elem.src = src;
-        }
-        elem.removeAttribute('data-echo-placeholder');
-        callback(elem, 'unload');
+        if(elem.getAttribute('data-echo')) imgRender(elem);
       }
     }
-    if (!length&&scrollRender) {
-      console.log("render complete");
-      // chapterAction.update();
-      scrollRender=false;
-    }
+    
   };
+
+  // echo.render = function () {
+  //   var nodes = panel.children;
+  //   // var length = nodes.length;
+  //   var renderstatus=false;
+  //   var inforstatus=false;   
+  //   for (var i = 0; i < nodes.length; ++i) {
+  //     var elem = nodes[i];
+  //     var box=elem.getBoundingClientRect();
+  //     if (box.bottom >= view.t && box.top <= view.b) {
+  //       if(elem.naturalWidth/elem.naturalHeight>1){
+  //         // elem.removeAttribute('style');
+  //         var h=window.innerHeight-58;
+  //         elem.style.maxHeight=h.toString()+'px';
+  //         elem.style.width="80%";
+  //       }
+  //       if(elem.getAttribute('data-num')&&(box.bottom >= windowView.t && box.top <= windowView.b)){
+  //         if(!inforstatus){
+  //           chapterAction.scroll(elem.getAttribute("data-chapter"),elem.getAttribute("data-num")+'/'+elem.getAttribute("data-pageMax"));
+  //           inforstatus=true;
+  //         }
+  //       }  
+  //       if(elem.getAttribute('data-echo')){
+  //         renderstatus=true;
+  //         imgRender(elem);
+  //       }else if(renderstatus){
+  //         break;
+  //       }
+  //     }
+  //   }
+  // };
 
   echo.run=function(){
-    scrollRender=true;
+    // scrollRender=true;
     echo.render();
   };
 
-  echo.detach = function () {
-    if (document.removeEventListener) {
-      window.removeEventListener('scroll', debounceOrThrottle);
-    } else {
-      window.detachEvent('onscroll', debounceOrThrottle);
-    }
-    clearTimeout(poll);
-  };
+  // echo.detach = function () {
+  //   window.removeEventListener('scroll', debounceOrThrottle);
+  //   clearTimeout(poll);
+  // };
 
   module.exports=echo;
 

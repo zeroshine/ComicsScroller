@@ -1,5 +1,6 @@
+// require("babel/polyfill");
 var Immutable = require('immutable');
-var objectAssign=require('object-assign');
+// var objectAssign=require('object-assign');
 var StoreMixin={
   _getStore:function(){
     chrome.storage.local.get('collected',function(items){      
@@ -20,6 +21,7 @@ var StoreMixin={
     }.bind(this));
 
     chrome.storage.local.get('readed',function(items){
+      console.log('readed',items);
       for(var i=0;i<items.readed.length;++i){
         if(items.readed[i].url===this.indexURL){
           this.markedItems=Immutable.Set(items.readed[i].markedPayload);  
@@ -31,6 +33,7 @@ var StoreMixin={
   },
   _saveStoreReaded:function(){
   	chrome.storage.local.get('readed',function(items){
+      console.log('readed',items);
       var obj={};
       obj.url=this.indexURL;
       obj.site=this.site;
@@ -38,7 +41,7 @@ var StoreMixin={
       obj.title=this.title;
       obj.markedPayload=this.markedItems.toArray();
       obj.menuItems=this.state.menuItems;
-      obj.lastReaded=objectAssign({},this.state.menuItems[this.state.selectedIndex]);
+      obj.lastReaded=Object.assign({},this.state.menuItems[this.state.selectedIndex]);
       var array=[];
       for(var i=0;i<items.readed.length;++i){
         if(items.readed[i].url!==this.indexURL){
@@ -52,7 +55,7 @@ var StoreMixin={
     chrome.storage.local.get('collected',function(items){
       for(var i=0;i<items.collected.length;++i){
         if(items.collected[i].url===this.indexURL){
-          items.collected[i].lastReaded=objectAssign({},this.state.menuItems[this.state.selectedIndex]);    
+          items.collected[i].lastReaded=Object.assign({},this.state.menuItems[this.state.selectedIndex]);    
           items.collected[i].menuItems=this.state.menuItems;
           items.collected[i].markedPayload=this.markedItems.toArray();
         }
@@ -70,7 +73,7 @@ var StoreMixin={
       obj.title=this.title;
       obj.markedPayload=this.markedItems.toArray();
       obj.menuItems=this.state.menuItems;
-      obj.lastReaded=objectAssign({},this.state.menuItems[this.state.selectedIndex]);
+      obj.lastReaded=Object.assign({},this.state.menuItems[this.state.selectedIndex]);
       var urlInItems=false;
       for(var i=0;i<this.collectedItems.length;++i){
         if(this.collectedItems[i].url===this.indexURL){

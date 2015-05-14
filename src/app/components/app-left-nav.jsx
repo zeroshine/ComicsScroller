@@ -1,12 +1,17 @@
 var React = require('react'),
   //Router = require('react-router'),
-  mui = require('material-ui');
+  LeftNav = require('./left-nav.jsx');
 
 
 
 var AppLeftNav = React.createClass({
 
   // mixins: [Router.Navigation, Router.State],
+  propTypes: {
+    selectedIndex:React.PropTypes.number,
+    menuItems:React.PropTypes.array,
+    onMenuItemClick:React.PropTypes.func,
+  },
 
   getInitialState: function() {
     return {
@@ -15,18 +20,17 @@ var AppLeftNav = React.createClass({
   },
 
   render: function() {
-    var header = <div className="logo" onClick={this._onHeaderClick}>章節</div>;
+    var header = (<div className="logo" onClick={this._onHeaderClick}>章節</div>);
 
     return (
-      <mui.LeftNav 
+      <LeftNav 
         ref="leftNav"
         docked={false}
         isInitiallyOpen={false}
         header={header}
         menuItems={this.props.menuItems} 
         selectedIndex={this.props.selectedIndex}
-        onChange={this.props.onMenuItemClick}
-        />
+        onChange={this.props.onMenuItemClick}/>
     );
   },
 

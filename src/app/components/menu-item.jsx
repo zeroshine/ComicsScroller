@@ -3,8 +3,8 @@ var Classable = require('material-ui').Mixins.Classable;
 // var Classable = require('../mixins/classable');
 var FontIcon = require('material-ui').FontIcon;
 // var FontIcon = require('../font-icon');
-var Toggle = require('../toggle');
-
+var Toggle = require('material-ui').Toggle;
+var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 var Types = {
   LINK: 'LINK',
   SUBHEADER: 'SUBHEADER',
@@ -13,7 +13,7 @@ var Types = {
 
 var MenuItem = React.createClass({
 
-  mixins: [Classable],
+  mixins: [PureRenderMixin,Classable],
 
   propTypes: {
     index: React.PropTypes.number.isRequired,
@@ -78,7 +78,7 @@ var MenuItem = React.createClass({
         className={classes}
         onTouchTap={this._handleTouchTap}
         onClick={this._handleOnClick}>
-
+        
         {icon}
         {this.props.children}
         {data}

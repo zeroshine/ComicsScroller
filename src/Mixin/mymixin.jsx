@@ -5,17 +5,24 @@ var AppBar =mui.AppBar;
 var AppCanvas=mui.AppCanvas;
 var IconButton=mui.IconButton;
 var TagIconButton=require('../app/components/TagIconButton.jsx');
-var LeftNav=require('../app/components/app-left-nav.jsx');
+var AppLeftNav=require('../app/components/app-left-nav.jsx');
 var Menu = mui.Menu;
 // var ChapterMenu=require('../app/components/chapter-menu.jsx');  
-var objectAssign=require('object-assign');
+// var objectAssign=require('object-assign');
 
 var Echo=require('../app/echo');
 
 var MyMixin={
 
   getInitialState: function(){
-    return {menuItems:[],selectedIndex:null,comicname:"",pageratio:"",chapter:"",starIsMarked:false}
+    return {menuItems:[],
+      selectedIndex:null,
+      comicname:"",
+      pageratio:"",
+      leftDisable:false,
+      rightDisable:false,
+      chapter:"",
+      starIsMarked:false}
   },    
   
   render: function() {
@@ -34,9 +41,12 @@ var MyMixin={
     return (
       <AppCanvas predefinedLayout={1}>
         <AppBar title={title+"  "+this.state.comicname+"  "+this.state.chapter+"  "+this.state.pageratio} onMenuIconButtonTouchTap={this._onMenuIconButtonTouchTap} >
-          <TagIconButton tooltip="Subscribed" onClick={this._starClick} isMarked={this.state.starIsMarked}/> {githubButton}
+          <TagIconButton tooltip="Subscribed" onClick={this._starClick} isMarked={this.state.starIsMarked}/> 
+          {githubButton}
+          <IconButton className="right-icon-button" iconClassName="icon-circle-right" disabled={this.state.rightDisable} onClick={this._nextClick} tooltip="下一話"/>
+          <IconButton className="left-icon-button" iconClassName="icon-circle-left" disabled={this.state.leftDisable} onClick={this._previousClick} tooltip="上一話"/>
         </AppBar>
-        <LeftNav menuItems={this.state.menuItems} selectedIndex={this.state.selectedIndex} isInitiallyOpen={false} ref="leftNav" onMenuItemClick={this._onMenuItemClick}/>
+        <AppLeftNav menuItems={this.state.menuItems} selectedIndex={this.state.selectedIndex} isInitiallyOpen={false} ref="leftNav" onMenuItemClick={this._onMenuItemClick}/>
         <div id="comics_panel" />   
       </AppCanvas>
     );
@@ -48,31 +58,7 @@ var MyMixin={
 
   chapterUpdateIndex: -1,
   
-  appendImage:function(index){
-      if(index===-1){
-        index=this.chapterUpdateIndex;
-        this.chapterUpdateIndex=-2;
-      }
-      for(var i=0;i<this.pageMax;++i){
-        var img=new Image();
-        img.src="../img/Transparent.gif";
-        img.setAttribute("data-echo",this.images[i]);
-        img.setAttribute("data-num",i+1);
-        img.setAttribute("data-chapter",index);
-        img.style.width="900px";
-        img.style.height="1300px";
-        img.style.borderWidth="1px";
-        img.style.borderColor="white";
-        img.style.borderStyle="solid";
-        img.setAttribute("data-pageMax",this.pageMax);
-        img.className="comics_img";
-        document.getElementById("comics_panel").appendChild(img);
-      }
-      var chapterEnd=document.createElement("div");
-      chapterEnd.className="comics_img_end";
-      chapterEnd.textContent="本話結束";
-      document.getElementById("comics_panel").appendChild(chapterEnd);
-  },
+  
 
   setImageIndex:function(index){
     if(this.chapterUpdateIndex===-1){
@@ -103,25 +89,32 @@ var MyMixin={
   },
 
   _updateInfor: function(num,pageratio){
-    var n=parseInt(num);
-    if(n===-1) return;
-    if(n!==this.state.selectedIndex){      
+    var index=parseInt(num);
+    if(index===-1) return;
+    if(index!==this.state.selectedIndex){
+      // console.log("not the selectedIndex");      
       var menuItems=this._cloneMenuItems({isMarked:true,text:true});
-      if(!this.markedItems.has(this.state.menuItems[n].payload)){
-        menuItems[n].isMarked=true;
-        this.markedItems=this.markedItems.add(menuItems[n].payload);
+      if(!this.markedItems.has(this.state.menuItems[index].payload)){
+        menuItems[index].isMarked=true;
+        this.markedItems=this.markedItems.add(menuItems[index].payload);
       }
-      this._updateHash(menuItems[n].payload,"#");
+      this._updateHash(menuItems[index].payload,"#");
       // console.log('_updateInfor',this.state.menuItems[n].text);      
-      document.title=this.title+" "+this.state.menuItems[n].text;
-      this.setState({menuItems:menuItems,selectedIndex: n,chapter:this.state.menuItems[n].text},function(){this._saveStoreReaded()}.bind(this));
+      document.title=this.title+" "+this.state.menuItems[index].text;
+      this.setState({
+        menuItems:menuItems,
+        rightDisable:index===0,
+        leftDisable:index===this.state.menuItems.length-1,
+        selectedIndex: index,
+        chapter:this.state.menuItems[index].text},
+        function(){this._saveStoreReaded()}.bind(this));
     }
-    if(typeof(this.state.menuItems[n].number)==="undefined"||pageratio!==this.state.menuItems[n].number){
+    if(typeof(this.state.menuItems[index].number)==="undefined"||pageratio!==this.state.menuItems[index].number){
       var menuItems=this._cloneMenuItems({isMarked:true,text:true});
-      menuItems[n].number=pageratio;
+      menuItems[index].number=pageratio;
       this.setState({menuItems:menuItems,pageratio:pageratio});
     }
-    if(n===this.lastIndex){
+    if(index===this.lastIndex){
       if(this.lastIndex>0){
         this._getImage(--this.lastIndex,this.state.menuItems[this.lastIndex].payload);
       }        
@@ -137,8 +130,68 @@ var MyMixin={
       this._removeStoreCollected();
       this.setState({starIsMarked:false});  
     }
+  },
+
+  _previousClick:function(){
+    var panel=document.getElementById("comics_panel");
+    var index=this.state.selectedIndex+1;
+    if(index<this.state.menuItems.length){
+      var menuItems=this._cloneMenuItems({isMarked:true,text:true});
+      if(!this.markedItems.has(menuItems[index].payload)){
+        menuItems[index].isMarked=true;
+        this.markedItems=this.markedItems.add(menuItems[index].payload);      
+      }   
+      this.setState({
+        menuItems:menuItems,
+        selectedIndex:index,
+        pageratio:"",
+        rightDisable:index===0,
+        leftDisable:index===this.state.menuItems.length-1,
+        chapter:menuItems[index].text},
+        function(){this._saveStoreReaded()}.bind(this));
+      this.lastIndex=index;
+      // panel.innerHTML="";
+      // this._getImage(index,item.payload);
+      document.title=this.title+" "+this.state.menuItems[index].text;
+      this._updateHash(menuItems[index].payload,'');
+      if(!Echo.hadInited){
+        Echo.init(); 
+      }else{
+        Echo.run();
+      }
+    }
+  },
+
+  _nextClick:function(){
+    var panel=document.getElementById("comics_panel");
+    var index=this.state.selectedIndex-1;
+    if(index>=0){
+      var menuItems=this._cloneMenuItems({isMarked:true,text:true});
+      if(!this.markedItems.has(menuItems[index].payload)){
+        menuItems[index].isMarked=true;
+        this.markedItems=this.markedItems.add(menuItems[index].payload);      
+      }   
+      this.setState({
+        menuItems:menuItems,
+        selectedIndex:index,
+        pageratio:"",
+        rightDisable:index===0,
+        leftDisable:index===this.state.menuItems.length-1,
+        chapter:menuItems[index].text},
+        function(){this._saveStoreReaded()}.bind(this));
+      this.lastIndex=index;
+      // panel.innerHTML="";
+      // this._getImage(index,item.payload);
+      document.title=this.title+" "+this.state.menuItems[index].text;
+      this._updateHash(menuItems[index].payload,'');
+      if(!Echo.hadInited){
+        Echo.init(); 
+      }else{
+        Echo.run();
+      }
+    }
   }
 
-}
+};
 
 module.exports=MyMixin;

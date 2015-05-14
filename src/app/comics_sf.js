@@ -1,4 +1,4 @@
-var ObjectAssign=require('object-assign');
+// var ObjectAssign=require('object-assign');
 var comics={
 	regex: /http\:\/\/comic\.sfacg\.com\/(HTML\/[^\/]+\/.+)$/,
 
@@ -10,9 +10,9 @@ var comics={
 	    this.pageURL=/chapter\/(HTML\/[^\/]+\/)/.exec(params_str)[1];   
 	    this.chapterURL=this.baseURL+(/chapter\/(.*)$/.exec(params_str)[1]);
 	    this.indexURL=this.baseURL+this.pageURL;
-	    console.log("chapterURL",this.chapterURL);
+	    // console.log("chapterURL",this.chapterURL);
     	if(!(/#$/.test(params_str))){
-	      console.log('page back');
+	      // console.log('page back');
 	      document.getElementById("comics_panel").innerHTML="";
 	      var index=-1;
 	      for(var i=0;i<this.state.menuItems.length;++i){
@@ -20,9 +20,14 @@ var comics={
 	          index=i;
 	          this.lastIndex=index;
 	          this._getImage(index,this.chapterURL);
-	          this.setState({selectedIndex:index,chapter:this.state.menuItems[index].text,pageratio:""},function(){
-	          	this._saveStoreReaded();
-	          }.bind(this));
+	          // this.setState({selectedIndex:index,
+	          // 	chapter:this.state.menuItems[index].text,
+	          // 	pageratio:"",
+	          // 	rightDisable:index===0,
+	          // 	leftDisable:index===this.state.menuItems.length-1},
+	          // 	function(){
+	          // 		this._saveStoreReaded();
+	          // 	}.bind(this));
 	          break;
 	        }
 	      }
@@ -78,14 +83,14 @@ var comics={
 		    	}
 		    }
 		    if(!urlInChapter && chapters.length>0){
-				ObjectAssign(obj,{
+				var obj={
 					url:indexURL,
 					title:title,
 					site:'sf',
 					iconUrl:imgUrl,
 					lastReaded:item
-				});
-				   chrome.notifications.create(item.payload,{
+				};
+				chrome.notifications.create(item.payload,{
 					type:"image",
 					iconUrl:'img/comics-64.png',
 					title:"Comics Update",

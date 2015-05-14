@@ -1,16 +1,10 @@
 var React = require('react'),
-  // KeyCode = require('./utils/key-code'),
   KeyCode = require('material-ui').Utils.KeyCode,
-  // Classable = require('./mixins/classable'),
   Classable = require('material-ui').Mixins.Classable,
-  // WindowListenable = require('./mixins/window-listenable'),
   WindowListenable = require('material-ui').Mixins.WindowListenable,
-  // Overlay = require('./overlay'),
-  Overlay = require('material-ui').Overlay,
+  Overlay = require('../../../node_modules/material-ui/lib/js/overlay.js'),
   Paper = require('material-ui').Paper,
-  // Paper = require('./paper'),
-  // Menu = require('./menu/menu');
-  Menu = require('./menu');
+  Menu = require('./menu.jsx');
 
 var LeftNav = React.createClass({
 
@@ -67,17 +61,14 @@ var LeftNav = React.createClass({
       overlay;
 
     if (!this.props.docked) overlay = <Overlay show={this.state.open} onTouchTap={this._onOverlayTouchTap} />;
-
     return (
       <div className={classes}>
-
         {overlay}
         <Paper
           ref="clickAwayableElement"
           className="mui-left-nav-menu"
           zDepth={2}
           rounded={false}>
-          
           {this.props.header}
           <Menu 
             ref="menuItems"
@@ -85,10 +76,11 @@ var LeftNav = React.createClass({
             menuItems={this.props.menuItems}
             selectedIndex={selectedIndex}
             onItemClick={this._onMenuItemClick} />
-
         </Paper>
       </div>
-    );
+    );   
+    
+    
   },
 
   _onMenuItemClick: function(e, key, payload) {
