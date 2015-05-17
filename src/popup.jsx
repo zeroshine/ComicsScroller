@@ -158,7 +158,7 @@ var Cards=React.createClass({
 	},
 	_removeCollected:function(e,index){
 		var array=[];
-		for(var i=0;i>this.state.collectedItems.length;++i){
+		for(var i=0;i<this.state.collectedItems.length;++i){
 			if(i!==index){
 				array.push(this.state.collectedItems[i]);
 			}

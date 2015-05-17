@@ -13,9 +13,9 @@ ComicsScroller是一個chrome extenstion的專案
 # Support Websites
 無限動漫  
 http://www.8comic.com/  
-SFACG
+SFACG  
 http://comic.sfacg.com/  
-動漫屋
+動漫屋  
 http://tel.dm5.com/  
 http://www.dm5.com/  
 http://www.manben.com/    
