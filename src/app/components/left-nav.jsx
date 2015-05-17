@@ -5,16 +5,15 @@ var React = require('react'),
   Overlay = require('../../../node_modules/material-ui/lib/js/overlay.js'),
   Paper = require('material-ui').Paper,
   Menu = require('./menu.jsx');
-
+var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 var LeftNav = React.createClass({
 
-  mixins: [Classable, WindowListenable],
+  mixins: [PureRenderMixin,Classable, WindowListenable],
 
   propTypes: {
     docked: React.PropTypes.bool,
     header: React.PropTypes.element,
     onChange: React.PropTypes.func,
-    menuItems: React.PropTypes.array.isRequired,
     selectedIndex: React.PropTypes.number,
     onNavOpen: React.PropTypes.func,
     onNavClose: React.PropTypes.func

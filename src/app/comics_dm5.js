@@ -12,19 +12,11 @@ var comics={
     	if(!(/#$/.test(params_str))){
 	      document.getElementById("comics_panel").innerHTML="";
 	      var index=-1;
-	      for(var i=0;i<this.state.menuItems.length;++i){
-	        if(this.state.menuItems[i].payload===this.chapterURL&&index===-1){
+	      for(var i=0;i<this.state.menuItems.size;++i){
+	        if(this.state.menuItems.get(i).get('payload')===this.chapterURL){
 	          index=i;
 	          this.lastIndex=index;
 	          this._getImage(index,this.chapterURL);
-	          // this.setState({selectedIndex:index,
-	          // 	chapter:this.state.menuItems[index].text,
-	          // 	pageratio:"",
-	          // 	rightDisable:index===0,
-	          // 	leftDisable:index===this.state.menuItems.length-1},
-	          // 	function(){
-	          // 		this._saveStoreReaded();
-	          // 	}.bind(this));
 	          break;
 	        }
 	      }

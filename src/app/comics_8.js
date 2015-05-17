@@ -13,30 +13,20 @@ var comics={
 	    this.chapterNum=/chapter\/.*\?ch\=(\d*)/.exec(params_str)[1];
 	    this.prefixURL=/chapter\/(.*\?ch\=)\d*/.exec(params_str)[1];;  
 	    this.indexURL=this.comicspageURL+this.pageURL;
-	    console.log('params_str',params_str);
+	    // console.log('params_str',params_str);
     	if(!(/#$/.test(params_str))){
 	      console.log('page back');
 	      document.getElementById("comics_panel").innerHTML="";
 	      var index=-1;
-	      for(var i=0;i<this.state.menuItems.length;++i){
-	        if(this.state.menuItems[i].payload===this.baseURL+this.prefixURL+this.chapterNum&&index===-1){
+	      for(var i=0;i<this.state.menuItems.size;++i){
+	        if(this.state.menuItems.get(i).get('payload')===this.baseURL+this.prefixURL+this.chapterNum){
 	          index=i;
 	          this.lastIndex=index;
 	          this._getImage(index,this.chapterNum);
-	          // this.setState({
-	          // 	selectedIndex:index,
-	          // 	chapter:this.state.menuItems[index].text,
-	          // 	pageratio:"",
-	          // 	rightDisable:index===0,
-	          // 	leftDisable:index===this.state.menuItems.length-1},
-	          // 	function(){
-	          // 		this._saveStoreReaded();
-	          // 	}.bind(this));
 	          break;
 	        }
 	      }
 	    }else{
-	      // console.log("replace with","#/site/comics8/chapter/"+(/chapter\/(.*)#$/.exec(params_str)[1]));	
 	      window.history.replaceState('',document.title,"#/site/comics8/chapter/"+(/chapter\/(.*)#$/.exec(params_str)[1]));
 	    }  
 	},
@@ -182,13 +172,13 @@ var comics={
 			    }
 			}
 		    if(urlInChapter===false&&chapters.length>0){
-			    ObjectAssign(obj,{
+			    obj={
 					url:indexURL,
 					title:title,
 					site:'comics8',
 					iconUrl:imgUrl,
 					lastReaded:item
-				});
+				};
 				chrome.notifications.create(item.payload,{
 					type:"image",
 					iconUrl:'img/comics-64.png',

@@ -65,8 +65,8 @@
     // window.addEventListener('load', debounceOrThrottle, false);
   };
   echo.render = function () {
-    panel=document.getElementById('comics_panel');
-    var nodes = panel.children;
+    // panel=document.getElementById('comics_panel');
+    // var nodes = echo.nodes;
     // var length = nodes.length;
     // var renderstatus=false;
     // var inforstatus=false;   
@@ -78,40 +78,46 @@
     //   var box=elem.getBoundingClientRect(); 
             
     // }
-    var index=bSeachElem(nodes, 0, nodes.length-1);
-    var elem=nodes[index];
-    if(elem.getAttribute('data-echo')) imgRender(elem);
+    if(echo.nodes.length===0) return;
+    var index=bSeachElem(echo.nodes, 0, echo.nodes.length-1);
+    var elem=echo.nodes[index];
+    
     if(elem.getAttribute('data-num')){
       chapterAction.scroll(elem.getAttribute("data-chapter"),elem.getAttribute("data-num")+'/'+elem.getAttribute("data-pageMax"));  
     }
+
     if(!elem.style.maxHeight && elem.naturalWidth/elem.naturalHeight>1){
       var h=window.innerHeight-58;
       elem.style.maxHeight=h.toString()+'px';
-      elem.style.width="80%";
+      elem.style.width=Math.round(h*(elem.naturalWidth)/(elem.naturalHeight)).toString()+'px';
     }   
     
+    if(elem.getAttribute('data-echo')) imgRender(elem);
+
     for(var i=1;i<=5;++i){
       if(index-i>=0){
-        var elem=nodes[index-i];
+        var elem=echo.nodes[index-i];
         if(!elem.style.maxHeight&&elem.naturalWidth/elem.naturalHeight>1){
           var h=window.innerHeight-58;
           elem.style.maxHeight=h.toString()+'px';
-          elem.style.width="80%";
+          elem.style.width=Math.round(h*(elem.naturalWidth)/(elem.naturalHeight)).toString()+'px';
         }
         if(elem.getAttribute('data-echo')) imgRender(elem);
       }
-      if(index+i<nodes.length){
-        var elem=nodes[index+i];
+      if(index+i<echo.nodes.length){
+        var elem=echo.nodes[index+i];
         if(!elem.style.maxHeight && elem.naturalWidth/elem.naturalHeight>1){
           var h=window.innerHeight-58;
           elem.style.maxHeight=h.toString()+'px';
-          elem.style.width="80%";
+          elem.style.width=Math.round(h*(elem.naturalWidth)/(elem.naturalHeight)).toString()+'px';
         }
         if(elem.getAttribute('data-echo')) imgRender(elem);
       }
     }
     
   };
+
+  echo.nodes=[];
 
   // echo.render = function () {
   //   var nodes = panel.children;

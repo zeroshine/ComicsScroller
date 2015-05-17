@@ -1,9 +1,8 @@
 var React = require('react');
-var Immutable = require('immutable');
 var Comics=require('../comics_8.js');
 var Echo=require('../echo');
 var Mixins=require('../../Mixin/mymixin.jsx');
-var StoreMixin=require('../../Mixin/storemixin.jsx');
+var StoreMixin=require('../../Mixin/storemixin_ff.jsx');
 
 var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
@@ -26,7 +25,32 @@ var Main = React.createClass({
       hasAddedListener=true;
     }
   },
-
+  _onMenuItemClick: function(e, index, item) {
+    var panel=document.getElementById("comics_panel");
+    var menuItems=this._cloneMenuItems({isMarked:true,text:true});
+    if(!this.markedItems.has(menuItems[index].payload)){
+      menuItems[index].isMarked=true;
+      this.markedItems=this.markedItems.add(menuItems[index].payload);      
+    }
+    console.log(menuItems);   
+    this.setState({
+      menuItems:menuItems,
+      rightDisable:index===0,
+      leftDisable:index===this.state.menuItems.length-1,
+      selectedIndex:index,
+      chapter:menuItems[index].text},
+      function(){this._saveStoreReaded()}.bind(this));
+    this.lastIndex=index;
+    // panel.innerHTML="";
+    // this._getImage(index,item.payload);
+    document.title=this.title+" "+this.state.menuItems[index].text;
+    this._updateHash(menuItems[index].payload,'');
+    // if(!Echo.hadInited){
+    //   Echo.init(); 
+    // }else{
+    //   Echo.run();
+    // }    
+  },
   _getChapter: function(){
     var creq=new XMLHttpRequest();
     creq.open("GET",this.indexURL,true);
@@ -51,7 +75,6 @@ var Main = React.createClass({
       if(this.markedItems.has(item.payload)){
         item.isMarked=true;  
       }
-      item=Immutable.Map(item);
       array.push(item);
       for(var i=nl.length-3;i>=0;--i){
         var item={};
@@ -68,17 +91,16 @@ var Main = React.createClass({
         if(this.markedItems.has(item.payload)){
           item.isMarked=true;  
         }
-        item=Immutable.Map(item);
         array.push(item);
       }
       this.title=this.getTitleName(doc);
       this.iconUrl=this.getCoverImg(doc);
-      document.title=this.title+" "+array[index].get('text');
+      document.title=this.title+" "+array[index].text;
       console.log("index",index);
       this.setState({
-        menuItems:Immutable.List(array),
+        menuItems:array,
         selectedIndex:index,
-        chapter:array[index].get("text"),
+        chapter:array[index].text,
         rightDisable:index===0,
         leftDisable:index===array.length-1,
         comicname:this.title},
@@ -113,7 +135,6 @@ var Main = React.createClass({
   },
 
   appendImage:function(index){
-    var comics_panel=document.getElementById("comics_panel");
     if(index===-1){
       index=this.chapterUpdateIndex;
       this.chapterUpdateIndex=-2;
@@ -131,9 +152,8 @@ var Main = React.createClass({
       img.style.borderStyle="solid";
       img.setAttribute("data-pageMax",this.pageMax);
       img.className="comics_img";
-      comics_panel.appendChild(img);
+      document.getElementById("comics_panel").appendChild(img);
     }
-    Echo.nodes=comics_panel.children;
     var chapterEnd=document.createElement("div");
     chapterEnd.className="comics_img_end";
     chapterEnd.textContent="本話結束";

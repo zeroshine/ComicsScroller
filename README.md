@@ -1,10 +1,21 @@
 # ComicsScroller
 ComicsScroller is a chrome extension which makes the comics website shows all images of one chapter in the page. And it will append all the images in the next chapter in the end of pages automatically when user scrolls to the bottom of the page. It also can subscribe comics and notify you when there is an update.  
 
+ComicsScroller是一個chrome extenstion的專案  
+基於node.js babel React flux less webpack  
+因為有做lazyloading 比較吃CPU一點  
+在漫畫網站點進章節以後可以一次把一話的圖片全部秀出來， 
+看完一話之後也會自動載入下一話的圖片，你只需要一直捲動頁面就好，  
+自動記錄觀看過的章節，讓你不會忘記上次看到哪  
+訂閱漫畫，漫畫更新會自動通知你  
+直接跳轉本地端頁面 乾淨 無廣告 無惡意多餘javascritp程式碼   
 
 # Support Websites
+無限動漫  
 http://www.8comic.com/  
+SFACG
 http://comic.sfacg.com/  
+動漫屋
 http://tel.dm5.com/  
 http://www.dm5.com/  
 http://www.manben.com/    

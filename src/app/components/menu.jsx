@@ -6,6 +6,7 @@ var Classable = require('material-ui').Mixins.Classable;
 var ClickAwayable = require('material-ui').Mixins.ClickAwayable;
 var Paper = require('material-ui').Paper;
 var MenuItem = require('./menu-item.jsx');
+var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 // var LinkMenuItem = require('./link-menu-item');
 // var SubheaderMenuItem = require('./subheader-menu-item');
 
@@ -19,7 +20,7 @@ var NestedMenuItem = React.createClass({
   propTypes: {
     index: React.PropTypes.number.isRequired,
     text: React.PropTypes.string,
-    menuItems: React.PropTypes.array.isRequired,
+    // menuItems: React.PropTypes.array.isRequired,
     zDepth: React.PropTypes.number,
     disabled: React.PropTypes.bool,
     onItemClick: React.PropTypes.func,
@@ -100,14 +101,14 @@ var NestedMenuItem = React.createClass({
 ****************/
 var Menu = React.createClass({
 
-  mixins: [Classable],
+  mixins: [PureRenderMixin,Classable],
 
   propTypes: {
     autoWidth: React.PropTypes.bool,
     onItemTap: React.PropTypes.func,
     onItemClick: React.PropTypes.func,
     onToggleClick: React.PropTypes.func,
-    menuItems: React.PropTypes.array.isRequired,
+    // menuItems: React.PropTypes.array.isRequired,
     selectedIndex: React.PropTypes.number,
     hideable: React.PropTypes.bool,
     visible: React.PropTypes.bool,
@@ -168,11 +169,11 @@ var Menu = React.createClass({
     //This array is used to keep track of all nested menu refs
     this._nestedChildren = [];
     console.log("test",this.props.menuItems);
-    for (var i=0; i < this.props.menuItems.length; i++) {
-      menuItem = this.props.menuItems[i];
+    for (var i=0; i < this.props.menuItems.size; i++) {
+      menuItem = this.props.menuItems.get(i);
       isSelected = i === this.props.selectedIndex;
-      isDisabled = (menuItem.disabled === undefined) ? false : menuItem.disabled;
-      isMarked = (menuItem.isMarked === undefined) ? false :menuItem.isMarked;
+      isDisabled = (menuItem.get('disabled') === undefined) ? false : menuItem.get('disabled');
+      isMarked = (menuItem.get('isMarked') === undefined) ? false :menuItem.get('isMarked');
       var {
         icon,
         data,
@@ -206,21 +207,21 @@ var Menu = React.createClass({
         //   );
         //   break;
 
-        case MenuItem.Types.NESTED:
-          itemComponent = (
-            <NestedMenuItem
-              ref={i}
-              key={i}
-              index={i}
-              text={menuItem.text}
-              disabled={isDisabled}
-              menuItems={menuItem.items}
-              zDepth={this.props.zDepth}
-              onItemClick={this._onNestedItemClick}
-              onItemTap={this._onNestedItemClick} />
-          );
-          this._nestedChildren.push(i);
-          break;
+        // case MenuItem.Types.NESTED:
+        //   itemComponent = (
+        //     <NestedMenuItem
+        //       ref={i}
+        //       key={i}
+        //       index={i}
+        //       text={menuItem.text}
+        //       disabled={isDisabled}
+        //       menuItems={menuItem.items}
+        //       zDepth={this.props.zDepth}
+        //       onItemClick={this._onNestedItemClick}
+        //       onItemTap={this._onNestedItemClick} />
+        //   );
+        //   this._nestedChildren.push(i);
+        //   break;
 
         default:
           itemComponent = (
@@ -229,16 +230,16 @@ var Menu = React.createClass({
               selected={isSelected}
               key={i}
               index={i}
-              icon={menuItem.icon}
-              data={menuItem.data}
-              attribute={menuItem.attribute}
-              number={menuItem.number}
-              toggle={menuItem.toggle}
+              icon={menuItem.get('icon')}
+              data={menuItem.get('data')}
+              attribute={menuItem.get('attribute')}
+              number={menuItem.get('number')}
+              toggle={menuItem.get('toggle')}
               disabled={isDisabled}
               isMarked={isMarked}
               onClick={this._onItemClick}
               onTouchTap={this._onItemTap}>
-              {menuItem.text}
+              {menuItem.get('text')}
             </MenuItem>
           );
       }
@@ -299,15 +300,15 @@ var Menu = React.createClass({
   },
 
   _onItemClick: function(e, index) {
-    if (this.props.onItemClick) this.props.onItemClick(e, index, this.props.menuItems[index]);
+    if (this.props.onItemClick) this.props.onItemClick(e, index, this.props.menuItems.get('index'));
   },
 
   _onItemTap: function(e, index) {
-    if (this.props.onItemTap) this.props.onItemTap(e, index, this.props.menuItems[index]);
+    if (this.props.onItemTap) this.props.onItemTap(e, index, this.props.menuItems.get('index'));
   },
 
   _onItemToggle: function(e, index, toggled) {
-    if (this.props.onItemToggle) this.props.onItemToggle(e, index, this.props.menuItems[index], toggled);
+    if (this.props.onItemToggle) this.props.onItemToggle(e, index, this.props.menuItems.get('index'), toggled);
   }
 
 });

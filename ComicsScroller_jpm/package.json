@@ -1,0 +1,12 @@
+{
+  "title": "ComicsScroller",
+  "name": "comicsscroller",
+  "version": "3.0.1",
+  "description": "Comics Scroller is an extention giving you a better reading experience on china comics website.",
+  "main": "index.js",
+  "author": "Guan-Lin Chen",
+  "engines": {
+    "firefox": ">=38.0a1"
+  },
+  "license": "MIT"
+}

@@ -1,12 +1,14 @@
 // var React = require('react');
-var mui = require('material-ui');
+// var mui = require('material-ui');
 var Immutable = require('immutable');
-var AppBar =mui.AppBar;
-var AppCanvas=mui.AppCanvas;
-var IconButton=mui.IconButton;
+var AppBar =require('../app/components/app-bar.jsx');
+// var AppBar=require('material-ui').AppBar;
+var AppCanvas=require('material-ui').AppCanvas;
+var IconButton=require('../app/components/icon-button.jsx');
+// var IconButton=require('material-ui').IconButton;
 var TagIconButton=require('../app/components/TagIconButton.jsx');
 var AppLeftNav=require('../app/components/app-left-nav.jsx');
-var Menu = mui.Menu;
+
 // var ChapterMenu=require('../app/components/chapter-menu.jsx');  
 // var objectAssign=require('object-assign');
 
@@ -15,7 +17,8 @@ var Echo=require('../app/echo');
 var MyMixin={
 
   getInitialState: function(){
-    return {menuItems:[],
+    return {
+      menuItems:Immutable.List(),
       selectedIndex:null,
       comicname:"",
       pageratio:"",
@@ -56,6 +59,29 @@ var MyMixin={
     this.refs.leftNav.toggle();
   },
 
+  _onMenuItemClick: function(e, index, item) {
+    var menuItems=this.state.menuItems;
+    var obj=this.state.menuItems.get(index);
+    var payload=obj.get('payload');
+    var chstr=obj.get('text');
+    if(!this.markedItems.has(payload)){
+      obj=obj.set('isMarked',true);
+      menuItems=this.state.menuItems.set(index,obj);
+      console.log(menuItems);
+      this.markedItems=this.markedItems.add(payload);      
+    }
+    this.setState({
+      menuItems:menuItems,
+      rightDisable:index===0,
+      leftDisable:index===this.state.menuItems.size-1,
+      selectedIndex:index,
+      chapter:chstr},
+      function(){this._saveStoreReaded()}.bind(this));
+    this.lastIndex=index;
+    document.title=this.title+" "+chstr;
+    this._updateHash(payload,'');
+  },
+
   chapterUpdateIndex: -1,
   
   
@@ -76,47 +102,51 @@ var MyMixin={
 
   collectedItems: [],
 
-  _cloneMenuItems: function(options){
-    var menuItems=[];
-    for(var i=0;i<this.state.menuItems.length;++i){
-      var item={};
-      if(options.text===true)item.text=this.state.menuItems[i].text;
-      item.payload=this.state.menuItems[i].payload;
-      if(options.isMarked===true)item.isMarked=this.state.menuItems[i].isMarked;
-      menuItems.push(item);
-    }
-    return menuItems;
-  },
+  // _cloneMenuItems: function(options){
+  //   var menuItems=[];
+  //   for(var i=0;i<this.state.menuItems.length;++i){
+  //     var item={};
+  //     if(options.text===true)item.text=this.state.menuItems[i].text;
+  //     item.payload=this.state.menuItems[i].payload;
+  //     if(options.isMarked===true)item.isMarked=this.state.menuItems[i].isMarked;
+  //     menuItems.push(item);
+  //   }
+  //   return menuItems;
+  // },
 
   _updateInfor: function(num,pageratio){
     var index=parseInt(num);
     if(index===-1) return;
+    
     if(index!==this.state.selectedIndex){
-      // console.log("not the selectedIndex");      
-      var menuItems=this._cloneMenuItems({isMarked:true,text:true});
-      if(!this.markedItems.has(this.state.menuItems[index].payload)){
-        menuItems[index].isMarked=true;
-        this.markedItems=this.markedItems.add(menuItems[index].payload);
+      var obj=this.state.menuItems.get(index);
+      var payload=obj.get('payload');
+      var chstr=obj.get('text');
+      // var oldpn=obj.get('number');
+      var menuItems=this.state.menuItems;
+      if(!this.markedItems.has(payload)){
+        obj=obj.set('isMarked',true);
+        menuItems=this.state.menuItems.set(index,obj);
+        this.markedItems=this.markedItems.add(payload);
       }
-      this._updateHash(menuItems[index].payload,"#");
-      // console.log('_updateInfor',this.state.menuItems[n].text);      
-      document.title=this.title+" "+this.state.menuItems[index].text;
+      this._updateHash(payload,"#");
+      document.title=this.title+" "+chstr;
       this.setState({
         menuItems:menuItems,
         rightDisable:index===0,
-        leftDisable:index===this.state.menuItems.length-1,
+        leftDisable:index===this.state.menuItems.size-1,
         selectedIndex: index,
-        chapter:this.state.menuItems[index].text},
+        chapter:chstr},
         function(){this._saveStoreReaded()}.bind(this));
     }
-    if(typeof(this.state.menuItems[index].number)==="undefined"||pageratio!==this.state.menuItems[index].number){
-      var menuItems=this._cloneMenuItems({isMarked:true,text:true});
-      menuItems[index].number=pageratio;
-      this.setState({menuItems:menuItems,pageratio:pageratio});
-    }
+    var obj=this.state.menuItems.get(index);
+    // var oldpn=obj.get('number');
+    // if(pageratio!==this.state.pageratio){
+      // this.setState({pageratio:pageratio});
+    // }
     if(index===this.lastIndex){
       if(this.lastIndex>0){
-        this._getImage(--this.lastIndex,this.state.menuItems[this.lastIndex].payload);
+        this._getImage(--this.lastIndex,this.state.menuItems.get(this.lastIndex).get('payload'));
       }        
     }
   },
@@ -133,62 +163,62 @@ var MyMixin={
   },
 
   _previousClick:function(){
-    var panel=document.getElementById("comics_panel");
+    // var panel=document.getElementById("comics_panel");
     var index=this.state.selectedIndex+1;
-    if(index<this.state.menuItems.length){
-      var menuItems=this._cloneMenuItems({isMarked:true,text:true});
-      if(!this.markedItems.has(menuItems[index].payload)){
-        menuItems[index].isMarked=true;
-        this.markedItems=this.markedItems.add(menuItems[index].payload);      
+    if(index<this.state.menuItems.size){
+      var menuItems=this.state.menuItems;
+      var obj=this.state.menuItems.get(index);
+      var payload=obj.get('payload');
+      var chstr=obj.get('text');
+      if(!this.markedItems.has(payload)){
+        var obj=this.state.menuItems.get(index);
+        obj=obj.set('isMarked',true);
+        menuItems=this.state.menuItems.set(index,obj);
+        this.markedItems=this.markedItems.add(payload);      
       }   
       this.setState({
         menuItems:menuItems,
         selectedIndex:index,
         pageratio:"",
         rightDisable:index===0,
-        leftDisable:index===this.state.menuItems.length-1,
-        chapter:menuItems[index].text},
+        leftDisable:index===this.state.menuItems.size-1,
+        chapter:chstr},
         function(){this._saveStoreReaded()}.bind(this));
       this.lastIndex=index;
       // panel.innerHTML="";
       // this._getImage(index,item.payload);
-      document.title=this.title+" "+this.state.menuItems[index].text;
-      this._updateHash(menuItems[index].payload,'');
-      if(!Echo.hadInited){
-        Echo.init(); 
-      }else{
-        Echo.run();
-      }
+      document.title=this.title+" "+chstr;
+      this._updateHash(payload,'');
     }
   },
 
   _nextClick:function(){
-    var panel=document.getElementById("comics_panel");
+    // var panel=document.getElementById("comics_panel");
     var index=this.state.selectedIndex-1;
     if(index>=0){
-      var menuItems=this._cloneMenuItems({isMarked:true,text:true});
-      if(!this.markedItems.has(menuItems[index].payload)){
-        menuItems[index].isMarked=true;
-        this.markedItems=this.markedItems.add(menuItems[index].payload);      
+      var menuItems=this.state.menuItems;
+      var obj=this.state.menuItems.get(index);
+      var payload=obj.get('payload');
+      var chstr=obj.get('text');
+      if(!this.markedItems.has(payload)){
+        var obj=this.state.menuItems.get(index);
+        obj=obj.set('isMarked',true);
+        menuItems=this.state.menuItems.set(index,obj);
+        this.markedItems=this.markedItems.add(payload);      
       }   
       this.setState({
         menuItems:menuItems,
         selectedIndex:index,
         pageratio:"",
         rightDisable:index===0,
-        leftDisable:index===this.state.menuItems.length-1,
-        chapter:menuItems[index].text},
+        leftDisable:index===this.state.menuItems.size-1,
+        chapter:chstr},
         function(){this._saveStoreReaded()}.bind(this));
       this.lastIndex=index;
       // panel.innerHTML="";
       // this._getImage(index,item.payload);
-      document.title=this.title+" "+this.state.menuItems[index].text;
-      this._updateHash(menuItems[index].payload,'');
-      if(!Echo.hadInited){
-        Echo.init(); 
-      }else{
-        Echo.run();
-      }
+      document.title=this.title+" "+chstr;
+      this._updateHash(payload,'');
     }
   }
 

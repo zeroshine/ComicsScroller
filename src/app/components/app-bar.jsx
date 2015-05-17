@@ -1,9 +1,11 @@
 var React = require('react');
-var Classable = require('./mixins/classable');
-var IconButton = require('./icon-button');
-var NavigationMenu = require('./svg-icons/navigation-menu');
-var Paper = require('./paper');
+var Classable = require('material-ui').Mixins.Classable;
+var IconButton = require('./icon-button.jsx');
+// var IconButton =require('material-ui').IconButton;
+var NavigationMenu = require('material-ui').Icons.NavigationMenu;
+var Paper = require('material-ui').Paper;
 var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
+
 var AppBar = React.createClass({
 
   mixins: [PureRenderMixin,Classable],
