@@ -8,5 +8,8 @@
   "engines": {
     "firefox": ">=38.0a1"
   },
+  "permissions": {
+    "cross-domain-content": ["http://*.comicvip.com/*","http://*.sfacg.com/*","http://www.manben.com/*","http://*.dm5.com/*"]
+  },
   "license": "MIT"
 }

@@ -1,31 +1,12 @@
 var React = require('react');
-
+var Immutable = require('immutable');
 var Comics=require('../comics_dm5.js');
 var Echo=require('../echo');
 var Mixins=require('../../Mixin/mymixin.jsx');
-var StoreMixin=require('../../Mixin/storemixin_ff.jsx');
+var StoreMixin=require('../../Mixin/storemixin.jsx');
 var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
 var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
-
-var handler = function(details) {
-  var isRefererSet = false;
-  var headers = details.requestHeaders,
-    blockingResponse = {};
-  headers.push({
-    name: "Referer",
-    value: "http://www.manben.com/"
-  });
-  headers.push({
-    name: "Cookie",
-    value: "isAdult=1"
-  })
-  blockingResponse.requestHeaders = headers;
-  return blockingResponse;
-};
-
-chrome.webRequest.onBeforeSendHeaders.addListener(handler, {urls: ["http://www.manben.com/*"]},['requestHeaders', 'blocking']);
-
 
 var hasAddedListener=false;
 
@@ -56,35 +37,7 @@ var Main = React.createClass({
     }
     // this._getChapter();
   },
-  _onMenuItemClick: function(e, index, item) {
-    var panel=document.getElementById("comics_panel");
-    var menuItems=this._cloneMenuItems({isMarked:true,text:true});
-    if(!this.markedItems.has(menuItems[index].payload)){
-      menuItems[index].isMarked=true;
-      this.markedItems=this.markedItems.add(menuItems[index].payload);
-    }   
-    this.setState({
-      menuItems:menuItems,
-      rightDisable:index===0,
-      leftDisable:index===this.state.menuItems.length-1,
-      selectedIndex:index,
-      chapter:menuItems[index].text},
-      function(){this._saveStoreReaded()}.bind(this));
-    this.lastIndex=index;
-    // panel.innerHTML="";
-    // this._getImage(index,item.payload);
-    document.title=this.title+" "+this.state.menuItems[index].text;
-    this._updateHash(menuItems[index].payload,'');
-    // if(!Echo.hadInited){
-    //   Echo.init({
-    //     offsetBottom: 2500,
-    //     throttle: 200,
-    //     unload: true
-    //   }); 
-    // }else{
-    //   Echo.run();
-    // }    
-  },
+
   _getChapter: function(){    
     var creq=new XMLHttpRequest();
     creq.open("GET",this.indexURL,true);
@@ -110,16 +63,18 @@ var Main = React.createClass({
         if(this.markedItems.has(item.payload)){
           item.isMarked=true;  
         }
+        item=Immutable.Map(item);
         array.push(item);
       }
       this.title=this.getTitleName(doc);
       this.iconUrl=this.getCoverImg(doc);
-      document.title=this.title+" "+array[index].text;
-      this.setState({menuItems:array,
+      document.title=this.title+" "+array[index].get('text');
+      this.setState({
+        menuItems:Immutable.List(array),
         selectedIndex:index,
         rightDisable:index===0,
         leftDisable:index===array.length-1,
-        chapter:array[index].text,
+        chapter:array[index].get('text'),
         comicname:this.title},
         function(){this._saveStoreReaded();}.bind(this));
       this.lastIndex=index;
@@ -150,6 +105,7 @@ var Main = React.createClass({
   },
 
   appendImage:function(index){
+    var comics_panel=document.getElementById("comics_panel");
     if(index===-1){
       index=this.chapterUpdateIndex;
       this.chapterUpdateIndex=-2;
@@ -167,12 +123,14 @@ var Main = React.createClass({
       img.style.borderStyle="solid";
       img.setAttribute("data-pageMax",this.pageMax);
       img.className="comics_img";
-      document.getElementById("comics_panel").appendChild(img);
+      comics_panel.appendChild(img);
     }
+    Echo.nodes=comics_panel.children;
     var chapterEnd=document.createElement("div");
     chapterEnd.className="comics_img_end";
     chapterEnd.textContent="本話結束";
-    document.getElementById("comics_panel").appendChild(chapterEnd);
+    comics_panel.appendChild(chapterEnd);
+    // Echo.nodes.concat(comics_panel.children);
     if(!Echo.hadInited){
       Echo.init({
         imgRender:function(elem){

@@ -16,7 +16,6 @@ var urlRegEX_8comics=/http\:\/\/new\.comicvip\.com\/show\/(.*-\d*.html\?ch=\d*)/
 var urlRegEX_sf=/http\:\/\/comic\.sfacg\.com\/(HTML\/[^\/]+\/.+)$/;
 var urlRegEX_manben=/http\:\/\/www\.manben\.com\/(m\d*\/)/;
 var urlRegEX_dm5=/http\:\/\/(tel||www)\.dm5\.com\/(m\d*\/)/;
-var url=data.url('reader.html').slice(0,-16);
 
 tabs.on('ready',function(tab){
     if(urlRegEX_8comics.test(tab.url)){

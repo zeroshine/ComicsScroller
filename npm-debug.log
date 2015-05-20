@@ -1,0 +1,35 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'run', 'ff' ]
+2 info using npm@2.9.1
+3 info using node@v0.12.3
+4 verbose run-script [ 'preff', 'ff', 'postff' ]
+5 info preff materialComicsScroller@3.0.1
+6 info ff materialComicsScroller@3.0.1
+7 verbose unsafe-perm in lifecycle true
+8 info materialComicsScroller@3.0.1 Failed to exec ff script
+9 verbose stack Error: materialComicsScroller@3.0.1 ff: `webpack --config webpack.ff.config.js --progress --colors --watch`
+9 verbose stack Exit status 1
+9 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:213:16)
+9 verbose stack     at EventEmitter.emit (events.js:110:17)
+9 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:24:14)
+9 verbose stack     at ChildProcess.emit (events.js:110:17)
+9 verbose stack     at maybeClose (child_process.js:1015:16)
+9 verbose stack     at Process.ChildProcess._handle.onexit (child_process.js:1087:5)
+10 verbose pkgid materialComicsScroller@3.0.1
+11 verbose cwd /Users/zeroshine/Dropbox/extension_project/ComicsScroller
+12 error Darwin 14.3.0
+13 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "run" "ff"
+14 error node v0.12.3
+15 error npm  v2.9.1
+16 error code ELIFECYCLE
+17 error materialComicsScroller@3.0.1 ff: `webpack --config webpack.ff.config.js --progress --colors --watch`
+17 error Exit status 1
+18 error Failed at the materialComicsScroller@3.0.1 ff script 'webpack --config webpack.ff.config.js --progress --colors --watch'.
+18 error This is most likely a problem with the materialComicsScroller package,
+18 error not with npm itself.
+18 error Tell the author that this fails on your system:
+18 error     webpack --config webpack.ff.config.js --progress --colors --watch
+18 error You can get their info via:
+18 error     npm owner ls materialComicsScroller
+18 error There is likely additional logging output above.
+19 verbose exit [ 1, true ]
