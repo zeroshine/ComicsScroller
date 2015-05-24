@@ -1,9 +1,9 @@
 var React = require('react');
 var Immutable = require('immutable');
 var Comics=require('../comics_dm5.js');
-var Echo=require('../echo');
+var Echo=require('../echo.js');
 var Mixins=require('../../Mixin/mymixin.jsx');
-var StoreMixin=require('../../Mixin/storemixin.jsx');
+var StoreMixin=require('../../Mixin/storemixin_ff.jsx');
 var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
 var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
@@ -20,8 +20,10 @@ var Main = React.createClass({
     this._getImage(-1,this.chapterURL);
     var req=new XMLHttpRequest();
     req.open("GET",this.chapterURL);
+    console.log('this.chapterURL',this.chapterURL);
     req.responseType="document";
     req.onload=function(){
+      console.log('req.response',req.response);
       var doc=req.response;
       this.indexURL=doc.querySelector("#index_right > div.lan_kk2 > div:nth-child(1) > dl > dt.red_lj > a").href;
       this._getStore(); 
@@ -111,8 +113,8 @@ var Main = React.createClass({
       this.chapterUpdateIndex=-2;
     }
     for(var i=0;i<this.pageMax;++i){
-      var img=new Image();
-      img.src="../img/Transparent.gif";
+      var img=document.createElement('img');
+      img.src="http://zeroshine.github.io/ComicsScroller/img/Transparent.gif";
       img.setAttribute("data-echo",this.images[i]);
       img.setAttribute("data-num",i+1);
       img.setAttribute("data-chapter",index);

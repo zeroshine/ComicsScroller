@@ -160,7 +160,7 @@ var comics={
 		}
 		for(var i=nl.length-3;i>=0;--i){
 			var item={};
-      		item.payload= Comics_8.getChapterUrl(nl[i].getAttribute("onclick"));
+      		item.payload= this.getChapterUrl(nl[i].getAttribute("onclick"));
 		    item.text=nl[i].textContent.trim();
 		    array.push(item);
 		    var obj={};

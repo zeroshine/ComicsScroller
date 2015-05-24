@@ -8,9 +8,11 @@ var StoreMixin=require('../../Mixin/storemixin.jsx');
 var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
 var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
+
 var hasAddedListener=false;
 
 var Main = React.createClass({
+  
   mixins:[PureRenderMixin,StoreMixin,Mixins,Comics],
 
   componentDidMount: function() {
@@ -119,7 +121,7 @@ var Main = React.createClass({
       this.chapterUpdateIndex=-2;
     }
     for(var i=0;i<this.pageMax;++i){
-      var img=new Image();
+      var img=document.createElement('img');
       img.src="../img/Transparent.gif";
       img.setAttribute("data-echo",this.images[i]);
       img.setAttribute("data-num",i+1);

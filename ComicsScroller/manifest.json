@@ -18,9 +18,9 @@
     },
     "background":{
         "page": "background.html",
-        "persistence":true
+        "persistence":false
     },
-    "permissions":["unlimitedStorage","notifications","webRequest","webRequestBlocking","cookies","storage","tabs","activeTab","http://*.comicvip.com/*","http://*.sfacg.com/*","http://www.manben.com/*","http://*.dm5.com/*","http://*.cdndm5.com/*"],
+    "permissions":["webNavigation","alarms","unlimitedStorage","notifications","webRequest","webRequestBlocking","cookies","storage","tabs","activeTab","http://*.comicvip.com/*","http://*.sfacg.com/*","http://www.manben.com/*","http://*.dm5.com/*","http://*.cdndm5.com/*"],
     "content_security_policy": "img-src 'self' * ; script-src 'self' 'unsafe-eval' https://*.google-analytics.com https://ajax.googleapis.com ; object-src 'self' ; ",
     "web_accessible_resources":["js/*.js","css/*.css"]
 }

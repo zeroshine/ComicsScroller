@@ -3,7 +3,7 @@ var Immutable = require('immutable');
 var Comics=require('../comics_sf.js');
 var Echo=require('../echo');
 var Mixins=require('../../Mixin/mymixin.jsx');
-var StoreMixin=require('../../Mixin/storemixin.jsx');
+var StoreMixin=require('../../Mixin/storemixin_ff.jsx');
 
 var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
@@ -111,8 +111,8 @@ var Main = React.createClass({
       this.chapterUpdateIndex=-2;
     }
     for(var i=0;i<this.pageMax;++i){
-      var img=new Image();
-      img.src="../img/Transparent.gif";
+      var img=document.createElement('img');
+      img.src="http://zeroshine.github.io/ComicsScroller/img/Transparent.gif";
       img.setAttribute("data-echo",this.images[i]);
       img.setAttribute("data-num",i+1);
       img.setAttribute("data-chapter",index);

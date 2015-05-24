@@ -12,7 +12,7 @@
 
   // var offset=5000;
 
-  var delay=500;
+  var delay=200;
 
   var useDebounce=false;
 

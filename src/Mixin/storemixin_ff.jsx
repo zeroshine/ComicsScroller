@@ -2,17 +2,18 @@ var Immutable = require('immutable');
 var StoreMixin={
   _getStore:function(){
     var citems=localStorage.getItem('collected');
-    console.log(citems);
+    // console.log('citems',citems);
     this.collectedItems = (citems===null) ? []: JSON.parse(citems);
     var array= this.collectedItems.filter(function(obj){return obj.url===this.indexURL}.bind(this));
     if(array.length>0){
       this.setState({starIsMarked:true});
     }
     var ritems=localStorage.getItem('readed');
+    // console.log('ritems',ritems);
     var readedItems=(ritems===null)? []:JSON.parse(ritems);
     for(var i=0;i<readedItems.length;++i){
       if(readedItems[i].url===this.indexURL){
-        this.markedItems=Immutable.Set(items.readed[i].markedPayload);  
+        this.markedItems=Immutable.Set(readedItems[i].markedPayload);  
           // console.log('init this markedItems',this.markedItems.toArray);  
       }
     }
@@ -20,6 +21,7 @@ var StoreMixin={
   },
   
   _saveStoreReaded:function(){
+    console.log('this.indexURL',this.indexURL);
   	var ritems=localStorage.getItem('readed');
     var readedItems=(ritems===null)? []:JSON.parse(ritems);
   	var obj={};
@@ -38,7 +40,8 @@ var StoreMixin={
     }
     array.push(obj);
     readedItems=array;
-    localStorage.setItem('readed',JSON.stringify(collectedItems));
+    // console.log('readed save',readedItems);
+    localStorage.setItem('readed',JSON.stringify(readedItems));
     
     var citems=localStorage.getItem('collected');
     var collectedItems=(citems===null)? []:JSON.parse(citems);

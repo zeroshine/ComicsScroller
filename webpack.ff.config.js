@@ -4,6 +4,7 @@ var webpack=require('webpack');
 module.exports={
 	entry:{
 		app_min:'./src/app/app_ff.jsx'
+		// popup_min:'./src/popup_ff.jsx'
 	},
 	output:{
 		path:Path.resolve(__dirname,'ComicsScroller_ff/'),

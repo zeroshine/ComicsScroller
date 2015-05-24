@@ -8,6 +8,9 @@ var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
 var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 
+var hasAddedListener=false;
+
+
 var handler = function(details) {
   var isRefererSet = false;
   var headers = details.requestHeaders,
@@ -27,7 +30,7 @@ var handler = function(details) {
 chrome.webRequest.onBeforeSendHeaders.addListener(handler, {urls: ["http://www.manben.com/*"]},['requestHeaders', 'blocking']);
 
 
-var hasAddedListener=false;
+
 
 
 var Main = React.createClass({

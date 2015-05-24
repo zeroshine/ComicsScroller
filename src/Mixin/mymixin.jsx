@@ -67,7 +67,7 @@ var MyMixin={
     if(!this.markedItems.has(payload)){
       obj=obj.set('isMarked',true);
       menuItems=this.state.menuItems.set(index,obj);
-      console.log(menuItems);
+      // console.log(menuItems);
       this.markedItems=this.markedItems.add(payload);      
     }
     this.setState({

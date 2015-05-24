@@ -143,7 +143,7 @@ var Menu = React.createClass({
 
   componentDidUpdate: function(prevProps, prevState) {
     if (this.props.visible !== prevProps.visible) this._renderVisibility();
-    console.log("Update menu",this.props.menuItems);
+    // console.log("Update menu",this.props.menuItems);
   },
 
   render: function() {
@@ -168,7 +168,7 @@ var Menu = React.createClass({
       isMarked;
     //This array is used to keep track of all nested menu refs
     this._nestedChildren = [];
-    console.log("test",this.props.menuItems);
+    // console.log("test",this.props.menuItems);
     for (var i=0; i < this.props.menuItems.size; i++) {
       menuItem = this.props.menuItems.get(i);
       isSelected = i === this.props.selectedIndex;
