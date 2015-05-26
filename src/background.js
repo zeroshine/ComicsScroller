@@ -30,9 +30,9 @@ var Comics_dm5=require('./app/comics_dm5.js');
 // };
 
 
-// chrome.notifications.onClicked.addListener(function(id){
-// 	chrome.tabs.create({url:id});
-// });
+chrome.notifications.onClicked.addListener(function(id){
+	chrome.tabs.create({url:id});
+});
 
 var comicsQuery = function(){
 	// chrome.notifications.create("test",{

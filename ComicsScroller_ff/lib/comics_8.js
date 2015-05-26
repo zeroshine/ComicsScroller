@@ -1,4 +1,8 @@
 // var ObjectAssign=require('object-assign');
+var notifications = require("sdk/notifications");
+var tabs=require("sdk/tabs");
+var ss=require("sdk/simple-storage");
+
 var comics={
 	regex: /http\:\/\/new\.comicvip\.com\/show\/(.*-\d*.html\?ch=\d*)/,
 
@@ -118,13 +122,12 @@ var comics={
 		this.images=img;
 		this.appendImage(index);
 	},
-	backgroundOnload:function(indexURL,chapters,req,items,k){
+	backgroundOnload:function(button,indexURL,chapters,req,items,k){
 	    var doc=req.response;
 		var nl = this.getChapter(doc);
 		var title=this.getTitleName(doc);
 	    var imgUrl=this.getCoverImg(doc);
 	    var array=[];
-		var obj={};
 		var item={};
 		item.payload=this.getChapterUrl(nl[nl.length-2].getAttribute("onclick"));
 		item.text=nl[nl.length-1].textContent;
@@ -137,26 +140,18 @@ var comics={
 	    	}
 	    }
     	if(urlInChapter===false&&chapters.length>0){
-    		var obj={
-				url:indexURL,
-				title:title,
-				site:'comics8',
-				iconUrl:imgUrl,
-				lastReaded:item
-			};
-		    chrome.notifications.create(item.payload,{
-				type:"image",
-				iconUrl:'img/comics-64.png',
-				title:"Comics Update",
-				message:title+"  "+obj.lastReaded.text,
-				imageUrl:imgUrl
+			notifications.notify({
+			  title: "Comics Update",
+			  text: title+"  "+obj.lastReaded.text,
+			  iconURL:'./comics-128.png',
+			  data: item.payload,
+			  onClick: function (data) {
+			    tabs.open(data);
+			  }
 			});
-			chrome.storage.local.get('update',function(items){							
-				items.update.push(this);
-				var num=items.update.length.toString();
-				chrome.browserAction.setBadgeText({text:num});
-				chrome.storage.local.set(items);
-			}.bind(obj));
+			var uitems=ss.storage.update;
+			var num=uitems.length.toString();
+			button.badge=num;
 		}
 		for(var i=nl.length-3;i>=0;--i){
 			var item={};
@@ -172,30 +167,22 @@ var comics={
 			    }
 			}
 		    if(urlInChapter===false&&chapters.length>0){
-			    obj={
-					url:indexURL,
-					title:title,
-					site:'comics8',
-					iconUrl:imgUrl,
-					lastReaded:item
-				};
-				chrome.notifications.create(item.payload,{
-					type:"image",
-					iconUrl:'img/comics-64.png',
-					title:"Comics Update",
-					message:title+"  "+obj.lastReaded.text,
-					imageUrl:imgUrl
+				notifications.notify({
+				  title: "Comics Update",
+				  text: title+"  "+obj.lastReaded.text,
+				  iconURL:'./comics-128.png',
+				  data: item.payload,
+				  onClick: function (data) {
+				    tabs.open(data);
+				  }
 				});
-				chrome.storage.local.get('update',function(items){							
-					items.update.push(this);
-					var num=items.update.length.toString();
-					chrome.browserAction.setBadgeText({text:num});
-					chrome.storage.local.set(items);
-				}.bind(obj));
+				var uitems=ss.storage.update;
+				var num=uitems.length.toString();
+				button.badge=num;
 		    }
 		}
-		items['collected'][k].menuItems=array;
-		chrome.storage.local.set(items);		
+		items[k].menuItems=array;
+		ss.storage.collected=items;		
 	}
 };
 

@@ -41,7 +41,7 @@ var StoreMixin={
       obj.markedPayload=this.markedItems.toArray();
       obj.lastReaded=this.state.menuItems.get(this.state.selectedIndex).toObject();
       obj.menuItems=this.state.menuItems.map(item=>item.toObject()).toArray();
-      console.log('objmenu',obj.menuItems);
+      // console.log('objmenu',obj.menuItems);
       var array=[];
       for(var i=0;i<items.readed.length;++i){
         if(items.readed[i].url!==this.indexURL){

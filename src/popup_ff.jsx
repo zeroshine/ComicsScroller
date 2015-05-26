@@ -45,34 +45,42 @@ var Card=React.createClass({
 		this.props.removeElemet(e,this.props.index);
 	},
 	_openSite:function(){
-		chrome.tabs.create({url:this.siteurl});
+		self.port.emit('open', this.siteurl);
 	},
 	_openPage:function(){
-		chrome.tabs.create({url:this.props.lastReaded.payload});
+		self.port.emit('open',this.props.lastReaded.payload);
 	},
 	_openIndex:function(){
-		console.log('this.props.indexURL',this.props.indexURL);
-		chrome.tabs.create({url:this.props.indexURL});
+		self.port.emit('open',this.props.indexURL);
 	}
 
 });
 
 var Cards=React.createClass({	
 	getInitialState:function(){
+		self.port.on('show', (function (msg) {
+			var obj = JSON.parse(msg);
+			var collectedItems = obj.collected;
+			var readedItems = obj.readed;
+			var updateItems = obj.update;
+			this.setState({
+				updateItems: updateItems,
+				collectedItems: collectedItems,
+				historyItems: readedItems
+			});
+		}).bind(this));
+
 		return {collectedItems:[],historyItems:[],updateItems:[]};
 	},
 	componentDidMount:function(){
-		var citems=localStorage.getItem('collected');
-		var curllist=(citems===null) ? []: JSON.parse(citems);
-		this.setState({collectedItems:curllist});
-
-		var ritems=localStorage.getItem('readed');
-		var rurllist=(citems===null) ? []: JSON.parse(ritems);
-		this.setState({collectedItems:rurllist});
-
-		var uitems=localStorage.getItem('update');
-		var uurllist=(citems===null) ? []: JSON.parse(uitems);
-		this.setState({collectedItems:uurllist});
+		var collectedItems = self.options.collected;
+		var readedItems = self.options.readed;
+		var updateItems = self.options.update;
+		this.setState({
+			updateItems: updateItems,
+			collectedItems: collectedItems,
+			historyItems: readedItems
+		});
 	},
 	render:function(){
 		var classes='material-popup-container';
@@ -120,6 +128,7 @@ var Cards=React.createClass({
 		// console.log(this.props.historyItems);
 		for(var i =this.state.historyItems.length-1;i>=0;--i){
 			var item=this.state.historyItems[i];
+			console.log('lastReaded',item.lastReaded);
 			var CardItem=(<Card key={i} 
 				str={'上次看到'}
 				index={i} 
@@ -158,7 +167,8 @@ var Cards=React.createClass({
 				array.push(this.state.collectedItems[i]);
 			}
 		}
-		localStorage.setItem('collected',JSON.stringify(array));
+		self.port.emit('saveCollected',JSON.stringify(array));
+		// localStorage.setItem('collected',JSON.stringify(array));
 		
 		// chrome.storage.local.set({collected:array});
 		this.setState({collectedItems:array});
@@ -170,7 +180,7 @@ var Cards=React.createClass({
 				array.push(this.state.historyItems[i]);
 			}
 		}
-		localStorage.setItem('readed',JSON.stringify(array));
+		self.port.emit('saveReaded',JSON.stringify(array));
 		// chrome.storage.local.set({readed:array});
 		this.setState({historyItems:array});
 	},
@@ -181,11 +191,11 @@ var Cards=React.createClass({
 				array.push(this.state.updateItems[i]);
 			}
 		}
-		localStorage.setItem('update',JSON.stringify(array));
+		self.port.emit('saveUpdate',JSON.stringify(array));
 		// chrome.storage.local.set({update:array});
 		this.setState({updateItems:array});
-		var badgeText=(array.length===0)?"":array.length.toString();
-      	chrome.browserAction.setBadgeText({text:badgeText});
+		// var badgeText=(array.length===0)?"":array.length.toString();
+      	// chrome.browserAction.setBadgeText({text:badgeText});
 	}
  
 });
