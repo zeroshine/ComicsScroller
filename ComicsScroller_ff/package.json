@@ -8,7 +8,7 @@
   },
   "author": "Guan-Lin Chen",
   "license": "MPL 2.0",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "icon" : "./data/comics-64.png",
   "icon64" : "./data/comics-64.png"
 }
