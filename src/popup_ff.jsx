@@ -63,6 +63,7 @@ var Cards=React.createClass({
 			var collectedItems = obj.collected;
 			var readedItems = obj.readed;
 			var updateItems = obj.update;
+			console.log('show to',obj);
 			this.setState({
 				updateItems: updateItems,
 				collectedItems: collectedItems,

@@ -22,8 +22,9 @@ var MyMixin={
       selectedIndex:null,
       comicname:"",
       pageratio:"",
-      leftDisable:false,
-      rightDisable:false,
+      leftDisable:true,
+      rightDisable:true,
+      starDisable:true,
       chapter:"",
       starIsMarked:false}
   },    
@@ -44,7 +45,7 @@ var MyMixin={
     return (
       <AppCanvas predefinedLayout={1}>
         <AppBar title={title+"  "+this.state.comicname+"  "+this.state.chapter+"  "+this.state.pageratio} onMenuIconButtonTouchTap={this._onMenuIconButtonTouchTap} >
-          <TagIconButton tooltip="Subscribed" onClick={this._starClick} isMarked={this.state.starIsMarked}/> 
+          <TagIconButton tooltip="Subscribed" onClick={this._starClick} isMarked={this.state.starIsMarked} disabled={this.state.starDisable}/> 
           {githubButton}
           <IconButton className="right-icon-button" iconClassName="icon-circle-right" disabled={this.state.rightDisable} onClick={this._nextClick} tooltip="下一話"/>
           <IconButton className="left-icon-button" iconClassName="icon-circle-left" disabled={this.state.leftDisable} onClick={this._previousClick} tooltip="上一話"/>

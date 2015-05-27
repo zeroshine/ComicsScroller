@@ -65,6 +65,7 @@ var Main = React.createClass({
         selectedIndex:index,
         rightDisable:index===0,
         leftDisable:index===array.length-1,
+        starDisable:false,
         chapter:array[index].get('text'),
         comicname:this.title},
         function(){this._saveStoreReaded();}.bind(this));

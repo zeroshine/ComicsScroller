@@ -26,6 +26,7 @@ var Main = React.createClass({
       window.addEventListener("hashchange",function(e){
         this.handleUrlHash();
       }.bind(this));
+      
       hasAddedListener=true;
     }
   },
@@ -84,6 +85,7 @@ var Main = React.createClass({
         chapter:array[index].get("text"),
         rightDisable:index===0,
         leftDisable:index===array.length-1,
+        starDisable:false,
         comicname:this.title},
         function(){this._saveStoreReaded();}.bind(this));
       this.lastIndex=index;

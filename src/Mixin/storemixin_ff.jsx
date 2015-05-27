@@ -1,4 +1,5 @@
 var Immutable = require('immutable');
+
 var StoreMixin={
   _getStore:function(){
     var citems=self.options.collected;
@@ -78,13 +79,21 @@ var StoreMixin={
     if(!urlInItems){
       this.collectedItems.push(obj);
     }
-    collectedItems=this.collectedItems;
-    self.port.emit('saveCollected',JSON.stringify(collectedItems));
+    // items.collected=this.collectedItems;
+    self.port.emit('saveCollected',JSON.stringify(obj));
   },
 
   _removeStoreCollected:function(){
+    var obj={};
+    obj.url=this.indexURL;
+    obj.site=this.site;
+    obj.iconUrl=this.iconUrl;
+    obj.title=this.title;
+    obj.markedPayload=this.markedItems.toArray();
+    obj.menuItems=this.state.menuItems.map(item=>item.toObject()).toArray();
+    obj.lastReaded=this.state.menuItems.get(this.state.selectedIndex).toObject();
     this.collectedItems=this.collectedItems.filter(function(obj){return obj.url!==this.indexURL}.bind(this));
-    self.port.emit('saveCollected',JSON.stringify(this.collectedItems));
+    self.port.emit('removeCollected',JSON.stringify(obj));
   }
 };
 

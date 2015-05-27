@@ -83,6 +83,7 @@ html,body{
 }
 .trash {
   -webkit-appearance: none;
+  -moz-appearance: none;
   background: none;
   border: none;
   cursor: pointer;
@@ -111,24 +112,30 @@ html,body{
 
 .trash > .lid {
   -webkit-transform-origin: -7% 100%;
+  -moz-transform-origin: -7% 100%;
   -webkit-transition: -webkit-transform 150ms;
+  -moz-transition: -moz-transform 150ms;
   height: 6px;
   width: 14px;
 }
 
 html[dir='rtl'] .trash > .lid {
   -webkit-transform-origin: 107% 100%;
+  -moz-transform-origin: 107% 100%;
 }
 
 .trash:focus > .lid,
 .trash:hover > .lid {
   -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
   -webkit-transition: -webkit-transform 250ms;
+  -moz-transition: -moz-transform 250ms;
 }
 
 html[dir='rtl'] .trash:focus > .lid,
 html[dir='rtl'] .trash:hover > .lid {
   -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
 }
 
 .trash > .can {

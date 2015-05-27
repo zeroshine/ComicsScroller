@@ -9,7 +9,8 @@
   "scripts": {
     "product": "webpack --config webpack.product.config.js --progress --colors --watch",
     "dev": "webpack --config webpack.config.js --progress --colors --watch",
-    "ff": "webpack --config webpack.ff.config.js --progress --colors --watch"
+    "ff": "webpack --config webpack.ff.config.js --progress --colors --watch",
+    "ffproduct":"webpack --config webpack.ff.product.config.js --progress --colors --watch"
   },
   "devDependencies": {
     "babel-core": "^5.3.3",
