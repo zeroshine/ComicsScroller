@@ -9,7 +9,7 @@ var { setInterval } = require("sdk/timers");
 var Comics_sf=require('./comics_sf.js');
 var Comics_8=require('./comics_8.js');
 var Comics_dm5=require('./comics_dm5.js');
-
+var {XMLHttpRequest}=require("sdk/net/xhr");
 ss.storage.readed=ss.storage.readed||[];
 ss.storage.collected=ss.storage.collected||[];
 ss.storage.update=ss.storage.update||[];
@@ -34,6 +34,7 @@ panel.on('show',function(){
     obj.readed=ss.storage.readed;
     obj.update=ss.storage.update;
     obj.collected=ss.storage.collected;
+    console.log('show from',obj);
     panel.port.emit('show',JSON.stringify(obj));
 });
 
@@ -43,7 +44,7 @@ panel.port.on('open',function(msg){
 
 panel.port.on('saveReaded',function(msg){
     var obj=JSON.parse(msg);
-    console.log('saveReaded',obj);
+    // console.log('saveReaded',obj);
     ss.storage.readed=obj;
 });
 
@@ -117,7 +118,24 @@ pageMod.PageMod({
         });
         worker.port.on('saveCollected',function(msg){
             var obj=JSON.parse(msg);
-            ss.storage.collected=obj;
+            var collectedItems=ss.storage.collected;
+            var urlInItems=false;
+            for(var i=0;i<collectedItems.length;++i){
+                if(collectedItems[i].url===obj.url){
+                    collectedItems[i]=obj;
+                    urlInItems=true;    
+                }
+            }
+            if(!urlInItems){
+                collectedItems.push(obj);
+            }
+            ss.storage.collected=collectedItems;
+        });
+        worker.port.on('removeCollected',function(msg){
+            var obj=JSON.parse(msg);
+            var collectedItems=ss.storage.collected;
+            collectedItems=collectedItems.filter(function(item){return item.url!==this.url}.bind(obj));
+            ss.storage.collected=collectedItems;
         });
     }
 });
@@ -184,7 +202,7 @@ var comicsQuery = function(){
     for(var k=0;k<items.length;++k){
         var indexURL=items[k].url;
         var chapters=items[k].menuItems;
-        var req=new XMLHttpRequest();
+        var req = new XMLHttpRequest();
         req.open('GET',indexURL);
         req.responseType="document";
         if(items[k].site==='sf'){
