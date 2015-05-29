@@ -12,9 +12,13 @@ var AppLeftNav=require('../app/components/app-left-nav.jsx');
 // var ChapterMenu=require('../app/components/chapter-menu.jsx');  
 // var objectAssign=require('object-assign');
 
-var Echo=require('../app/echo');
+// var Echo=require('../app/echo');
 
 var MyMixin={
+
+  markedItems: Immutable.Set(),
+
+  collectedItems: [],
 
   getInitialState: function(){
     return {
@@ -81,27 +85,8 @@ var MyMixin={
     this.lastIndex=index;
     document.title=this.title+" "+chstr;
     this._updateHash(payload,'');
-  },
-
-  chapterUpdateIndex: -1,
-  
-  
-
-  setImageIndex:function(index){
-    if(this.chapterUpdateIndex===-1){
-      this.chapterUpdateIndex=index;
-    }else if(this.chapterUpdateIndex===-2){
-      var imgs=document.querySelectorAll('img[data-chapter=\"-1\"]');
-      for(var i=0;i<imgs.length;++i){
-        imgs[i].setAttribute("data-chapter",index);
-      }
-      this.chapterUpdateIndex=-1;  
-    }
   },  
 
-  markedItems: Immutable.Set(),
-
-  collectedItems: [],
 
   // _cloneMenuItems: function(options){
   //   var menuItems=[];
@@ -115,42 +100,7 @@ var MyMixin={
   //   return menuItems;
   // },
 
-  _updateInfor: function(num,pageratio){
-    var index=parseInt(num);
-    if(index===-1) return;
-    
-    if(index!==this.state.selectedIndex){
-      var obj=this.state.menuItems.get(index);
-      var payload=obj.get('payload');
-      var chstr=obj.get('text');
-      // var oldpn=obj.get('number');
-      var menuItems=this.state.menuItems;
-      if(!this.markedItems.has(payload)){
-        obj=obj.set('isMarked',true);
-        menuItems=this.state.menuItems.set(index,obj);
-        this.markedItems=this.markedItems.add(payload);
-      }
-      this._updateHash(payload,"#");
-      document.title=this.title+" "+chstr;
-      this.setState({
-        menuItems:menuItems,
-        rightDisable:index===0,
-        leftDisable:index===this.state.menuItems.size-1,
-        selectedIndex: index,
-        chapter:chstr},
-        function(){this._saveStoreReaded()}.bind(this));
-    }
-    var obj=this.state.menuItems.get(index);
-    // var oldpn=obj.get('number');
-    // if(pageratio!==this.state.pageratio){
-      // this.setState({pageratio:pageratio});
-    // }
-    if(index===this.lastIndex){
-      if(this.lastIndex>0){
-        this._getImage(--this.lastIndex,this.state.menuItems.get(this.lastIndex).get('payload'));
-      }        
-    }
-  },
+
   
   _starClick:function(){
     var array=this.collectedItems.filter(function(obj){ return obj.url===this.indexURL}.bind(this));

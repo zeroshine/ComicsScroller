@@ -12,6 +12,8 @@ var StoreMixin={
     }.bind(this));
 
     chrome.storage.local.get('update',function(items){      
+      console.log('updateItems',items.update);
+      console.log(this.indexURL);
       var updateItems=items.update;
       var array= updateItems.filter(function(obj){return obj.url!==this.indexURL}.bind(this)) 
       items.update=array;
@@ -41,7 +43,7 @@ var StoreMixin={
       obj.markedPayload=this.markedItems.toArray();
       obj.lastReaded=this.state.menuItems.get(this.state.selectedIndex).toObject();
       obj.menuItems=this.state.menuItems.map(item=>item.toObject()).toArray();
-      // console.log('objmenu',obj.menuItems);
+      console.log('objmarked',obj.markedPayload);
       var array=[];
       for(var i=0;i<items.readed.length;++i){
         if(items.readed[i].url!==this.indexURL){
