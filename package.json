@@ -23,7 +23,7 @@
     "immutable": "^3.7.2",
     "less": "^2.5.0",
     "less-loader": "^2.2.0",
-    "material-ui": "^0.7.5",
+    "material-ui": "^0.8.0",
     "react": "^0.13.3",
     "react-tap-event-plugin": "^0.1.6",
     "style-loader": "^0.12.2",

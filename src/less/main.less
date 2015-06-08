@@ -1,24 +1,19 @@
-/* material-ui */
-@import "../../node_modules/material-ui/src/less/scaffolding.less";
-@import "../../node_modules/material-ui/src/less/components.less";
-//Define a custom less file to override any variables defined in scaffolding.less
-
 @import (less)"icomoon/style.css";
 // @import (less) "github.css";
 // @import "custom-overrides.less";
 
-@accent-1-color: @orange-A200;
-@primary-1-color: @grey-800;
-@menu-item-selected-text-color: @cyan-700;
+// @accent-1-color: @orange-A200;
+// @primary-1-color: @grey-800;
+// @menu-item-selected-text-color: @cyan-700;
 // @menu-item-data-height: 24px;
-@desktop-left-nav-menu-item-height: auto;
+// @desktop-left-nav-menu-item-height: auto;
 // @desktop-keyline-increment:48px;
 // @desktop-gutter: 18px;
-@app-bar-height:48px;
 // @app-bar-height:48px;
-@desktop-left-nav-menu-item-height: 42px;
+// @app-bar-height:48px;
+// @desktop-left-nav-menu-item-height: 42px;
 // @left-nav-width: 200px;
-@menu-item-hover-color: @red-100;
+// @menu-item-hover-color: @red-100;
 //Your custom app styles
 html,body{
   margin: 0px;
@@ -27,17 +22,17 @@ html,body{
 }
 
 
-.logo {
-  cursor: pointer;
-  .mui-font-style-headline;
-  .mui-text-full-white;
-  line-height: @app-bar-height;
-  .mui-font-weight-light;
-  background-color: @primary-1-color;
-  padding-left: @desktop-gutter;
-  padding-top: 0;
-  margin-bottom: 0px;
-}
+// .logo {
+//   cursor: pointer;
+//   // .mui-font-style-headline;
+//   // .mui-text-full-white;
+//   line-height: 48px;
+//   // .mui-font-weight-light;
+//   background-color: #424242;
+//   // padding-left: @desktop-gutter;
+//   // padding-top: 0;
+//   margin-bottom: 0px;
+// }
 
 #comics_panel{
   padding-top: 64px;
@@ -47,6 +42,7 @@ html,body{
   // color: #C0c0c0;
   min-height: 100vh;
   height: 100%;
+  
 }
 
 .comics_img{
@@ -82,72 +78,68 @@ html,body{
 }
 
 
-.mui-left-nav-menu {
-  height: 100%;
-  .mui-menu{
-    overflow-y: auto;
-    height: calc(~'100% - 48px');
-    .mui-menu-item {
-      &.mui-is-marked{
-        color: @grey-500;
-        background-color: @grey-200;
-        &.mui-is-selected{
-          color: @menu-item-selected-text-color;
-        }
-      }
-    }
-  }
+// .mui-left-nav-menu {
+//   height: 100%;
+//   .mui-menu{
+//     overflow-y: auto;
+//     height: calc(~'100% - 48px');
+//     .mui-menu-item {
+//       &.mui-is-marked{
+//         color: @grey-500;
+//         background-color: @grey-200;
+//         &.mui-is-selected{
+//           color: @menu-item-selected-text-color;
+//         }
+//       }
+//     }
+//   }
 
+// }
+
+
+
+// .mui-app-canvas {
+//   height: 100%;
+//   // .mui-app-bar:hover {
+//   //   opacity: 1;
+//   //   .github-icon-button {
+//   //     float: right;
+      
+//   //     // margin-right: -8px;
+//   //   }
+//   //   .tag-icon-button {
+//   //     float: right;
+//   //     // margin-right: 8px;
+//   //   }
+//   //   .right-icon-button {
+//   //     float: right;
+//   //     // margin-right: 8px;
+//   //   }
+//   //   .left-icon-button {
+//   //     float: right;
+//   //     // margin-right: 8px;
+//   //   }
+//   // }
+//   .mui-app-bar{
+//     opacity: 1;
+//     min-height:@app-bar-height;
+//     .mui-app-bar-title {
+//       line-height: @app-bar-height;
+//     }
+    
+//   }
+// }
+.github-icon-button {
+  float: right;
 }
-
-
-
-.mui-app-canvas {
-  height: 100%;
-  // .mui-app-bar:hover {
-  //   opacity: 1;
-  //   .github-icon-button {
-  //     float: right;
-      
-  //     // margin-right: -8px;
-  //   }
-  //   .tag-icon-button {
-  //     float: right;
-  //     // margin-right: 8px;
-  //   }
-  //   .right-icon-button {
-  //     float: right;
-  //     // margin-right: 8px;
-  //   }
-  //   .left-icon-button {
-  //     float: right;
-  //     // margin-right: 8px;
-  //   }
-  // }
-  .mui-app-bar{
-    opacity: 1;
-    min-height:@app-bar-height;
-    .mui-app-bar-title {
-      line-height: @app-bar-height;
-    }
-    .github-icon-button {
-      float: right;
-      
-      // margin-right: -8px;
-    }
-    .tag-icon-button {
-      float: right;
-      // margin-right: 8px;
-    }
-    .right-icon-button {
-      float: right;
-      // margin-right: 8px;
-    }
-    .left-icon-button {
-      float: right;
-      // margin-right: 8px;
-    }
-  }
+.tag-icon-button {
+  float: right;
+}
+.right-icon-button {
+  float: right;
+}
+.left-icon-button {
+  float: right;
 }
 .icon-price-tag {
   &.icon-is-tagged{
@@ -156,25 +148,25 @@ html,body{
 }
 
 
-.chapter-menu{
-  position: fixed;
-  float: left;
-  height: 100vh;
-  padding-top: 63px;
-  width:15%;  
-  z-index: 1;
-  .mui-menu{
-    width:100%;
-    height:100%;
-    overflow-y: auto;
-  } 
-}
+// .chapter-menu{
+//   position: fixed;
+//   float: left;
+//   height: 100vh;
+//   padding-top: 63px;
+//   width:15%;  
+//   z-index: 1;
+//   .mui-menu{
+//     width:100%;
+//     height:100%;
+//     overflow-y: auto;
+//   } 
+// }
 
-.mui-icon-button {
-  &.mui-is-disabled {
-    * {
-      color: @grey-700;
-      fill: @grey-700;
-    }
-  }
-}
+// .mui-icon-button {
+//   &.mui-is-disabled {
+//     * {
+//       color: @grey-700;
+//       fill: @grey-700;
+//     }
+//   }
+// }
