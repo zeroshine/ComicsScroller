@@ -1,6 +1,9 @@
 var React = require('react'),
   //Router = require('react-router'),
   LeftNav = require('./left-nav.jsx');
+var Colors= require('material-ui').Styles.Colors;
+var Typography=require('material-ui').Styles.Typography;
+var Spacing=require('material-ui').Styles.Spacing;
 var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 
 
@@ -16,7 +19,7 @@ var AppLeftNav = React.createClass({
   },
   propTypes: {
     selectedIndex:React.PropTypes.number,
-    // menuItems:React.PropTypes.array,
+    menuItems:React.PropTypes.object,
     onMenuItemClick:React.PropTypes.func
   },
 
@@ -26,14 +29,28 @@ var AppLeftNav = React.createClass({
     };
   },
 
+  getStyles: function() {
+    return {
+      cursor: 'pointer',
+      fontSize: '24px',
+      color: Typography.textFullWhite,
+      lineHeight: 48 + 'px',
+      fontWeight: Typography.fontWeightLight,
+      backgroundColor: Colors.grey800,
+      paddingLeft: Spacing.desktopGutter,
+      paddingTop: '0px',
+      marginBottom: '8px'
+    };
+  },
+
   render: function() {
-    var header = (<div className="logo" onClick={this._onHeaderClick}>章節</div>);
+    var header = (<div style={this.getStyles()} onClick={this._onHeaderClick}>章節</div>);
 
     return (
       <LeftNav 
         ref="leftNav"
         docked={false}
-        isInitiallyOpen={false}
+        isInitiallyOpen={true}
         header={header}
         menuItems={this.props.menuItems} 
         selectedIndex={this.props.selectedIndex}
@@ -42,6 +59,7 @@ var AppLeftNav = React.createClass({
   },
 
   toggle: function() {
+    console.log('app left nav toggle');
     this.refs.leftNav.toggle();
   },
 

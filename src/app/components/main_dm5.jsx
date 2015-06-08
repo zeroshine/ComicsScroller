@@ -7,7 +7,7 @@ var StoreMixin=require('../../Mixin/storemixin.jsx');
 var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
 var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
-
+var StylePropable = require('material-ui').Mixins.StylePropable;
 var hasAddedListener=false;
 
 
@@ -31,7 +31,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(handler, {urls: ["http://www.m
 
 var Main = React.createClass({
   
-  mixins:[PureRenderMixin,StoreMixin,Mixins],  
+  mixins:[PureRenderMixin,StoreMixin,Mixins,StylePropable],  
   
   componentDidMount: function() {
     Comics.handleUrlHash(this.state.menuItems);

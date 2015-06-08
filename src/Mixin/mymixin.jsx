@@ -1,11 +1,15 @@
-// var React = require('react');
+var React = require('react');
 // var mui = require('material-ui');
 var Immutable = require('immutable');
+var mui = require('material-ui');
+var Colors = mui.Styles.Colors;
+var Spacing = require('material-ui').Styles.Spacing;
+var Typography = mui.Styles.Typography;
+var TM = require('../app/components/theme-manager.js');
+var ThemeManager=new TM;
+var AppCanvas=require('../app/components/app-canvas.jsx');
 var AppBar =require('../app/components/app-bar.jsx');
-// var AppBar=require('material-ui').AppBar;
-var AppCanvas=require('material-ui').AppCanvas;
 var IconButton=require('../app/components/icon-button.jsx');
-// var IconButton=require('material-ui').IconButton;
 var TagIconButton=require('../app/components/TagIconButton.jsx');
 var AppLeftNav=require('../app/components/app-left-nav.jsx');
 
@@ -19,6 +23,44 @@ var MyMixin={
   markedItems: Immutable.Set(),
 
   collectedItems: [],
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext: function() {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
+  getStyles: function() {
+    // var themeVariables = this.context.muiTheme.component.appBar;
+    // var darkWhite = Colors.darkWhite;
+    var iconButtonSize=Spacing.iconSize * 2
+    return {
+      iconButton: {
+        style: {
+          marginTop: (48 - iconButtonSize) / 2,
+          float: 'right',
+          marginRight: 8,
+          marginLeft: -16
+        },
+        defaulrIconStyle: {
+          fill: Colors.darkWhite,
+          color: Colors.darkWhite
+        },
+        yellowIconStyle: {
+          fill: Colors.darkWhite,
+          color: Colors.darkWhite
+        },
+        disableIconStyle: {
+          fill: Colors.darkWhite,
+          color: Colors.darkWhite
+        }
+      }
+    };
+  },
 
   getInitialState: function(){
     return {
@@ -34,33 +76,76 @@ var MyMixin={
   },    
   
   render: function() {
-    var title="Comics Scroller";
-    
+    var styles = this.getStyles();
+    // var subscribedStyle=
     var githubButton = (
       <IconButton
         className="github-icon-button"
         iconClassName="icon-github"
+        style={this.mergeAndPrefix(styles.iconButton.style)}
+        // iconStyle={this.mergeAndPrefix(styles.iconButton.iconStyle)}
         tooltip="Github"
         target="_blank"
         href="https://github.com/zeroshine/ComicsScroller"
         linkButton={true} />
     );
     
+    var subscribedButton =(
+      <IconButton 
+        className={"tag-icon-button"} 
+        iconClassName={'icon-price-tag'} 
+        style={this.mergeAndPrefix(styles.iconButton.style)}
+        // iconStyle={this.mergeAndPrefix(styles.iconButton.iconStyle)} 
+        tooltip="Subscribed" 
+        onClick={this._starClick} 
+        disabled={this.state.starDisable} />
+    );
+    
+    var nextButton=(
+      <IconButton 
+        className="right-icon-button" 
+        style={this.mergeAndPrefix(styles.iconButton.style)}
+        // iconStyle={this.mergeAndPrefix(styles.iconButton.iconStyle)} 
+        iconClassName="icon-circle-right" 
+        disabled={this.state.rightDisable} 
+        onClick={this._nextClick} 
+        tooltip="下一話"/>
+    );
+
+    var previousButton=(
+      <IconButton 
+        className="left-icon-button"  
+        style={this.mergeAndPrefix(styles.iconButton.style)}
+        // iconStyle={this.mergeAndPrefix(styles.iconButton.iconStyle)} 
+        iconClassName="icon-circle-left" 
+        disabled={this.state.leftDisable} 
+        onClick={this._previousClick} 
+        tooltip="上一話"/>
+    );
+
     return (
-      <AppCanvas predefinedLayout={1}>
-        <AppBar title={title+"  "+this.state.comicname+"  "+this.state.chapter+"  "+this.state.pageratio} onMenuIconButtonTouchTap={this._onMenuIconButtonTouchTap} >
-          <TagIconButton tooltip="Subscribed" onClick={this._starClick} isMarked={this.state.starIsMarked} disabled={this.state.starDisable}/> 
+      <AppCanvas>
+        <AppBar 
+          title={"Comics Scroller  "+this.state.comicname+"  "+this.state.chapter+"  "+this.state.pageratio} 
+          onLeftIconButtonTouchTap={this._onLeftIconButtonTouchTap} >
+          {subscribedButton}  
           {githubButton}
-          <IconButton className="right-icon-button" iconClassName="icon-circle-right" disabled={this.state.rightDisable} onClick={this._nextClick} tooltip="下一話"/>
-          <IconButton className="left-icon-button" iconClassName="icon-circle-left" disabled={this.state.leftDisable} onClick={this._previousClick} tooltip="上一話"/>
+          {nextButton}
+          {previousButton}
         </AppBar>
-        <AppLeftNav menuItems={this.state.menuItems} selectedIndex={this.state.selectedIndex} isInitiallyOpen={false} ref="leftNav" onMenuItemClick={this._onMenuItemClick}/>
+        <AppLeftNav 
+          ref="leftNav" 
+          menuItems={this.state.menuItems} 
+          selectedIndex={this.state.selectedIndex} 
+          isInitiallyOpen={true}  
+          onMenuItemClick={this._onMenuItemClick}/>
         <div id="comics_panel" />   
       </AppCanvas>
     );
   },
 
-  _onMenuIconButtonTouchTap: function() {
+  _onLeftIconButtonTouchTap: function() {
+    // console.log('toggle',this.refs);
     this.refs.leftNav.toggle();
   },
 
@@ -86,21 +171,6 @@ var MyMixin={
     document.title=this.title+" "+chstr;
     this._updateHash(payload,'');
   },  
-
-
-  // _cloneMenuItems: function(options){
-  //   var menuItems=[];
-  //   for(var i=0;i<this.state.menuItems.length;++i){
-  //     var item={};
-  //     if(options.text===true)item.text=this.state.menuItems[i].text;
-  //     item.payload=this.state.menuItems[i].payload;
-  //     if(options.isMarked===true)item.isMarked=this.state.menuItems[i].isMarked;
-  //     menuItems.push(item);
-  //   }
-  //   return menuItems;
-  // },
-
-
   
   _starClick:function(){
     var array=this.collectedItems.filter(function(obj){ return obj.url===this.indexURL}.bind(this));
@@ -114,7 +184,6 @@ var MyMixin={
   },
 
   _previousClick:function(){
-    // var panel=document.getElementById("comics_panel");
     var index=this.state.selectedIndex+1;
     if(index<this.state.menuItems.size){
       var menuItems=this.state.menuItems;
@@ -136,15 +205,12 @@ var MyMixin={
         chapter:chstr},
         function(){this._saveStoreReaded()}.bind(this));
       this.lastIndex=index;
-      // panel.innerHTML="";
-      // this._getImage(index,item.payload);
       document.title=this.title+" "+chstr;
       this._updateHash(payload,'');
     }
   },
 
   _nextClick:function(){
-    // var panel=document.getElementById("comics_panel");
     var index=this.state.selectedIndex-1;
     if(index>=0){
       var menuItems=this.state.menuItems;
@@ -166,8 +232,6 @@ var MyMixin={
         chapter:chstr},
         function(){this._saveStoreReaded()}.bind(this));
       this.lastIndex=index;
-      // panel.innerHTML="";
-      // this._getImage(index,item.payload);
       document.title=this.title+" "+chstr;
       this._updateHash(payload,'');
     }

@@ -8,12 +8,12 @@ var StoreMixin=require('../../Mixin/storemixin.jsx');
 var ChapterAction=require('../../actions/chapterAction.js');
 var ChapterStore=require('../../store/chapterStore.js');
 var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
-
+var StylePropable = require('material-ui').Mixins.StylePropable;
 var hasAddedListener=false;
 
 var Main = React.createClass({
   
-  mixins:[PureRenderMixin,StoreMixin,Mixins],
+  mixins:[PureRenderMixin,StoreMixin,Mixins,StylePropable],
 
   componentDidMount: function() {
     // ChapterStore.addListener("update",this._updateChapter);
