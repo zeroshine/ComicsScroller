@@ -146,6 +146,7 @@ var MyMixin={
 
   _onLeftIconButtonTouchTap: function() {
     // console.log('toggle',this.refs);
+    this.setState({menuItem:this.tmp_menuItems});
     this.refs.leftNav.toggle();
   },
 

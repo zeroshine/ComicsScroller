@@ -14,7 +14,7 @@
 
   var delay=200;
 
-  var useDebounce=false;
+  var useDebounce=true;
 
   echo.hadInited=false;
 
@@ -55,7 +55,7 @@
   };
   echo.init = function (opts) {
     // scrollRender=true;
-    console.log("echo init");
+    // console.log("echo init");
     opts = opts || {};
     // panel=document.getElementById('comics_panel');
     imgRender=opts.imgRender || imgRender;

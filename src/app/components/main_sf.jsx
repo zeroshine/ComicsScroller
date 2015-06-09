@@ -44,6 +44,7 @@ var Main = React.createClass({
       var menuItems=Comics.getMenuItems(doc,this.markedItems);
       var initIndex=Comics.initIndex;
       this.markedItmes=Comics.markedItmes;
+      this.tmp_menuItems=menuItems;
       this.setState({
         menuItems:menuItems,
         selectedIndex:initIndex,
@@ -79,8 +80,9 @@ var Main = React.createClass({
       }
       this._updateHash(payload,"#");
       document.title=Comics.title+" "+chstr;
+      this.tmp_menuItems=menuItems;
       this.setState({
-        menuItems:menuItems,
+        // menuItems:menuItems,
         rightDisable:index===0,
         leftDisable:index===this.state.menuItems.size-1,
         selectedIndex: index,
