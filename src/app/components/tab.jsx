@@ -22,19 +22,19 @@ var Tab = React.createClass({
 
   render: function(){
     var styles = this.mergeAndPrefix({
-      'display': 'table-cell',
-      'cursor': 'pointer',
-      'textAlign': 'center',
-      'verticalAlign': 'middle',
-      'height': '48px',
-      'color': Colors.white,
-      'opacity': '.6',
-      'fontSize': '18px',
-      'fontWeight': '500',
-      'whiteSpace': 'initial',
-      'fontFamily': this.context.muiTheme.contentFontFamily,
-      'boxSizing': 'border-box',
-      'width': this.props.width
+      display: 'table-cell',
+      cursor: 'pointer',
+      textAlign: 'center',
+      verticalAlign: 'middle',
+      height: '48px',
+      color: Colors.white,
+      opacity: '.6',
+      fontSize: '18px',
+      fontWeight: '500',
+      whiteSpace: 'initial',
+      fontFamily: this.context.muiTheme.contentFontFamily,
+      boxSizing: 'border-box',
+      width: this.props.width
     }, this.props.style);
 
     if (this.props.selected) styles.opacity = '1';

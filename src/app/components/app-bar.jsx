@@ -88,7 +88,7 @@ var AppBar = React.createClass({
 
   render: function() {
     // this.props.onLeftIconButtonTouchTap();
-    console.log('left',this.props.onLeftIconButtonTouchTap);
+    // console.log('left',this.props.onLeftIconButtonTouchTap);
     var styles = this.getStyles();
     var {
       onTouchTap,

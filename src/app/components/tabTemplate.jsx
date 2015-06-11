@@ -5,13 +5,13 @@ var TabTemplate = React.createClass({
   render: function(){
     console.log('TabTemplate');
     var styles = {
-      'display': 'block',
-      'width': '100%',
-      'position': 'relative',
-      'text-align': 'initial',
-      'height':352,
-      'overflow-y': 'auto',
-      'backgroundColor': Colors.grey200
+      display: 'block',
+      width: '100%',
+      position: 'relative',
+      textAlign: 'initial',
+      height:352,
+      overflowY: 'auto',
+      backgroundColor: Colors.grey200
     };
 
     return (

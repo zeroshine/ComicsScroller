@@ -131,7 +131,7 @@ var MenuItem = React.createClass({
     var toggleElement;
 
     var styles = this.getStyles();
-    console.log('data',styles.data);
+    // console.log('data',styles.data);
     if (this.props.iconClassName) icon = <FontIcon style={this.mergeAndPrefix(styles.icon, this.props.iconStyle)} className={this.props.iconClassName} />;
     if (this.props.iconRightClassName) iconRight = <FontIcon style={this.mergeAndPrefix(styles.iconRight, this.props.iconRightStyle)} className={this.props.iconRightClassName} />;
     if (this.props.data) data = <span style={this.mergeAndPrefix(styles.data)}>{this.props.data}</span>;
@@ -152,13 +152,6 @@ var MenuItem = React.createClass({
       } = this.props;
       toggleElement = <Toggle {...other} onToggle={this._handleToggle} style={styles.toggle}/>;
     }
-    console.log('menuItem',this.mergeAndPrefix(
-          styles.root,
-          this.props.isMarked && styles.rootWhenMarked, 
-          this.props.selected && styles.rootWhenSelected,
-          (this.state.hovered && !this.props.disabled) && styles.rootWhenHovered,
-          this.props.style,
-          this.props.disabled && styles.rootWhenDisabled));
     return (
       <div
         key={this.props.index}

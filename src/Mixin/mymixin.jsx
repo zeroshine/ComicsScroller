@@ -51,8 +51,8 @@ var MyMixin={
           color: Colors.darkWhite
         },
         yellowIconStyle: {
-          fill: Colors.darkWhite,
-          color: Colors.darkWhite
+          fill: 'yellow',
+          color: 'yellow'
         },
         disableIconStyle: {
           fill: Colors.darkWhite,
@@ -89,13 +89,15 @@ var MyMixin={
         href="https://github.com/zeroshine/ComicsScroller"
         linkButton={true} />
     );
-    
+    // var subscribedButtonStyle=this.mergeAndPrefix(styles.iconButton.style,styles.iconButton.yellowIconStyle)
+    console.log('subscribedStyle',this.state.starIsMarked,this.mergeAndPrefix(this.state.starIsMarked&&styles.iconButton.yellowIconStyle));
+    // console.log('subscribed',);
     var subscribedButton =(
       <IconButton 
         className={"tag-icon-button"} 
         iconClassName={'icon-price-tag'} 
         style={this.mergeAndPrefix(styles.iconButton.style)}
-        // iconStyle={this.mergeAndPrefix(styles.iconButton.iconStyle)} 
+        iconStyle={this.mergeAndPrefix(this.state.starIsMarked && styles.iconButton.yellowIconStyle)} 
         tooltip="Subscribed" 
         onClick={this._starClick} 
         disabled={this.state.starDisable} />
@@ -175,6 +177,7 @@ var MyMixin={
   
   _starClick:function(){
     var array=this.collectedItems.filter(function(obj){ return obj.url===this.indexURL}.bind(this));
+    console.log('collectedItems',array);
     if(array.length===0){      
       this._saveStoreCollected();
       this.setState({starIsMarked:true});  

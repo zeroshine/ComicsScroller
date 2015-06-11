@@ -87,6 +87,7 @@ var StoreMixin={
         this.collectedItems.push(obj);
       }
       items.collected=this.collectedItems;
+      console.log('save collected',items);
       chrome.storage.local.set(items);
     }.bind(this));
   },
@@ -95,6 +96,7 @@ var StoreMixin={
     chrome.storage.local.get('collected',function(items){
       this.collectedItems=this.collectedItems.filter(function(obj){return obj.url!==this.indexURL}.bind(this));
       items['collected']=this.collectedItems;
+      console.log('remove collected',items);
       chrome.storage.local.set(items);
     }.bind(this));
   }
