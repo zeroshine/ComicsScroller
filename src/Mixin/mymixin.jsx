@@ -80,7 +80,7 @@ var MyMixin={
     // var subscribedStyle=
     var githubButton = (
       <IconButton
-        className="github-icon-button"
+        // className="github-icon-button"
         iconClassName="icon-github"
         style={this.mergeAndPrefix(styles.iconButton.style)}
         // iconStyle={this.mergeAndPrefix(styles.iconButton.iconStyle)}
@@ -90,11 +90,11 @@ var MyMixin={
         linkButton={true} />
     );
     // var subscribedButtonStyle=this.mergeAndPrefix(styles.iconButton.style,styles.iconButton.yellowIconStyle)
-    console.log('subscribedStyle',this.state.starIsMarked,this.mergeAndPrefix(this.state.starIsMarked&&styles.iconButton.yellowIconStyle));
+    // console.log('subscribedStyle',this.state.starIsMarked,this.mergeAndPrefix(this.state.starIsMarked&&styles.iconButton.yellowIconStyle));
     // console.log('subscribed',);
     var subscribedButton =(
       <IconButton 
-        className={"tag-icon-button"} 
+        // className={"tag-icon-button"} 
         iconClassName={'icon-price-tag'} 
         style={this.mergeAndPrefix(styles.iconButton.style)}
         iconStyle={this.mergeAndPrefix(this.state.starIsMarked && styles.iconButton.yellowIconStyle)} 
@@ -105,7 +105,7 @@ var MyMixin={
     
     var nextButton=(
       <IconButton 
-        className="right-icon-button" 
+        // className="right-icon-button" 
         style={this.mergeAndPrefix(styles.iconButton.style)}
         // iconStyle={this.mergeAndPrefix(styles.iconButton.iconStyle)} 
         iconClassName="icon-circle-right" 
@@ -116,7 +116,7 @@ var MyMixin={
 
     var previousButton=(
       <IconButton 
-        className="left-icon-button"  
+        // className="left-icon-button"  
         style={this.mergeAndPrefix(styles.iconButton.style)}
         // iconStyle={this.mergeAndPrefix(styles.iconButton.iconStyle)} 
         iconClassName="icon-circle-left" 
@@ -125,12 +125,38 @@ var MyMixin={
         tooltip="上一話"/>
     );
 
+    var fbButton=(
+      <IconButton
+        // className="fb-icon-button"
+        iconClassName="icon-facebook2"
+        style={this.mergeAndPrefix(styles.iconButton.style)}
+        // iconStyle={this.mergeAndPrefix(styles.iconButton.iconStyle)}
+        tooltip="facebook"
+        target="_blank"
+        href="https://www.facebook.com/ComicsScroller"
+        linkButton={true} />
+    );
+
+    var homeButton=(
+      <IconButton
+        // className="home-icon-button"
+        iconClassName="icon-home"
+        style={this.mergeAndPrefix(styles.iconButton.style)}
+        // iconStyle={this.mergeAndPrefix(styles.iconButton.iconStyle)}
+        tooltip="site"
+        target="_blank"
+        href="https://zeroshine.github.io/ComicsScroller"
+        linkButton={true} />
+    );
+
     return (
       <AppCanvas>
         <AppBar 
           title={"Comics Scroller  "+this.state.comicname+"  "+this.state.chapter+"  "+this.state.pageratio} 
           onLeftIconButtonTouchTap={this._onLeftIconButtonTouchTap} >
-          {subscribedButton}  
+          {subscribedButton}
+          {homeButton}
+          {fbButton}  
           {githubButton}
           {nextButton}
           {previousButton}
@@ -147,24 +173,26 @@ var MyMixin={
   },
 
   _onLeftIconButtonTouchTap: function() {
-    // console.log('toggle',this.refs);
-    this.setState({menuItem:this.tmp_menuItems});
+    
+    // console.log(this.tmp_menuItems.get(1).get('isMarked'));
+    this.setState({menuItems:this.tmp_menuItems});
     this.refs.leftNav.toggle();
   },
 
   _onMenuItemClick: function(e, index, item) {
     var menuItems=this.state.menuItems;
-    var obj=this.state.menuItems.get(index);
+    var obj=this.tmp_menuItems.get(index);
     var payload=obj.get('payload');
     var chstr=obj.get('text');
     if(!this.markedItems.has(payload)){
       obj=obj.set('isMarked',true);
-      menuItems=this.state.menuItems.set(index,obj);
-      // console.log(menuItems);
+      this.tmp_menuItems=this.tmp_menuItems.set(index,obj);
+      // console.log(menuItems.get(index).get('isMarked'));
       this.markedItems=this.markedItems.add(payload);      
     }
+    
     this.setState({
-      menuItems:menuItems,
+      // menuItems:menuItems,
       rightDisable:index===0,
       leftDisable:index===this.state.menuItems.size-1,
       selectedIndex:index,
@@ -190,18 +218,19 @@ var MyMixin={
   _previousClick:function(){
     var index=this.state.selectedIndex+1;
     if(index<this.state.menuItems.size){
-      var menuItems=this.state.menuItems;
-      var obj=this.state.menuItems.get(index);
+      var menuItems=this.tmp_menuItems;
+      var obj=this.tmp_menuItems.get(index);
       var payload=obj.get('payload');
       var chstr=obj.get('text');
       if(!this.markedItems.has(payload)){
-        var obj=this.state.menuItems.get(index);
+        var obj=this.tmp_menuItems.get(index);
         obj=obj.set('isMarked',true);
-        menuItems=this.state.menuItems.set(index,obj);
-        this.markedItems=this.markedItems.add(payload);      
+        this.tmp_menuItems=this.tmp_menuItems.set(index,obj);
+        this.markedItems=this.markedItems.add(payload);  
+
       }   
       this.setState({
-        menuItems:menuItems,
+        // menuItems:menuItems,
         selectedIndex:index,
         pageratio:"",
         rightDisable:index===0,
@@ -217,18 +246,18 @@ var MyMixin={
   _nextClick:function(){
     var index=this.state.selectedIndex-1;
     if(index>=0){
-      var menuItems=this.state.menuItems;
-      var obj=this.state.menuItems.get(index);
+      // var menuItems=this.state.menuItems;
+      var obj=this.tmp_menuItems.get(index);
       var payload=obj.get('payload');
       var chstr=obj.get('text');
       if(!this.markedItems.has(payload)){
-        var obj=this.state.menuItems.get(index);
+        var obj=this.tmp_menuItems.get(index);
         obj=obj.set('isMarked',true);
-        menuItems=this.state.menuItems.set(index,obj);
-        this.markedItems=this.markedItems.add(payload);      
+        this.tmp_menuItems=this.tmp_menuItems.set(index,obj);
+        this.markedItems=this.markedItems.add(payload);    
       }   
       this.setState({
-        menuItems:menuItems,
+        // menuItems:menuItems,
         selectedIndex:index,
         pageratio:"",
         rightDisable:index===0,

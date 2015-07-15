@@ -12,8 +12,8 @@ var StoreMixin={
     }.bind(this));
 
     chrome.storage.local.get('update',function(items){      
-      console.log('updateItems',items.update);
-      console.log(this.indexURL);
+      // console.log('updateItems',items.update);
+      // console.log(this.indexURL);
       var updateItems=items.update;
       var array= updateItems.filter(function(obj){return obj.url!==this.indexURL}.bind(this)) 
       items.update=array;
@@ -41,9 +41,9 @@ var StoreMixin={
       obj.iconUrl=this.iconUrl;
       obj.title=this.title;
       obj.markedPayload=this.markedItems.toArray();
-      obj.lastReaded=this.state.menuItems.get(this.state.selectedIndex).toObject();
-      obj.menuItems=this.state.menuItems.map(item=>item.toObject()).toArray();
-      console.log('objmarked',obj.markedPayload);
+      obj.lastReaded=this.tmp_menuItems.get(this.state.selectedIndex).toObject();
+      obj.menuItems=this.tmp_menuItems.map(item=>item.toObject()).toArray();
+      // console.log('objmarked',obj.markedPayload);
       var array=[];
       for(var i=0;i<items.readed.length;++i){
         if(items.readed[i].url!==this.indexURL){
@@ -57,8 +57,8 @@ var StoreMixin={
     chrome.storage.local.get('collected',function(items){
       for(var i=0;i<items.collected.length;++i){
         if(items.collected[i].url===this.indexURL){
-          items.collected[i].lastReaded=this.state.menuItems.get(this.state.selectedIndex).toObject();    
-          items.collected[i].menuItems=this.state.menuItems.map(item=>item.toObject()).toArray();
+          items.collected[i].lastReaded=this.tmp_menuItems.get(this.state.selectedIndex).toObject();    
+          items.collected[i].menuItems=this.tmp_menuItems.map(item=>item.toObject()).toArray();
           items.collected[i].markedPayload=this.markedItems.toArray();
         }
       }
@@ -74,8 +74,8 @@ var StoreMixin={
       obj.iconUrl=this.iconUrl;
       obj.title=this.title;
       obj.markedPayload=this.markedItems.toArray();
-      obj.menuItems=this.state.menuItems.map(item=>item.toObject()).toArray();
-      obj.lastReaded=this.state.menuItems.get(this.state.selectedIndex).toObject();
+      obj.menuItems=this.tmp_menuItems.map(item=>item.toObject()).toArray();
+      obj.lastReaded=this.tmp_menuItems.get(this.state.selectedIndex).toObject();
       var urlInItems=false;
       for(var i=0;i<this.collectedItems.length;++i){
         if(this.collectedItems[i].url===this.indexURL){
@@ -87,7 +87,7 @@ var StoreMixin={
         this.collectedItems.push(obj);
       }
       items.collected=this.collectedItems;
-      console.log('save collected',items);
+      // console.log('save collected',items);
       chrome.storage.local.set(items);
     }.bind(this));
   },
@@ -96,7 +96,7 @@ var StoreMixin={
     chrome.storage.local.get('collected',function(items){
       this.collectedItems=this.collectedItems.filter(function(obj){return obj.url!==this.indexURL}.bind(this));
       items['collected']=this.collectedItems;
-      console.log('remove collected',items);
+      // console.log('remove collected',items);
       chrome.storage.local.set(items);
     }.bind(this));
   }

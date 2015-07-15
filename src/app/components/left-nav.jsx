@@ -10,7 +10,7 @@ var React = require('react'),
 var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 var LeftNav = React.createClass({
 
-  mixins: [PureRenderMixin,StylePropable,WindowListenable],
+  mixins: [StylePropable,WindowListenable],
 
   contextTypes: {
     muiTheme: React.PropTypes.object

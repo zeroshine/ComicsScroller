@@ -1,15 +1,16 @@
-// var ObjectAssign=require('object-assign');
-var Echo=require('./echo');
-var Immutable=require('immutable');
-var comics={
-	regex: /http\:\/\/new\.comicvip\.com\/show\/(.*-\d*.html\?ch=\d*)/,
+// let ObjectAssign=require('object-assign');
+let Echo=require('./echo');
+let Immutable=require('immutable');
+let parser= new DOMParser();
+let comics={
+	regex: /http\:\/\/\w*\.comicvip\.com\/show(\/.*-\d*.html\?ch=\d*)/,
 
 	baseURL: "http://new.comicvip.com/show/",
 	
 	comicspageURL: "http://www.comicvip.com/html/",	
 
 	handleUrlHash:function(menuItems){
-		var params_str=window.location.hash;
+		let params_str=window.location.hash;
 	    this.site= /site\/(\w*)/.exec(params_str)[1];
 	    this.pageURL=/chapter\/.*-(\d*\.html)\?/.exec(params_str)[1];   
 	    this.chapterNum=/chapter\/.*\?ch\=(\d*)/.exec(params_str)[1];
@@ -19,8 +20,8 @@ var comics={
     	if(!(/#$/.test(params_str))){
 	      // console.log('page back');
 	      document.getElementById("comics_panel").innerHTML="";
-	      var index=-1;
-	      for(var i=0;i<menuItems.size;++i){
+	      let index=-1;
+	      for(let i=0;i<menuItems.size;++i){
 	        if(menuItems.get(i).get('payload')===this.baseURL+this.prefixURL+this.chapterNum){
 	          index=i;
 	          this.lastIndex=index;
@@ -34,15 +35,15 @@ var comics={
 	},
 
 	getChapter: function(doc){
-		var nl=doc.querySelectorAll(".Vol , .ch , #lch");
+		let nl=doc.querySelectorAll(".Vol , .ch , #lch");
 		return nl;
 	},
 
 	getChapterUrl:function(str){
-		var p_array=/cview\(\'(.*-\d*\.html)\',(\d*)/.exec(str);
-      	var catid=p_array[2];
-      	var url=p_array[1];
-		var baseurl="";
+		let p_array=/cview\(\'(.*-\d*\.html)\',(\d*)/.exec(str);
+      	let catid=p_array[2];
+      	let url=p_array[1];
+		let baseurl="";
 		if(catid==4 || catid==6 || catid==12 ||catid==22 ) baseurl="http://new.comicvip.com/show/cool-";
 		if(catid==1 || catid==17 || catid==19 || catid==21) baseurl="http://new.comicvip.com/show/cool-";
 		if(catid==2 || catid==5 || catid==7 || catid==9)  baseurl="http://new.comicvip.com/show/cool-";
@@ -54,6 +55,7 @@ var comics={
 
 	getTitleName: function(doc){
 		this.title=doc.querySelector("body > table:nth-child(7) > tbody > tr > td > table > tbody > tr:nth-child(1) > td:nth-child(2) > table:nth-child(1) > tbody > tr:nth-child(1) > td > table > tbody > tr > td:nth-child(2) > font").textContent;
+		// this.title=encodeURIComponent(this.title);
 		return this.title;
 	},
 
@@ -62,29 +64,27 @@ var comics={
 		return this.iconUrl;
 	},
 
-	getImage: function(index,url){
-	    var req=new XMLHttpRequest();
-	    req.open("GET",this.baseURL+this.prefixURL+url,true);
-	    req.responseType="document";
-	    req.withCredentials = true;
-	    req.onload=(function(index,req,self){
-	      return function(){
-	        var doc=req.response;
-	        self.setImages(index, doc);
-	      }
-	    })(index,req,this);
-	    req.send();
+	getIndexURL:async function(){
+		return this.indexURL;
+	},
+
+	getImage: async function(index,url){
+	    let response = await fetch(this.baseURL+this.prefixURL+url);
+		let rtxt = await response.text();
+		let doc = parser.parseFromString(rtxt,"text/html");
+		this.setImages(this.baseURL+this.prefixURL+url,index,doc);
 	},
 
 	getMenuItems:function(doc,markedItems){
-	  var nl = this.getChapter(doc);
-	  var array=[];
+	  let nl = this.getChapter(doc);
+	  let array=[];
       this.initIndex=-1;
-      var item={};
+      let item={};
       item.payload= this.getChapterUrl(nl[nl.length-2].getAttribute("onclick"));
       item.text=nl[nl.length-1].textContent;
       if(item.payload===this.baseURL+this.prefixURL+this.chapterNum&&this.initIndex===-1){
         this.initIndex=0;
+        document.title=this.title+" "+item.text;
         this.setImageIndex(this.initIndex);
         item.isMarked=true;
         if(!markedItems.has(item.payload)){
@@ -96,11 +96,12 @@ var comics={
       }
       item=Immutable.Map(item);
       array.push(item);
-      for(var i=nl.length-3;i>=0;--i){
-        var item={};
+      for(let i=nl.length-3;i>=0;--i){
+        let item={};
         item.payload=this.getChapterUrl(nl[i].getAttribute("onclick"));
         if((item.payload===this.baseURL+this.prefixURL+this.chapterNum)&&this.initIndex===-1){
           this.initIndex=nl.length-i-2;
+          document.title=this.title+" "+item.text;
           this.setImageIndex(this.initIndex);
           item.isMarked=true;
           if(!markedItems.has(item.payload)){
@@ -124,22 +125,22 @@ var comics={
     	if(this.chapterUpdateIndex===-1){
       		this.chapterUpdateIndex=index;
     	}else if(this.chapterUpdateIndex===-2){
-      		var imgs=document.querySelectorAll('img[data-chapter=\"-1\"]');
-      		for(var i=0;i<imgs.length;++i){
+      		let imgs=document.querySelectorAll('img[data-chapter=\"-1\"]');
+      		for(let i=0;i<imgs.length;++i){
         		imgs[i].setAttribute("data-chapter",index);
       		}
       		this.chapterUpdateIndex=-1;  
     	}
 	},
 
-	setImages: function(index,doc){
-		var script=doc.evaluate("//*[@id=\"Form1\"]/script/text()",doc,null,XPathResult.ANY_TYPE, null).iterateNext().textContent.split('eval')[0];
+	setImages: function(url,index,doc){
+		let script=doc.evaluate("//*[@id=\"Form1\"]/script/text()",doc,null,XPathResult.ANY_TYPE, null).iterateNext().textContent.split('eval')[0];
 		eval(script);
-		var ch = /.*ch\=(.*)/.exec(doc.URL)[1];
+		let ch = /.*ch\=(.*)/.exec(url)[1];
 		if (ch.indexOf('#') > 0)
 			ch = ch.split('#')[0];
-		var p = 1;
-		var f = 50;
+		let p = 1;
+		let f = 50;
 		if (ch.indexOf('-') > 0) {
 			p = parseInt(ch.split('-')[1]);
 			ch = ch.split('-')[0];
@@ -148,19 +149,19 @@ var comics={
 			ch = 1;
 		else
 	   		ch = parseInt(ch);
-		var ss=function (a, b, c, d) {
-			var e = a.substring(b, b + c);
+		let ss=function (a, b, c, d) {
+			let e = a.substring(b, b + c);
 			return d == null ? e.replace(/[a-z]*/gi, "") : e;
 		};
-		var nn = function(n) {
+		let nn = function(n) {
 			return n < 10 ? '00' + n : n < 100 ? '0' + n : n;
 		};
-		var mm = function (p) {
+		let mm = function (p) {
 			return (parseInt((p - 1) / 10) % 10) + (((p - 1) % 10) * 3)
 		};
-		var c="";
-		var cc = cs.length;
-		for (var j = 0; j < cc / f; j++) {
+		let c="";
+		let cc = cs.length;
+		for (let j = 0; j < cc / f; j++) {
 			if (ss(cs, j * f, 4) == ch) {
 		    	c = ss(cs, j * f, f, f);
 			    ci = j;
@@ -173,11 +174,11 @@ var comics={
 		}			    
 		ps=ss(c, 7, 3);
 		this.pageMax=ps;
-		var img=[];
-		for(var i=0;i<this.pageMax;++i){
-			var c="";
-			var cc = cs.length;
-			for (var j = 0; j < cc / f; j++) {
+		let img=[];
+		for(let i=0;i<this.pageMax;++i){
+			let c="";
+			let cc = cs.length;
+			for (let j = 0; j < cc / f; j++) {
 			    if (ss(cs, j * f, 4) == ch) {
 			        c = ss(cs, j * f, f, f);
 			        ci = j;
@@ -195,31 +196,41 @@ var comics={
 	},
 
 	appendImage:function(index){
-	  var comics_panel=document.getElementById("comics_panel");
+	  let comics_panel=document.getElementById("comics_panel");
 	  if(index===-1){
 	    index=this.chapterUpdateIndex;
 	    this.chapterUpdateIndex=-2;
 	  }
-	  for(var i=0;i<this.pageMax;++i){
-	    var img=document.createElement('img');
-	    img.src="../img/Transparent.gif";
-	    img.setAttribute("data-echo",this.images[i]);
-	    img.setAttribute("data-num",i+1);
-	    img.setAttribute("data-chapter",index);
-	    img.style.width="900px";
-	    img.style.height="1300px";
-	    img.style.borderWidth="1px";
-	    img.style.borderColor="white";
-	    img.style.borderStyle="solid";
-	    img.setAttribute("data-pageMax",this.pageMax);
-	    img.className="comics_img";
-	    comics_panel.appendChild(img);
-	  }
+	  for(let i=0;i<this.pageMax;++i){
+	      let img=new Image();
+	      img.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+	      img.setAttribute("data-echo",this.images[i]);
+	      img.setAttribute("data-num",i+1);
+	      img.setAttribute("data-chapter",index);
+	      img.style.width="900px";
+	      img.style.height="1300px";
+	      img.style.display='block';
+	      img.style.borderWidth="1px";
+	      img.style.borderColor="white";
+	      img.style.borderStyle="solid";
+	      img.style.marginLeft='auto';
+	      img.style.marginRight='auto';
+	      img.style.marginTop='10px';
+	      img.style.marginBottom='50px';
+	      img.style.maxWidth='100%';
+	      img.style.background='#2a2a2a url(http://i.imgur.com/msdpdQm.gif) no-repeat center center';
+	      img.setAttribute("data-pageMax",this.pageMax);
+	      comics_panel.appendChild(img);
+	    }
 	  Echo.nodes=comics_panel.children;
-	  var chapterEnd=document.createElement("div");
+	  let chapterEnd=document.createElement("div");
 	  chapterEnd.className="comics_img_end";
 	  chapterEnd.textContent="本話結束";
-	  document.getElementById("comics_panel").appendChild(chapterEnd);
+	  comics_panel.appendChild(chapterEnd);
+	  let chapterPromote=document.createElement("div");
+	  chapterPromote.className="comics_img_promote";
+	  chapterPromote.textContent="If you like Comics Scroller, give me a like on FB or Github.";
+	  comics_panel.appendChild(chapterPromote);
 	  if(!Echo.hadInited){
 	    Echo.init(); 
 	  }else{
@@ -228,25 +239,25 @@ var comics={
 	},
 
 	backgroundOnload:function(indexURL,chapters,req,items,k){
-	    var doc=req.response;
-		var nl = this.getChapter(doc);
-		var title=this.getTitleName(doc);
-	    var imgUrl=this.getCoverImg(doc);
-	    var array=[];
-		var obj={};
-		var item={};
+	    let doc=req.response;
+		let nl = this.getChapter(doc);
+		let title=this.getTitleName(doc);
+	    let imgUrl=this.getCoverImg(doc);
+	    let array=[];
+		let obj={};
+		let item={};
 		item.payload=this.getChapterUrl(nl[nl.length-2].getAttribute("onclick"));
 		item.text=nl[nl.length-1].textContent;
 		array.push(item);
-		var urlInChapter=false;
-	    for(var j=0;j<chapters.length;++j){
+		let urlInChapter=false;
+	    for(let j=0;j<chapters.length;++j){
 	    	if(chapters[j].payload===item.payload){
 	    		urlInChapter=true;
 	    		break;
 	    	}
 	    }
     	if(urlInChapter===false&&chapters.length>0){
-    		var obj={
+    		let obj={
 				url:indexURL,
 				title:title,
 				site:'comics8',
@@ -262,19 +273,19 @@ var comics={
 			});
 			chrome.storage.local.get('update',function(items){							
 				items.update.push(this);
-				var num=items.update.length.toString();
+				let num=items.update.length.toString();
 				chrome.browserAction.setBadgeText({text:num});
 				chrome.storage.local.set(items);
 			}.bind(obj));
 		}
-		for(var i=nl.length-3;i>=0;--i){
-			var item={};
+		for(let i=nl.length-3;i>=0;--i){
+			let item={};
       		item.payload= this.getChapterUrl(nl[i].getAttribute("onclick"));
 		    item.text=nl[i].textContent.trim();
 		    array.push(item);
-		    var obj={};
-		    var urlInChapter=false;
-		    for(var j=0;j<chapters.length;++j){
+		    let obj={};
+		    let urlInChapter=false;
+		    for(let j=0;j<chapters.length;++j){
 			    if(chapters[j].payload===item.payload){
 			    	urlInChapter=true;
 			    	break;
@@ -297,7 +308,7 @@ var comics={
 				});
 				chrome.storage.local.get('update',function(items){							
 					items.update.push(this);
-					var num=items.update.length.toString();
+					let num=items.update.length.toString();
 					chrome.browserAction.setBadgeText({text:num});
 					chrome.storage.local.set(items);
 				}.bind(obj));

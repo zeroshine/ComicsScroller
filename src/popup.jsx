@@ -196,7 +196,7 @@ var Card=React.createClass({
 	},
 	
 	_openIndex:function(){
-		console.log('this.props.indexURL',this.props.indexURL);
+		// console.log('this.props.indexURL',this.props.indexURL);
 		chrome.tabs.create({url:this.props.indexURL});
 	}
 
@@ -259,7 +259,7 @@ var Cards=React.createClass({
 	},
 	_getCollectedChildren:function(){
 		var children=[];
-		console.log(this.state.collectedItems);
+		// console.log(this.state.collectedItems);
 		for(var i =this.state.collectedItems.length-1;i>=0;--i){
 			var item=this.state.collectedItems[i];
 			var CardItem=(<Card key={i} 

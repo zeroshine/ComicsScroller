@@ -10,13 +10,16 @@ var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 
 var AppLeftNav = React.createClass({
 
-  shouldComponentUpdate: function(nextProps, nextState) {
-    if(this.props.selectedIndex!==nextProps.selectedIndex){
-      console.log('appleftNav update');
-      return true;
-    } 
-    return false;
-  },
+  // shouldComponentUpdate: function(nextProps, nextState) {
+  //   if(this.props.selectedIndex!==nextProps.selectedIndex){
+  //     // console.log('appleftNav update');
+  //     return true;
+  //   } 
+  //   return false;
+  // },
+
+  mixins: [PureRenderMixin],
+
   propTypes: {
     selectedIndex:React.PropTypes.number,
     menuItems:React.PropTypes.object,
@@ -45,7 +48,6 @@ var AppLeftNav = React.createClass({
 
   render: function() {
     var header = (<div style={this.getStyles()} onClick={this._onHeaderClick}>章節</div>);
-
     return (
       <LeftNav 
         ref="leftNav"
@@ -59,7 +61,7 @@ var AppLeftNav = React.createClass({
   },
 
   toggle: function() {
-    console.log('app left nav toggle');
+    // console.log('app left nav toggle');
     this.refs.leftNav.toggle();
   },
 

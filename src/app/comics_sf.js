@@ -1,23 +1,25 @@
-// var ObjectAssign=require('object-assign');
-var Echo=require('./echo');
-var Immutable = require('immutable');
-var comics={
-	regex: /http\:\/\/comic\.sfacg\.com\/(HTML\/[^\/]+\/.+)$/,
+// let ObjectAssign=require('object-assign');
+let Echo=require('./echo');
+let Immutable = require('immutable');
+let parser= new DOMParser();
+let comics={
 
-	baseURL:"http://comic.sfacg.com/",
+	regex: /http\:\/\/comic\.sfacg\.com(\/HTML\/[^\/]+\/.+)$/,
+
+	baseURL:"http://comic.sfacg.com",
 
 	handleUrlHash:function(menuItems){
-		var params_str=window.location.hash;
+		let params_str=window.location.hash;
 	    this.site= /site\/(\w*)\//.exec(params_str)[1];
-	    this.pageURL=/chapter\/(HTML\/[^\/]+\/)/.exec(params_str)[1];   
-	    this.chapterURL=this.baseURL+(/chapter\/(.*)$/.exec(params_str)[1]);
+	    this.pageURL=/chapter(\/HTML\/[^\/]+\/)/.exec(params_str)[1];   
+	    this.chapterURL=this.baseURL+(/chapter(\/.*)$/.exec(params_str)[1]);
 	    this.indexURL=this.baseURL+this.pageURL;
 	    // console.log("chapterURL",this.chapterURL);
     	if(!(/#$/.test(params_str))){
 	      // console.log('page back');
 	      document.getElementById("comics_panel").innerHTML="";
-	      var index=-1;
-	      for(var i=0;i<menuItems.size;++i){
+	      let index=-1;
+	      for(let i=0;i<menuItems.size;++i){
 	        if(menuItems.get(i).get('payload')===this.chapterURL){
 	          index=i;
 	          this.lastIndex=index;
@@ -32,7 +34,7 @@ var comics={
 	},
 
 	getChapter:function(doc){
-		var nl=doc.querySelectorAll(".serialise_list>li>a");
+		let nl=doc.querySelectorAll(".serialise_list>li>a");
 		return nl;
 	},
 
@@ -46,37 +48,29 @@ var comics={
 		return this.iconUrl;
 	},
 
-  	getImage: function(index,url){
-    	var req=new XMLHttpRequest();
-    	req.open("GET",url,true);
-    	req.responseType="document";
-    	req.withCredentials = true;
-    	req.onload=(function(index,req,self){
-	      	return function(){
-	        	var doc=req.response;
-	        	var scriptURL=/src=\"(\/Utility.*\.js)\">/.exec(doc.head.innerHTML)[1]; 
-	        	var xhr = new XMLHttpRequest();
-	        	xhr.open("GET",self.baseURL+scriptURL,true);
-	        	xhr.onload=(function(index,xhr,self){
-		          	return function(){
-		            	self.setImages(index,xhr);    
-		          	}
-	        	})(index,xhr,self);
-	        	xhr.send();
-	      	}
-    	})(index,req,this);
-    	req.send();
+	getIndexURL:async function(){
+		return this.indexURL;
+	},
+
+  	getImage: async function(index,url){
+    	let response = await fetch(url);
+		let rtxt = await response.text();
+		let doc = parser.parseFromString(rtxt,"text/html");
+		let scriptURL=/src=\"(\/Utility.*\.js)\">/.exec(doc.head.innerHTML)[1]; 
+    	let response2 = await fetch(this.baseURL+scriptURL);
+		let rtxt2 = await response2.text();
+		this.setImages(index,rtxt2);
   	},
 
   	// markedItems: Immutable.Set(),
 
   	getMenuItems:function(doc,markedItems){
-		var nl = this.getChapter(doc);      
-	    var array=[];
+		let nl = this.getChapter(doc);      
+	    let array=[];
 	    this.initIndex=-1;
-	    for(var i=0;i<nl.length;++i){
-	      var item={};
-	      item.payload=nl[i].href;
+	    for(let i=0;i<nl.length;++i){
+	      let item={};
+	      item.payload=this.baseURL+nl[i].getAttribute('href');
 	      item.text=nl[i].textContent;
 	      if(item.payload===this.chapterURL&&this.initIndex===-1){
 	        this.initIndex=i;
@@ -103,21 +97,22 @@ var comics={
     	if(this.chapterUpdateIndex===-1){
       		this.chapterUpdateIndex=index;
     	}else if(this.chapterUpdateIndex===-2){
-      		var imgs=document.querySelectorAll('img[data-chapter=\"-1\"]');
-      		for(var i=0;i<imgs.length;++i){
+      		let imgs=document.querySelectorAll('img[data-chapter=\"-1\"]');
+      		for(let i=0;i<imgs.length;++i){
         		imgs[i].setAttribute("data-chapter",index);
       		}
       		this.chapterUpdateIndex=-1;  
     	}
 	},
 
-	setImages:function(index,xhr){
-		eval(xhr.response);
-		var name = "picHost=";
-		var picHost= hosts[0];
-    	var img =[]; 
+	setImages:function(index,response){
+		console.log(response);
+		eval(response);
+		let name = "picHost=";
+		let picHost= hosts[0];
+    	let img =[]; 
 		this.pageMax=picCount;
-		for(var i=0;i<this.pageMax;i++){
+		for(let i=0;i<this.pageMax;i++){
 			img[i]=picHost+picAy[i];
 		}
 		this.images=img;
@@ -125,31 +120,41 @@ var comics={
 	},
 	
 	appendImage:function(index){
-	    var comics_panel=document.getElementById("comics_panel");
+	    let comics_panel=document.getElementById("comics_panel");
 	    if(index===-1){
 	      index=this.chapterUpdateIndex;
 	      this.chapterUpdateIndex=-2;
 	    }
-	    for(var i=0;i<this.pageMax;++i){
-	      var img=new Image();
-	      img.src="../img/Transparent.gif";
+	    for(let i=0;i<this.pageMax;++i){
+	      let img=new Image();
+	      img.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 	      img.setAttribute("data-echo",this.images[i]);
 	      img.setAttribute("data-num",i+1);
 	      img.setAttribute("data-chapter",index);
 	      img.style.width="900px";
 	      img.style.height="1300px";
+	      img.style.display='block';
 	      img.style.borderWidth="1px";
 	      img.style.borderColor="white";
 	      img.style.borderStyle="solid";
+	      img.style.marginLeft='auto';
+	      img.style.marginRight='auto';
+	      img.style.marginTop='10px';
+	      img.style.marginBottom='50px';
+	      img.style.maxWidth='100%';
+	      img.style.background='#2a2a2a url(http://i.imgur.com/msdpdQm.gif) no-repeat center center';
 	      img.setAttribute("data-pageMax",this.pageMax);
-	      img.className="comics_img";
 	      comics_panel.appendChild(img);
 	    }
 	    Echo.nodes=comics_panel.children;
-	    var chapterEnd=document.createElement("div");
+	    let chapterEnd=document.createElement("div");
 	    chapterEnd.className="comics_img_end";
 	    chapterEnd.textContent="本話結束";
-	    document.getElementById("comics_panel").appendChild(chapterEnd);
+		comics_panel.appendChild(chapterEnd);
+	    let chapterPromote=document.createElement("div");
+	    chapterPromote.className="comics_img_promote";
+	    chapterPromote.textContent="If you like Comics Scroller, give me a like on FB or Github.";
+	    comics_panel.appendChild(chapterPromote);
 	    if(!Echo.hadInited){
 	      Echo.init(); 
 	    }else{
@@ -158,27 +163,27 @@ var comics={
 	},
 
 	backgroundOnload:function(indexURL,chapters,req,items,k){
-		var doc=req.response;
-		var nl = this.getChapter(doc);
-		var title=this.getTitleName(doc);
-		var imgUrl=this.getCoverImg(doc);
-		var array=[];
-		var obj={};
+		let doc=req.response;
+		let nl = this.getChapter(doc);
+		let title=this.getTitleName(doc);
+		let imgUrl=this.getCoverImg(doc);
+		let array=[];
+		let obj={};
 		// chapters.pop();
-		for(var i=0;i<nl.length;++i){
-		    var item={};
-		    item.payload=nl[i].href;
+		for(let i=0;i<nl.length;++i){
+		    let item={};
+		    item.payload=this.baseURL+nl[i].getAttribute('href');
 		    item.text=nl[i].textContent;
 		    array.push(item);
-		    var urlInChapter=false;  				    		
-		    for(var j=0;j<chapters.length;++j){
+		    let urlInChapter=false;  				    		
+		    for(let j=0;j<chapters.length;++j){
 		    	if(chapters[j].payload===item.payload){
 		    		urlInChapter=true;
 		    		break;
 		    	}
 		    }
 		    if(!urlInChapter && chapters.length>0){
-				var obj={
+				let obj={
 					url:indexURL,
 					title:title,
 					site:'sf',
@@ -194,7 +199,7 @@ var comics={
 				});
 				chrome.storage.local.get('update',function(items){							
 					items.update.push(this);
-					var num=items.update.length.toString();
+					let num=items.update.length.toString();
 					chrome.browserAction.setBadgeText({text:num});
 					chrome.storage.local.set(items);
 				}.bind(obj));							

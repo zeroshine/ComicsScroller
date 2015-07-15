@@ -17,7 +17,7 @@ var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 ***********************/
 var NestedMenuItem = React.createClass({
 
-  mixins: [StylePropable, ClickAwayable],
+  mixins: [PureRenderMixin,StylePropable, ClickAwayable],
 
   contextTypes: {
     muiTheme: React.PropTypes.object

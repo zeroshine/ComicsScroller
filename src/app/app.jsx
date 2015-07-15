@@ -1,25 +1,15 @@
 require('../less/main.less');
 // (function () {
   var React = require('react'),
-    injectTapEventPlugin = require("react-tap-event-plugin"),
+    injectTapEventPlugin = require("react-tap-event-plugin");
     
-    Main_sf = require('./components/main_sf.jsx'), // Our custom react component
-    Main_dm5 = require('./components/main_dm5.jsx'), // Our custom react component
-    Main_8 = require('./components/main_8.jsx');
+    // Main_sf = require('./components/main_sf.jsx'), // Our custom react component
+    // Main_dm5 = require('./components/main_dm5.jsx'), // Our custom react component
+    // Main_8 = require('./components/main_8.jsx');
   
   var site= /site\/(\w*)\//.exec(window.location.hash)[1];
-  var Main;
-  switch (site){
-    case 'sf':
-      Main=Main_sf;
-      break;
-    case 'comics8':
-      Main=Main_8;
-      break;
-    case 'dm5':
-      Main=Main_dm5;
-      break;    
-  }
+  var Main=require('./components/main.jsx');
+  
 
 
   //Needed for React Developer Tools

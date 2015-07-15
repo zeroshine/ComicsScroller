@@ -1,51 +1,70 @@
-var Comics_sf=require('./app/comics_sf.js');
-var Comics_8=require('./app/comics_8.js');
-var Comics_dm5=require('./app/comics_dm5.js');
+let Comics_sf=require('./app/comics_sf.js');
+let Comics_8=require('./app/comics_8.js');
+let Comics_dm5=require('./app/comics_dm5.js');
 
-var handler = function(details) {
-  console.log('handler');
-  var isRefererSet = false;
-  var headers = details.requestHeaders,
-    blockingResponse = {};
-  headers.push({
+let chapterfunhandler = function(details) {
+  // console.log("chapterfunhandler"+details.url);
+  // let isRefererSet = false;
+    // headers = details.requestHeaders;
+  details.requestHeaders.push({	    
     name: "Referer",
     value: "http://www.manben.com/"
   });
-  headers.push({
-    name: "Cookie",
-    value: "isAdult=1"
-  })
-  blockingResponse.requestHeaders = headers;
-  return blockingResponse;
+  return {requestHeaders:details.requestHeaders};
 };
 
-chrome.webRequest.onBeforeSendHeaders.addListener(handler, {urls: ["http://www.manben.com/*"]},['requestHeaders', 'blocking']);
+let mhandler = function(details) {
+  // console.log('handler');
+  // console.log("mhandler"+details.url);
+  // let headers = details.requestHeaders;
+    // setcookie = false;
+  for(let i=0 ; i < details.requestHeaders.length ; ++i){
+  	if(details.requestHeaders[i].name === "Cookie"){
+  		details.requestHeaders[i].value += ";isAdult=1";
+  		break;
+  	}
+  }
+  return {requestHeaders:details.requestHeaders};
+};
+
+chrome.webRequest.onBeforeSendHeaders.addListener(chapterfunhandler, 
+	{urls: ["http://www.manben.com/m*/chapterfun*"]},
+	['requestHeaders', 'blocking']);
+
+chrome.webRequest.onBeforeSendHeaders.addListener(mhandler, 
+	{urls: ["http://www.manben.com/m*/"]},
+	['requestHeaders', 'blocking']);
 
 chrome.notifications.onClicked.addListener(function(id){
 	chrome.tabs.create({url:id});
 });
 
-var comicsQuery = function(){
+let comicsQuery = function(){
 	chrome.storage.local.get('collected',function(items){
-      for(var k=0;k<items.collected.length;++k){
-      	var indexURL=items.collected[k].url;
-      	var chapters=items.collected[k].menuItems;
-      	var req=new XMLHttpRequest();
-	    req.open('GET',indexURL);
-	    req.responseType="document";
+      for(let k=0;k<items.collected.length;++k){
+      	let indexURL=items.collected[k].url;
+      	let chapters=items.collected[k].menuItems;
+      	// console.log('chapters',chapters.length,chapters[0].payload);
+      	let req=new XMLHttpRequest();
 	    if(items.collected[k].site==='sf'){
+		    req.open('GET',indexURL);
+		    req.responseType="document";
 	    	req.onload=(function(indexURL,chapters,req,items,k,Comics_sf){
 	      		return function(){
 	      			Comics_sf.backgroundOnload(indexURL, chapters, req, items, k);
 	      		}      		
 			})(indexURL,chapters,req,items,k,Comics_sf);
 	    }else if(items.collected[k].site==='comics8'){
+		    req.open('GET',indexURL);
+	    	req.responseType="document";
 	    	req.onload=(function(indexURL,chapters,req,items,k,Comics_8){
 	      		return function(){
 	      			Comics_8.backgroundOnload(indexURL, chapters, req, items, k);
 	      		}      		
 			})(indexURL,chapters,req,items,k,Comics_8);
 	    }else if(items.collected[k].site==='dm5'){
+		    req.open('GET',indexURL);
+		    req.responseType="document";
 	    	req.onload=(function(indexURL,chapters,req,items,k,Comics_dm5){
 	      		return function(){
 	      			Comics_dm5.backgroundOnload(indexURL, chapters, req, items, k);
@@ -59,29 +78,29 @@ var comicsQuery = function(){
 
 
 chrome.runtime.onInstalled.addListener(function(){
-	var collected={
+	let collected={
 		collected:[]		
 	};
 
-	var readed={
+	let readed={
 		readed:[]
 	};
 
-	var update={
+	let update={
 		update:[]
 	};
 	chrome.storage.local.get('readed',function(items){
-	  var readedItem = Object.assign(readed,items);
+	  let readedItem = Object.assign(readed,items);
 	  chrome.storage.local.set(readedItem);
 	});
 
 	chrome.storage.local.get('update',function(items){
-	  var updateItem = Object.assign(update,items);
+	  let updateItem = Object.assign(update,items);
 	  chrome.storage.local.set(updateItem);
 	});
 
 	chrome.storage.local.get('collected',function(items){
-	  var collectedItem = Object.assign(collected,items);
+	  let collectedItem = Object.assign(collected,items);
 	  chrome.storage.local.set(collectedItem);
 	});
 
@@ -92,29 +111,30 @@ chrome.runtime.onInstalled.addListener(function(){
 // chrome.tabs.onUpdated.addListener(redirectLocal);
 // chrome.webNavigation.onCommitted.addListener
 chrome.webNavigation.onCommitted.addListener(function(details) {
+	// console.log(details.url,Comics_8.regex.test(details.url));
 	if(Comics_8.regex.test(details.url)){
 		console.log("8 comics fired");
-		var chapter=Comics_8.regex.exec(details.url)[1];
-		chrome.tabs.update(details.tabId,{url: chrome.extension.getURL("reader.html")+"#/site/comics8/chapter/"+chapter});
+		let chapter=Comics_8.regex.exec(details.url)[1];
+		chrome.tabs.update(details.tabId,{url: chrome.extension.getURL("reader.html")+"#/site/comics8/chapter"+chapter});
 		ga('send', 'event', "8comics view");
 	}else if(Comics_sf.regex.test(details.url)){
 		console.log("sf fired");
-		var chapter=Comics_sf.regex.exec(details.url)[1];
-		chrome.tabs.update(details.tabId,{url: chrome.extension.getURL("reader.html")+"#/site/sf/chapter/"+chapter});
+		let chapter=Comics_sf.regex.exec(details.url)[1];
+		chrome.tabs.update(details.tabId,{url: chrome.extension.getURL("reader.html")+"#/site/sf/chapter"+chapter});
 		ga('send', 'event', "sf view");
 	}else if((Comics_dm5.regex.test(details.url)||Comics_dm5.dm5regex.test(details.url))){
 		console.log("dm5 fired");
-		var chapter=""
+		let chapter=""
 		if(Comics_dm5.dm5regex.test(details.url)){
 			chapter=Comics_dm5.dm5regex.exec(details.url)[2];
 		}else{
 			chapter=Comics_dm5.regex.exec(details.url)[1];
 		}
-		chrome.tabs.update(details.tabId,{url: chrome.extension.getURL("reader.html")+"#/site/dm5/chapter/"+chapter});
+		chrome.tabs.update(details.tabId,{url: chrome.extension.getURL("reader.html")+"#/site/dm5/chapter"+chapter});
 		ga('send', 'event', "dm5 view");
 	}
 },{url:[
-	{urlMatches: "http://new\.comicvip\.com/show/\w*"},
+	{urlMatches: "comicvip\.com/show/\w*"},
 		{urlMatches: "http://www\.manben\.com/m\d*"},
 		{urlMatches: "comic\.sfacg\.com\/HTML\/[^\/]+\/.+$"},
 		{urlMatches: "http://(tel||www)\.dm5\.com/m\d*"}
