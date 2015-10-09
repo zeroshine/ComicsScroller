@@ -1,4 +1,6 @@
 # Comics Scroller
+
+[![Join the chat at https://gitter.im/zeroshine/ComicsScroller](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zeroshine/ComicsScroller?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ComicsScroller is a chrome extension which makes the comics websites show all images of one chapter in the single page. And it will append all the images in the next chapter in the end of pages automatically when users scroll to the bottom of the page. It also can subscribe comics and notify you when there is an update.  
 
 厭倦不斷跳出廣告跟要一張一張圖片往下點的漫畫網站了嘛？  
