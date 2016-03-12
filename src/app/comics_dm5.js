@@ -2,11 +2,11 @@ let Echo=require('./echo');
 let Immutable = require('immutable');
 let parser= new DOMParser();
 let comics={
-	regex: /http\:\/\/www\.manben\.com(\/m\d+\/)/,
+	regex: /http\:\/\/www\.dm5\.com(\/m\d+\/)/,
 
 	dm5regex: /http\:\/\/(tel||www)\.dm5\.com(\/m\d+\/)/,
 	
-	baseURL:"http://www.manben.com",
+	baseURL:"http://www.dm5.com",
 
 	handleUrlHash: function(menuItems){
 		let params_str=window.location.hash;

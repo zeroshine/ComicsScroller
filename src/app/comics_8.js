@@ -3,11 +3,11 @@ let Echo=require('./echo');
 let Immutable=require('immutable');
 let parser= new DOMParser();
 let comics={
-	regex: /http\:\/\/\w*\.comicvip\.com\/show(\/.*-\d*.html\?ch=\d*)/,
+	regex: /http\:\/\/www\.comicbus\.com\/online(\/.*-\d*.html\?ch=\d*)/,
 
-	baseURL: "http://new.comicvip.com/show/",
+	baseURL: "http://www.comicbus.com/online/",
 	
-	comicspageURL: "http://www.comicvip.com/html/",	
+	comicspageURL: "http://www.comicbus.com/html/",	
 
 	handleUrlHash:function(menuItems){
 		let params_str=window.location.hash;
@@ -44,13 +44,13 @@ let comics={
       	let catid=p_array[2];
       	let url=p_array[1];
 		let baseurl="";
-		if(catid==4 || catid==6 || catid==12 ||catid==22 ) baseurl="http://new.comicvip.com/show/cool-";
-		if(catid==1 || catid==17 || catid==19 || catid==21) baseurl="http://new.comicvip.com/show/cool-";
-		if(catid==2 || catid==5 || catid==7 || catid==9)  baseurl="http://new.comicvip.com/show/cool-";
-		if(catid==10 || catid==11 || catid==13 || catid==14) baseurl="http://new.comicvip.com/show/best-manga-";
-		if(catid==3 || catid==8 || catid==15 || catid==16 ||catid==18 ||catid==20)baseurl="http://new.comicvip.com/show/best-manga-";
+		if(catid==4 || catid==6 || catid==12 ||catid==22 ) baseurl="/online/Domain-";
+		if(catid==1 || catid==17 || catid==19 || catid==21) baseurl="/online/finance-";
+		if(catid==2 || catid==5 || catid==7 || catid==9)  baseurl="/online/insurance-";
+		if(catid==10 || catid==11 || catid==13 || catid==14) baseurl="/online/insurance-";
+			if(catid==3 || catid==8 || catid==15 || catid==16 ||catid==18 ||catid==20)baseurl="/online/finance-";
 		url=url.replace(".html","").replace("-",".html?ch=");
-		return baseurl+url;
+		return "http://www.comicbus.com"+baseurl+url;
 	},
 
 	getTitleName: function(doc){
@@ -69,7 +69,8 @@ let comics={
 	},
 
 	getImage: async function(index,url){
-	    let response = await fetch(this.baseURL+this.prefixURL+url);
+		console.log(this.baseURL+this.prefixURL+url);
+	  let response = await fetch(this.baseURL+this.prefixURL+url);
 		let rtxt = await response.text();
 		let doc = parser.parseFromString(rtxt,"text/html");
 		this.setImages(this.baseURL+this.prefixURL+url,index,doc);
@@ -99,6 +100,8 @@ let comics={
       for(let i=nl.length-3;i>=0;--i){
         let item={};
         item.payload=this.getChapterUrl(nl[i].getAttribute("onclick"));
+        item.text=nl[i].textContent;
+        console.log(item.payload);
         if((item.payload===this.baseURL+this.prefixURL+this.chapterNum)&&this.initIndex===-1){
           this.initIndex=nl.length-i-2;
           document.title=this.title+" "+item.text;
@@ -189,7 +192,7 @@ let comics={
 			    c = ss(cs, cc - f, f);
 			    ch = chs;
 			}
-			img[i]='http://img' + ss(c, 4, 2) + '.8comic.com/' + ss(c, 6, 1) + '/' + ti + '/' + ss(c, 0, 4) + '/' + nn(i+1) + '_' + ss(c, mm(i+1) + 10, 3, f) + '.jpg';
+			img[i]='http://img' + ss(c, 4, 2) + '.6comic.com:99/' + ss(c, 6, 1) + '/' + ti + '/' + ss(c, 0, 4) + '/' + nn(i+1) + '_' + ss(c, mm(i+1) + 10, 3, f) + '.jpg';
 		}
 		this.images=img;
 		this.appendImage(index);

@@ -28,39 +28,6 @@ switch (site){
 let hasAddedListener=false;
 let parser=new DOMParser();
 
-// let handler = function(details) {
-//   // console.log('handler');
-//   let isRefererSet = false,
-//     headers = details.requestHeaders,
-//     blockingResponse = {},
-//     setcookie = false,
-//     setreferer = false;
-//   for(let i=0 ; i < headers.length ; ++i){
-//     if(headers[i].name === "Referer"){
-//       headers[i].value = "http://www.manben.com/";
-//       setreferer=true;
-//     }else if(headers[i].name === "Cookie"){
-//       headers[i].value += ";isAdult=1";
-//       setcookie=true;
-//     }
-//   }
-//   if(!setreferer){
-//     headers.push({      
-//       name: "Referer",
-//       value: "http://www.manben.com/"
-//     }); 
-//   }
-//   if(!setcookie){
-//     headers.push({
-//       name: "Cookie",
-//       value: "isAdult=1"
-//     }); 
-//   }
-//   blockingResponse.requestHeaders = headers;
-//   return blockingResponse;
-// };
-
-// chrome.webRequest.onBeforeSendHeaders.addListener(handler, {urls: ["http://www.manben.com/*","http://tel.dm5.com/*","http://www.dm5.com/*"]},['requestHeaders', 'blocking']);
 
 let Main = React.createClass({
   
@@ -84,6 +51,7 @@ let Main = React.createClass({
 
   _getChapter: function(){    
     var creq=new XMLHttpRequest();
+
     creq.open("GET",Comics.indexURL,true);
     creq.responseType="document";
     creq.withCredentials = true;
@@ -93,6 +61,7 @@ let Main = React.createClass({
       this.iconUrl=Comics.getCoverImg(doc);
       var menuItems=Comics.getMenuItems(doc,this.markedItems);
       var initIndex=Comics.initIndex;
+      // console.log(Comics.initIndex);
       this.tmp_menuItems=menuItems;
       this.setState({
         menuItems:menuItems,
@@ -145,7 +114,7 @@ let Main = React.createClass({
   },
 
   _updateHash:function(url,type){
-    // console.log(url);
+    console.log(url);
     let chapterHash="chapter"+Comics.regex.exec(url)[1];
     let str=window.location.hash;
     str=str.replace(/chapter\/.*$/,chapterHash)+type;

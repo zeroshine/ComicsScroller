@@ -2,6 +2,7 @@ var Path=require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var webpack=require('webpack');
 module.exports={
+	devtool: 'source-map',
 	entry:{
 		app_min:'./src/app/app.jsx',
 		background:'./src/background.js',

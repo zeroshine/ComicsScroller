@@ -99,7 +99,7 @@ var Card=React.createClass({
 				this.siteurl="http://comic.sfacg.com";
 				break;
 			case 'dm5':
-				this.siteurl="http://www.manben.com";
+				this.siteurl="http://www.dm5.com";
 				break;
 			case 'comics8':
 				this.siteurl="http://www.8comic.com/";
@@ -188,6 +188,7 @@ var Card=React.createClass({
 	},
 	
 	_openSite:function(){
+		console.log('site click',this.siteurl);
 		chrome.tabs.create({url:this.siteurl});
 	},
 	

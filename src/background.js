@@ -1,14 +1,14 @@
 let Comics_sf=require('./app/comics_sf.js');
 let Comics_8=require('./app/comics_8.js');
 let Comics_dm5=require('./app/comics_dm5.js');
-
+console.log('background');
 let chapterfunhandler = function(details) {
   // console.log("chapterfunhandler"+details.url);
   // let isRefererSet = false;
     // headers = details.requestHeaders;
   details.requestHeaders.push({	    
     name: "Referer",
-    value: "http://www.manben.com/"
+    value: "http://www.dm5.com/"
   });
   return {requestHeaders:details.requestHeaders};
 };
@@ -28,11 +28,11 @@ let mhandler = function(details) {
 };
 
 chrome.webRequest.onBeforeSendHeaders.addListener(chapterfunhandler, 
-	{urls: ["http://www.manben.com/m*/chapterfun*"]},
+	{urls: ["http://www.dm5.com/m*/chapterfun*"]},
 	['requestHeaders', 'blocking']);
 
 chrome.webRequest.onBeforeSendHeaders.addListener(mhandler, 
-	{urls: ["http://www.manben.com/m*/"]},
+	{urls: ["http://www.dm5.com/m*/"]},
 	['requestHeaders', 'blocking']);
 
 chrome.notifications.onClicked.addListener(function(id){
@@ -110,8 +110,9 @@ chrome.runtime.onInstalled.addListener(function(){
 
 // chrome.tabs.onUpdated.addListener(redirectLocal);
 // chrome.webNavigation.onCommitted.addListener
+chrome.webNavigation.onCommitted.addListener
 chrome.webNavigation.onCommitted.addListener(function(details) {
-	// console.log(details.url,Comics_8.regex.test(details.url));
+	console.log(details.url,Comics_8.regex.test(details.url));
 	if(Comics_8.regex.test(details.url)){
 		console.log("8 comics fired");
 		let chapter=Comics_8.regex.exec(details.url)[1];
@@ -134,8 +135,7 @@ chrome.webNavigation.onCommitted.addListener(function(details) {
 		ga('send', 'event', "dm5 view");
 	}
 },{url:[
-	{urlMatches: "comicvip\.com/show/\w*"},
-		{urlMatches: "http://www\.manben\.com/m\d*"},
+	{urlMatches: "comicbus\.com/online/\w*"},
 		{urlMatches: "comic\.sfacg\.com\/HTML\/[^\/]+\/.+$"},
 		{urlMatches: "http://(tel||www)\.dm5\.com/m\d*"}
 		]
