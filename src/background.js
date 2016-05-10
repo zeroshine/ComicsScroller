@@ -27,6 +27,16 @@ let mhandler = function(details) {
   return {requestHeaders:details.requestHeaders};
 };
 
+
+let sfhandler = function(details) {
+  console.log('sfhandler');
+  details.requestHeaders.push({     
+    name: "Referer",
+    value: "http://comic.sfacg.com/HTML/"
+  });
+  return {requestHeaders:details.requestHeaders};
+} 
+
 chrome.webRequest.onBeforeSendHeaders.addListener(chapterfunhandler, 
 	{urls: ["http://www.dm5.com/m*/chapterfun*"]},
 	['requestHeaders', 'blocking']);
@@ -34,6 +44,10 @@ chrome.webRequest.onBeforeSendHeaders.addListener(chapterfunhandler,
 chrome.webRequest.onBeforeSendHeaders.addListener(mhandler, 
 	{urls: ["http://www.dm5.com/m*/"]},
 	['requestHeaders', 'blocking']);
+
+chrome.webRequest.onBeforeSendHeaders.addListener(sfhandler, 
+  {urls: ["http://*.sfacg.com/*"]},
+  ['requestHeaders', 'blocking']);
 
 chrome.notifications.onClicked.addListener(function(id){
 	chrome.tabs.create({url:id});

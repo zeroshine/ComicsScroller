@@ -3,9 +3,9 @@ let Echo=require('./echo');
 let Immutable=require('immutable');
 let parser= new DOMParser();
 let comics={
-	regex: /http\:\/\/www\.comicbus\.com\/online(\/.*-\d*.html\?ch=\d*)/,
+	regex: /http\:\/\/v\.comicbus\.com\/online(\/.*-\d*.html\?ch=\d*)/,
 
-	baseURL: "http://www.comicbus.com/online/",
+	baseURL: "http://v.comicbus.com/online/",
 	
 	comicspageURL: "http://www.comicbus.com/html/",	
 
@@ -50,7 +50,7 @@ let comics={
 		if(catid==10 || catid==11 || catid==13 || catid==14) baseurl="/online/insurance-";
 			if(catid==3 || catid==8 || catid==15 || catid==16 ||catid==18 ||catid==20)baseurl="/online/finance-";
 		url=url.replace(".html","").replace("-",".html?ch=");
-		return "http://www.comicbus.com"+baseurl+url;
+		return "http://v.comicbus.com"+baseurl+url;
 	},
 
 	getTitleName: function(doc){

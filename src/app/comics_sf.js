@@ -109,7 +109,7 @@ let comics={
 		console.log(response);
 		eval(response);
 		let name = "picHost=";
-		let picHost= hosts[0];
+		let picHost= hosts[1];
     	let img =[]; 
 		this.pageMax=picCount;
 		for(let i=0;i<this.pageMax;i++){
