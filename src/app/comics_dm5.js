@@ -30,17 +30,17 @@ let comics={
 	},	
 
 	getChapter:function(doc){
-		let nl=doc.querySelectorAll(".nr6.lan2>li>.tg");
+		let nl=doc.querySelectorAll("div#l2_1 > a");
 		return nl;
 	},
 
 	getTitleName:function(doc){
-		this.title=doc.querySelector(".inbt_title_h2").textContent;
+		this.title=doc.querySelector("div.topToolBar > span.center > a:last-child").textContent;
 		return this.title;
 	},
 
 	getCoverImg:function(doc){
-		this.iconUrl=doc.querySelector(".innr91>img").src;
+		this.iconUrl='#';//doc.querySelector(".innr91>img").src;
 		return this.iconUrl;
 	},
 
@@ -49,7 +49,7 @@ let comics={
 		let response = await fetch(this.chapterURL);
     	let rtxt = await response.text();
     	let doc=parser.parseFromString(rtxt,"text/html");
-		this.indexURL=this.baseURL+doc.querySelector("#index_right > div.lan_kk2 > div:nth-child(1) > dl > dt.red_lj > a").getAttribute('href');
+		this.indexURL=this.baseURL+doc.querySelector("div.topToolBar > span.center > a:last-child").getAttribute('href');
 		return this.indexURL;
 	},
 
@@ -105,7 +105,7 @@ let comics={
 	},
 
 	setImages:function(url,index,doc){
-		let script1=/<script type\=\"text\/javascript\">(.*)reseturl/.exec(doc.head.innerHTML)[1];
+		let script1=/<script type\=\"text\/javascript\">(.*)reseturl/.exec(doc.body.innerHTML)[1];
 		eval(script1);
 		this.pageMax=DM5_IMAGE_COUNT;
 		let img=[];
