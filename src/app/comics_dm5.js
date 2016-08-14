@@ -39,10 +39,18 @@ let comics={
 		return this.title;
 	},
 
-	getCoverImg:function(doc){
-		this.iconUrl='#';//doc.querySelector(".innr91>img").src;
-		return this.iconUrl;
+    getComicUrl:function(doc){
+        this.comicUrl = doc.querySelector("div.topToolBar > span.center > a:nth-last-child(-n+2)").href;
+        return this.comicUrl;
 	},
+
+    getCoverImg:async function() {
+        let response = await fetch(this.comicUrl);
+        let rtxt = await response.text();
+        let doc = parser.parseFromString(rtxt,"text/html");
+        this.iconUrl = doc.querySelector(".innr91>img").src;
+        return this.iconUrl;
+    },
 
 	getIndexURL:async function(){
 		// console.log(doc);

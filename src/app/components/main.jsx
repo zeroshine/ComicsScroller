@@ -58,24 +58,27 @@ let Main = React.createClass({
     creq.onload=function(){
       var doc=creq.response;
       this.title=Comics.getTitleName(doc);
-      this.iconUrl=Comics.getCoverImg(doc);
+      this.comicUrl=Comics.getComicUrl(doc);
       var menuItems=Comics.getMenuItems(doc,this.markedItems);
       var initIndex=Comics.initIndex;
       // console.log(Comics.initIndex);
       this.tmp_menuItems=menuItems;
-      this.setState({
-        menuItems:menuItems,
-        selectedIndex:initIndex,
-        chapter:menuItems.get(initIndex).get("text"),
-        rightDisable:initIndex===0,
-        leftDisable:initIndex===menuItems.size-1,
-        starDisable:false,
-        comicname:this.title
-      },
-      function(){
-        this._saveStoreReaded();
-      }.bind(this));
       this.lastIndex=initIndex;
+      Comics.getCoverImg(doc).then(function(url) {
+          this.iconUrl=url;
+          this.setState({
+            menuItems:menuItems,
+            selectedIndex:initIndex,
+            chapter:menuItems.get(initIndex).get("text"),
+            rightDisable:initIndex===0,
+            leftDisable:initIndex===menuItems.size-1,
+            starDisable:false,
+            comicname:this.title
+          },
+          function(){
+            this._saveStoreReaded();
+          }.bind(this));
+      }.bind(this));
     }.bind(this);
     creq.send();
   },
