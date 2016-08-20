@@ -37,7 +37,6 @@ let Main = React.createClass({
     // console.log(Comics);
     Comics.handleUrlHash(this.state.menuItems);
     this.site=Comics.site;
-    this.indexURL= await Comics.getIndexURL();
     this._getStore();
 
     if(!hasAddedListener){

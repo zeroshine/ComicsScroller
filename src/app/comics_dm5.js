@@ -11,19 +11,19 @@ let comics={
 	handleUrlHash: function(menuItems){
 		let params_str=window.location.hash;
     	this.site= /site\/(.*)\/chapter/.exec(params_str)[1];
-    	this.chapterURL=this.baseURL+(/chapter(\/.*\/)/.exec(params_str)[1]);
+    	this.indexURL=this.baseURL+(/chapter(\/.*\/)/.exec(params_str)[1]);
 
     	if(!(/#$/.test(params_str))){
 	      document.getElementById("comics_panel").innerHTML="";
 	      let index=-1;
 	      for(let i=0;i<menuItems.size;++i){
-	        if(menuItems.get(i).get('payload')===this.chapterURL){
+	        if(menuItems.get(i).get('payload')===this.indexURL){
 	          index=i;
 	          this.lastIndex=index;
 	          break;
 	        }
 	      }
-	      this.getImage(index,this.chapterURL);
+	      this.getImage(index, this.indexURL);
 	    }else{
 	      window.history.replaceState('',document.title,"#/site/dm5/chapter/"+(/chapter\/(.*\/)/.exec(params_str)[1]));
 	    }  
@@ -35,31 +35,22 @@ let comics={
 	},
 
 	getTitleName:function(doc){
-		this.title=doc.querySelector("div.topToolBar > span.center > a:last-child").textContent;
+		this.title=doc.querySelector("div.topToolBar > span.center > a:nth-last-child(-n+2)").textContent;
 		return this.title;
 	},
 
     getComicUrl:function(doc){
-        this.comicUrl = doc.querySelector("div.topToolBar > span.center > a:nth-last-child(-n+2)").href;
-        return this.comicUrl;
+        this.chapterURL= doc.querySelector("div.topToolBar > span.center > a:nth-last-child(-n+2)").href;
+        return this.chapterURL;
 	},
 
     getCoverImg:async function() {
-        let response = await fetch(this.comicUrl);
+        let response = await fetch(this.chapterURL);
         let rtxt = await response.text();
         let doc = parser.parseFromString(rtxt,"text/html");
         this.iconUrl = doc.querySelector(".innr91>img").src;
         return this.iconUrl;
     },
-
-	getIndexURL:async function(){
-		// console.log(doc);
-		let response = await fetch(this.chapterURL);
-    	let rtxt = await response.text();
-    	let doc=parser.parseFromString(rtxt,"text/html");
-		this.indexURL=this.baseURL+doc.querySelector("div.topToolBar > span.center > a:last-child").getAttribute('href');
-		return this.indexURL;
-	},
 
 	// markedItems: Immutable.Set(),
 
