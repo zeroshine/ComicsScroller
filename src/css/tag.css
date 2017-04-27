@@ -1,0 +1,19 @@
+body {
+  font-family: 'Noto Sans', Arial,Helvetica, sans-serif;
+  color:#616161;
+  overflow-y: scroll;
+  margin: 0;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+a:link{
+  text-decoration:none !important;
+  color:inherit;
+}
+
+a:visited{
+  color:inherit;
+}

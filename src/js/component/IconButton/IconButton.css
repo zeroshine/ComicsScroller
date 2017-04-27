@@ -1,0 +1,6 @@
+.IconButton {
+  position: relative;
+  border-radius: 50%;
+  padding: 8px;
+  overflow: hidden;
+}

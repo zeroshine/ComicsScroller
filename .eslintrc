@@ -1,0 +1,32 @@
+{
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "globals": {
+    "chrome": true,
+    "ga": true
+  },
+  "extends": "airbnb",
+  "plugins": [
+    "flowtype"
+  ],
+  "rules": {
+    "prefer-arrow-callback": "off",
+    "arrow-body-style": "off",
+    "no-useless-escape": "off",
+    "react/prefer-stateless-function": "off",
+    "react/sort-comp": "off",
+    "react/require-default-props": "off",
+    "flowtype/define-flow-type": 1,
+    "jsx-a11y/no-static-element-interactions": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.config.dev.js"
+      }
+    }
+  }
+}

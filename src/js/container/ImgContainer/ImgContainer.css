@@ -1,0 +1,10 @@
+@value img-background from 'css/var';
+.ImgContainer {
+  background: img-background;
+  min-height: 100vh;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

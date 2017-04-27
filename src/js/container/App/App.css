@@ -1,0 +1,47 @@
+@value header-background, header-color, img-background from 'css/var';
+
+.Header {
+  background: header-background;
+  color: header-color;
+  font-size: 20px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding:0 24px;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 900;
+  will-change: scroll-position;
+  /*transform: translateZ(0);*/
+}
+
+.icon {
+  fill: header-color;
+  cursor: pointer;
+}
+
+.icon_deactive {
+  fill: grey;
+}
+
+.icon_subscribe {
+  fill: yellow;
+  cursor: pointer;
+}
+
+.leftContainer {
+  display: flex;
+  align-items: center;
+  > span {
+    margin-right: 10px; 
+  }
+}
+
+.rigthtContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 36px; 
+}

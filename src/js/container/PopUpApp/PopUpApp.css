@@ -1,0 +1,151 @@
+@value deep-orange-500, grey-300 from 'css/color';
+
+.headerContainer {
+  display: flex;
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+}
+
+.button {
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+}
+
+.rippleContainer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+}
+
+.menu {
+  top: 48px;
+  right: 0;
+  width: 180px;
+  position: absolute;
+  transition: transform 160ms ease-in-out, opacity 160ms ease-in-out;
+  z-index: 200;
+  transform-origin: 50% top 0px;
+  background: #fff;
+  composes: paper-shadow-1 from 'css/var';
+  > div {
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    font-size: 16px;
+    &:hover {
+      background: grey-300;
+    }
+  }
+}
+
+.menuOn {
+  composes: menu;
+  transform: scale(1, 1);
+  opacity: 1;
+}
+
+.menuOff {
+  composes: menu;
+  transform: scale(1, 0);
+  opacity: 0;
+}
+
+.header {
+  height: 48px;
+  width: calc(100vw - 32px);
+  line-height: 48px;
+  display: flex;
+  position: relative;
+  z-index: 100;
+}
+
+.tab {
+  position: relative;
+  overflow: hidden;
+  width: calc((100vw - 32px) / 3);
+  text-align: center;
+  font-size: 18px;
+  cursor: pointer
+}
+
+.tabActive {
+  composes: tab;
+  color: deep-orange-500;
+}
+
+.shiftMarker {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  height: 4px;
+  width: calc((100vw - 32px)/ 3);
+  background: deep-orange-500;
+  transition: transform 330ms ease-in-out;
+}
+
+.shiftMarker_left {
+  composes: shiftMarker;
+  transform: translateX(0);
+}
+
+.shiftMarker_mid {
+  composes: shiftMarker;
+  transform: translateX(100%);
+}
+
+.shiftMarker_right {
+  composes: shiftMarker;
+  transform: translateX(200%);
+}
+
+.CardContainer {
+  position: absolute;
+  top:48px;
+  height: calc(100vh - 48px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  transition: 330ms ease-in-out transform;
+  &::-webkit-scrollbar {
+    background: transparent;
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(117,117,117 ,0.5);
+    border-radius: 3px;
+  }
+  > div {
+    width: 500px;
+    flex: 0 0 auto;
+  }
+  &_left {
+    composes: CardContainer;
+    transform: translateX(0);
+    &_shift {
+      composes: CardContainer;
+      transform: translate(0, -170px);
+    }
+  }
+  &_mid {
+    composes: CardContainer;
+    transform: translateX(-500px);
+    &_shift {
+      composes: CardContainer;
+      transform: translate(-500px, -170px);
+    }
+  }
+  &_right {
+    composes: CardContainer;
+    transform: translateX(-1000px);
+    &_shift {
+      composes: CardContainer;
+      transform: translate(-1000px, -170px);
+    }
+  }
+}

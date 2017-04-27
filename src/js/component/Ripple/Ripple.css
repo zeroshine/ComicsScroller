@@ -1,0 +1,22 @@
+.ripple {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  border-radius: 50%;
+  z-index: 999;
+  background: gray;
+  opacity: 0.5;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+}
+
+.rippleActive {
+  composes: ripple;
+  transition: transform 350ms ease-out;
+}
+
+.rippleDeactive {
+  composes: ripple;
+  opacity: 0;
+  transition:transform 350ms ease-out, opacity 350ms ease-out;
+}

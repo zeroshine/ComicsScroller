@@ -1,0 +1,20 @@
+[ignore]
+./bin
+./Comicscroller
+./node_moduless
+
+[include]
+./src/js/**/*.jsx
+./src/js/**/*.js
+
+[libs]
+
+[options]
+module.name_mapper='^imgs\(.*\)$' -> 'empty/object'
+module.name_mapper='^css\(.*\)$' -> 'empty/object'
+module.name_mapper='^cmp\(.*\)$' -> '<PROJECT_ROOT>/src/js/component\1'
+module.file_ext=.js
+module.file_ext=.json
+module.file_ext=.jsx
+module.file_ext=.css
+module.file_ext=.svg

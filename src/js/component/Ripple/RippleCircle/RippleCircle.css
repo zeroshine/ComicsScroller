@@ -1,0 +1,21 @@
+.RippleCircle {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  border-radius: 50%;
+  z-index: 1000;
+  background: gray;
+  opacity: 0.3;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  transition: transform 350ms ease-in-out, opacity 350ms ease-in-out;
+}
+
+.RippleCircleActive {
+  composes: RippleCircle;
+}
+
+.RippleCircleOpacity {
+  composes: RippleCircle;
+  opacity: 0;
+}

@@ -1,0 +1,96 @@
+@value header-background, header-color, readed-color from 'css/var';
+
+.ChapterList {
+  width: 50vw;
+  height: 90vh;
+  min-width: 900px;
+  background: white;
+  composes: paper-shadow-2 from 'css/var';
+  transition: transform 300ms ease-in-out;
+  transform: scale(0,0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  will-change: scroll-position;
+}
+
+.ChapterListActive {
+  composes: ChapterList;
+  transform: scale(1,1);
+}
+
+.modal {
+  position: fixed;
+  will-change: scroll-position;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  right: 0;
+  background: rgba(0,0,0,0.4);
+  height: 100vh;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+  pointer-events: none;
+}
+
+.modalActive {
+  composes: modal;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.header {
+  background: header-background;
+  color: header-color;
+  height: 48px;
+  width: 100%;
+  font-size: 24px;
+  text-align: center;
+  line-height: 48px;
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 20px 0;
+  height: calc(90vh - 48px);
+  overflow-y: auto;
+  > div {
+    width: 200px;
+    font-size: 16px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    flex: 1 0 auto;
+    max-width: 220px;
+    border: 1px solid;
+    border-radius: 5px;
+    margin: 4px;
+  }
+}
+
+.chapter {
+  cursor: pointer;
+  color: cadetblue;
+  overflow: hidden;
+  &:hover {
+    background: cadetblue;
+    color: #fff;
+  }
+}
+
+.chapter_readed {
+  cursor: pointer;
+  color: readed-color;
+  overflow: hidden;
+  &:hover {
+    background: readed-color;
+    color: #fff;
+  }
+}

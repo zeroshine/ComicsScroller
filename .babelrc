@@ -1,0 +1,76 @@
+{
+  "env": {
+    "development": {
+      "presets": [
+        "flow",
+        [
+         "env",
+          {
+            "target": {
+              "chrome": "56"
+            }, 
+            "loose": true,
+            "modules": false
+          }
+        ],
+        "react",
+        "stage-2",
+      ],
+      "plugins": [
+        "transform-runtime",
+        "react-hot-loader/babel",
+        ["transform-es2015-modules-commonjs", {
+            "strict" : false
+        }]
+      ]
+    },
+    "production": {
+      "presets": [
+        "flow",
+        [
+          "env",
+          {
+            "target": {
+              "chrome": "56"
+            }, 
+            "loose": true,
+            "modules": false
+          }
+        ],
+        "react",
+        "stage-2",
+        "react-optimize"
+      ],
+      "plugins": [
+        "lodash",
+        "transform-runtime",
+        ["transform-es2015-modules-commonjs", {
+            "strict" : false
+        }]
+      ]
+    },
+    "test": {
+      "presets": [
+        "flow",
+        [
+         "env",
+          {
+            "target": {
+              "chrome": "56"
+            }, 
+            "loose": true,
+            "modules": false
+          }
+        ],
+        "react",
+        "stage-2"
+      ],
+      "plugins": [
+        "transform-runtime",
+        ["transform-es2015-modules-commonjs", {
+            "strict" : false
+        }]
+      ]
+    }
+  }
+}

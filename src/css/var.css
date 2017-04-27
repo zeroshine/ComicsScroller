@@ -1,0 +1,27 @@
+@value grey-800, grey-300, grey-900, grey-400 from './color.css';
+
+@value readed-color: grey-400;
+@value header-color: grey-300;
+@value header-background: grey-800;
+@value img-background: grey-900;
+@value loading-color: grey-300;
+
+.paper-shadow-1 {
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+}
+
+.paper-shadow-2 {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.23);
+}
+
+.paper-shadow-3 {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.19), 0 6px 10px rgba(0, 0, 0, 0.23);
+}
+
+.paper-shadow-4 {
+  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.25), 0 10px 18px rgba(0, 0, 0, 0.22);
+}
+
+.paper-shadow-5 {
+  box-shadow: 0 19px 60px rgba(0, 0, 0, 0.30), 0 15px 20px rgba(0, 0, 0, 0.22);
+}

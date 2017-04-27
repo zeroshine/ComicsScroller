@@ -1,0 +1,48 @@
+@value loading-color from 'css/var';
+
+.Loading {
+  display:flex;
+  justify-content:center;
+  width:100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  will-change: scroll-position;
+  > svg {
+    width:60px;
+    height:60px;
+    animation: circular-bar-rotate 2s linear 0s infinite;
+    > circle {
+      transition: stroke-dasharray 0.16s ease-in-out 0s; 
+      animation: circular-bar-dash 1.5s ease-in-out 0s infinite;
+      fill: none;
+      stroke: loading-color;
+      stroke-dasharray: 1.25 * 1, 1.25 * 200;
+      stroke-dashoffset: 0;
+      stroke-linecap: round;
+      stroke-miterlimit: 20;
+      stroke-width: 4;
+    }
+  }
+}
+
+@keyframes circular-bar-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes circular-bar-dash {
+  0% {
+    stroke-dasharray: 1.25, 250;
+    stroke-dashoffset: 1.25 0;
+  }
+  50% {
+    stroke-dasharray: 111.25, 250;
+    stroke-dashoffset: -43.75;
+  }
+  100% {
+    stroke-dasharray: 111.25, 250;
+    stroke-dashoffset: -155;
+  }
+}

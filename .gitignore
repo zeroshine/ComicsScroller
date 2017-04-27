@@ -1,0 +1,4 @@
+node_modules/*
+ComicsScroller/
+npm-debug.log
+.DS_Store

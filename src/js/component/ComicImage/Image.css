@@ -1,0 +1,40 @@
+.ComicImageNatural {
+  border: 2px solid;
+  margin: 20px 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  > img {
+    height: 100%;
+  }
+  > div {
+    font-size: 40px;
+    color: #FFF;
+    text-align: center;
+  }
+}
+
+.ComicImage {
+  composes: ComicImageNatural;
+  height: 1400px;
+}
+
+.ComicImageInit {
+  composes: ComicImage;
+  width: 980px;
+}
+
+.ComicImageWide {
+  composes: ComicImage;
+  max-height: calc(100vh - 68px);
+}
+
+.ComicImageEnd {
+  height:72px;
+  margin: 20px 0;
+  line-height: 72px;
+  font-size: 36px;
+  text-align: center;
+  color: #FFF;
+}

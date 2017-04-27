@@ -1,0 +1,89 @@
+@value deep-orange-500 from 'css/color';
+
+.ComicCard {
+  composes: paper-shadow-1 from 'css/var';
+  height: 180px;
+  margin: 8px; 
+  background: #fff;
+  display: flex;
+  transition: none;
+  position: relative;
+  opacity: 1;
+  
+  > img {
+    height: 180px;
+    min-width: 120px;
+    flex: 0 0 auto;
+  }
+}
+
+.ComicCard_move {
+  composes: ComicCard;
+  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+  transform: translateX(calc(-100% - 8px)) scale(0);
+  opacity: 0;
+}
+
+.ComicCard_shift {
+  composes: ComicCard;
+  transition: transform 300ms ease-in-out;
+  transform: translateY(calc(-100% - 8px));
+}
+
+.trash {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  cursor: pointer;
+  > svg {
+    transition: transform 300ms ease-in-out;
+    transform-origin: left top;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    fill: #616161;
+  }
+  &:hover > svg:nth-child(1) {
+    transform: rotate(-20deg);
+  }
+}
+
+.trashBody {
+  
+}
+
+.trashTop {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  fill: gray;
+}
+
+.infor {
+  padding: 0 16px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  > div {
+    font-size: 14px;
+    line-height: 24px;
+  }
+  > h1 {
+    color: deep-orange-500;
+    cursor: pointer;
+    margin-right: 24px;
+    font-size:18px;
+  }
+}
+
+.itemContainer {
+  > div {
+    > span {
+      margin-right: 8px;
+      &:last-child {
+        cursor: pointer;
+        color: deep-orange-500;
+      }
+    }
+  }
+}
