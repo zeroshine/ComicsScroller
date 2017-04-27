@@ -16,6 +16,10 @@ function stopImmediatePropagation(e) {
   e.nativeEvent.stopImmediatePropagation();
 }
 
+function preventDefault(e) {
+  e.preventDefault();
+}
+
 function getShiftMarkerClass(
   selectedType: 'update' | 'subscribe' | 'history',
 ): string {
@@ -98,9 +102,9 @@ const MenuButton = ({
       {children}
     </div>
     <div className={showMenu ? cn.menuOn : cn.menuOff}>
-      <div onClick={downloadHandler}>Download Config</div>
-      <div onClick={uploadHandler}>Upload Config</div>
-      <div onClick={resetHandler}>Reset Config</div>
+      <div onMouseDown={preventDefault} onClick={downloadHandler}>Download Config</div>
+      <div onMouseDown={preventDefault} onClick={uploadHandler}>Upload Config</div>
+      <div onMouseDown={preventDefault} onClick={resetHandler}>Reset Config</div>
       <a
         style={{ display: 'none' }}
         ref={aRefHandler}
@@ -187,7 +191,7 @@ class PopUpApp extends Component {
       this.fileInput.click();
     }
   };
-  w;
+  
   fileOnChangeHandler = () => {
     const fr = new FileReader();
     fr.onload = (e) => {

@@ -18,6 +18,7 @@ const ripple = (WrapComponent: Class<React.Component<*, *, *>> | Function) => {
     counter = 0;
 
     onMouseDownHandler = (e: any) => {
+      if (e.defaultPrevented) return;
       const x = e.pageX - window.scrollX || window.pageXOffset;
       const y = e.pageY - window.scrollY || window.pageYOffset;
       const { left, top, height, width } = e.currentTarget.getBoundingClientRect();
