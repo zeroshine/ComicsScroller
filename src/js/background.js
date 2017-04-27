@@ -135,12 +135,18 @@ function comicsQuery() {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.get((item) => {
     const { version } = chrome.runtime.getManifest();
-    if (version < '4.0.0') {
+    if (!item.version) {
       chrome.storage.local.clear();
       chrome.storage.local.set(initObject);
     } else {
-      chrome.storage.local.set({ ...item, ...initObject });
+      chrome.storage.local.set({ ...item, ...initObject }); 
     }
+    chrome.notifications.create('Comics Scroller Update', {
+      type: 'basic',
+      iconUrl: './imgs/comics-128.png',
+      title: 'Comics Scroller Update',
+      message: `Comics Scroller ${version} 更新`,
+    });
   });
 });
 

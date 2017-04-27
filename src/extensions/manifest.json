@@ -1,13 +1,13 @@
 {
   "name": "Comics Scroller",
-  "version": "3.0.4.3",
+  "version": "4.0.0",
   "manifest_version": 2,
   "description": "一個支援動漫屋、無限動漫、sfacg，給你更好的漫畫閱讀體驗的 chrome extension ",
   "icons": {
-    "16":"imgs/comics-16.png",
-    "48":"imgs/comics-48.png",
-    "64":"imgs/comics-64.png",
-    "128":"imgs/comics-128.png"
+    "16": "imgs/comics-16.png",
+    "48": "imgs/comics-48.png",
+    "64": "imgs/comics-64.png",
+    "128": "imgs/comics-128.png"
   },
   "browser_action": {
     "default_icon": {
@@ -38,7 +38,7 @@
     "http://localhost:8000/*"
   ],
   "content_security_policy": "img-src 'self' data: * ; script-src 'self' 'unsafe-eval' https://*.google-analytics.com https://ajax.googleapis.com http://localhost:8000; object-src 'self' ; ",
-  "web_accessible_resources":[
+  "web_accessible_resources": [
     "js/*.js",
     "css/*.css"
   ]
