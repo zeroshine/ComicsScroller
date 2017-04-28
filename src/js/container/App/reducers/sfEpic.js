@@ -99,7 +99,7 @@ export function fetchChapterPage$(url: string) {
       '.serialise_list.Blue_link2 > li > a',
     );
     const title = response.querySelector(
-      'body > table:nth-child(8) > tbody > tr > td:nth-child(1) > table:nth-child(2) > tbody > tr > td > h1 > b',
+      'body > table > tbody > tr > td:nth-child(1) > table:nth-child(2) > tbody > tr > td > h1 > b',
     ).textContent;
     const coverURL = response.querySelector('.comic_cover > img').src;
     const chapterList = map(chapterNode, n =>

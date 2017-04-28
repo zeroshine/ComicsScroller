@@ -150,7 +150,7 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.webNavigation.onCommitted.addListener((details) => {
+chrome.webNavigation.onBeforeNavigate.addListener((details) => {
   if (comicbusRegex.test(details.url)) {
     console.log('comicbus fired');
     const chapter = comicbusRegex.exec(details.url)[2];
@@ -165,7 +165,7 @@ chrome.webNavigation.onCommitted.addListener((details) => {
     console.log('dm5 fired');
     let chapter = '';
     chapter = dm5Regex.exec(details.url)[2];
-    chrome.tabs.update({ url: `${chrome.extension.getURL('app.html')}?site=dm5&chapter=${chapter}` });
+    chrome.tabs.update(details.tabId, { url: `${chrome.extension.getURL('app.html')}?site=dm5&chapter=${chapter}` });
     ga('send', 'event', 'dm5 view');
   }
 }, {

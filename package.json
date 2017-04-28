@@ -11,7 +11,8 @@
     "compile:background": "webpack --config webpack.config.bg.js",
     "copy:prod": "cp -r ./src/extensions/* ./ComicsScroller/ && rm -rf ./ComicsScroller/app_dev.html ./ComicsScroller/popup_dev.html",
     "set:prod": "npm run clean && npm run mkdir && npm run copy:prod",
-    "product": "npm run set:prod && npm run compile:background && BABEL_ENV=production webpack --config webpack.config.prod.js",
+    "product": "npm run set:prod && NODE_ENV=production npm run compile:background && BABEL_ENV=production webpack --config webpack.config.prod.js",
+    "zip": "rm -rf *.zip && zip -r ComicsScroller.zip ./ComicsScroller",
     "test": "jest --coverage"
   },
   "jest": {

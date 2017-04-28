@@ -1,30 +1,33 @@
 var path = require('path');
 var webpack = require('webpack');
+const BabiliPlugin = require('babili-webpack-plugin');
 
 module.exports = {
-  entry: [
-    './src/js/background.js',
-  ],
+  entry: ['./src/js/background.js'],
   output: {
     path: path.join(__dirname, 'ComicsScroller/js'),
     filename: 'background.js',
   },
+  plugins: process.env.NODE_ENV === 'production' ? [new BabiliPlugin({})] : [],
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      loader: 'babel-loader?cacheDirectory',
-      include: path.join(__dirname, 'src'),
-      exclude: path.join(__dirname, 'node_modules')
-    },{
-      test: /\.json$/,
-      loader: 'json'
-    }]
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader?cacheDirectory',
+        include: path.join(__dirname, 'src'),
+        exclude: path.join(__dirname, 'node_modules'),
+      },
+      {
+        test: /\.json$/,
+        loader: 'json',
+      },
+    ],
   },
   resolve: {
-    alias:{
+    alias: {
       css: path.join(__dirname, 'src/css'),
-      imgs: path.join(__dirname, 'src/imgs')
+      imgs: path.join(__dirname, 'src/imgs'),
     },
-    extensions: ['.js', '.jsx', '.json', '.css']
-  }
+    extensions: ['.js', '.jsx', '.json', '.css'],
+  },
 };
