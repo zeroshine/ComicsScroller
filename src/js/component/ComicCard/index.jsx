@@ -72,7 +72,7 @@ class ComicCard extends Component {
   };
 
   removeHandler = () => {
-    chrome.storage.local.get((store) => {
+    chrome.storage.local.get(store => {
       let newStore = {};
       if (this.props.category === 'history') {
         newStore = {
@@ -112,7 +112,7 @@ class ComicCard extends Component {
           ),
         };
       }
-      chrome.storage.local.set(newStore, (err) => {
+      chrome.storage.local.set(newStore, err => {
         if (!err) {
           chrome.browserAction.setBadgeText({
             text: `${newStore.update.length === 0 ? '' : newStore.update.length}`,

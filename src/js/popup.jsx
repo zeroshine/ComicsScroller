@@ -15,7 +15,7 @@ render(
       <App />
     </Provider>
   </AppContainer>,
-  document.getElementById('app')
+  document.getElementById('app'),
 );
 
 if (module.hot) {
@@ -23,10 +23,10 @@ if (module.hot) {
     render(
       <AppContainer>
         <Provider store={store}>
-          <App />         
+          <App />
         </Provider>
       </AppContainer>,
-      document.getElementById('app')
+      document.getElementById('app'),
     );
   });
 }

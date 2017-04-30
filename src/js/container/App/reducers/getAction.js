@@ -110,12 +110,11 @@ function getEpic(site) {
   }
 }
 
-const _site = (/site=(.*)&/.test(document.URL)) ? /site=(.*)&/.exec(document.URL)[1] : ''; //eslint-disable-line
+const _site = /site=(.*)&/.test(document.URL)
+  ? /site=(.*)&/.exec(document.URL)[1]
+  : ''; //eslint-disable-line
 
-export const {
-  site,
-  baseURL,
-} = getInfor(_site);
+export const { site, baseURL } = getInfor(_site);
 
 export const {
   fetchChapter,

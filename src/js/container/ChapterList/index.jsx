@@ -32,11 +32,11 @@ class ChapterList extends Component {
     this.props.showChapterListHandler();
   };
 
-  refHandler = (node) => {
+  refHandler = node => {
     this.node = node;
   };
 
-  chapterClickHandler = (e) => {
+  chapterClickHandler = e => {
     if (e.target.matches(`.${cn.content} > div`)) {
       const index = parseInt(e.target.dataset.index, 10);
       this.props.stopScroll();
@@ -51,21 +51,18 @@ class ChapterList extends Component {
   render() {
     return (
       <div
-        className={(this.props.show) ? cn.modalActive : cn.modal}
-        onClick={(this.props.show) ? this.onClickHandler : undefined}
+        className={this.props.show ? cn.modalActive : cn.modal}
+        onClick={this.props.show ? this.onClickHandler : undefined}
       >
         <div
-          className={(this.props.show) ? cn.ChapterListActive : cn.ChapterList}
+          className={this.props.show ? cn.ChapterListActive : cn.ChapterList}
           ref={this.refHandler}
         >
           <div className={cn.header}>章節</div>
-          <div
-            className={cn.content}
-            onClick={this.chapterClickHandler}
-          >
+          <div className={cn.content} onClick={this.chapterClickHandler}>
             {map(this.props.chapterList, (item, i) => (
               <div
-                className={(item.readed) ? cn.chapter_readed : cn.chapter}
+                className={item.readed ? cn.chapter_readed : cn.chapter}
                 key={i}
                 data-chapter={item.chapter}
                 data-index={i}
@@ -83,20 +80,18 @@ class ChapterList extends Component {
 function mapStateToProps(state) {
   const { readedChapters, chapterList, chapters } = state.comics;
   return {
-    chapterList: map(chapterList, item =>
-     ({
-       ...chapters[item],
-       readed: !!(readedChapters[item]),
-     })),
+    chapterList: map(chapterList, item => ({
+      ...chapters[item],
+      readed: !!readedChapters[item],
+    })),
   };
 }
 
-export default connect(
-  mapStateToProps, {
-    stopScroll,
-    resetImg,
-    updateReaded,
-    updateRenderIndex,
-    updateChapterLatestIndex,
-    fetchImgList,
-  })(ChapterList);
+export default connect(mapStateToProps, {
+  stopScroll,
+  resetImg,
+  updateReaded,
+  updateRenderIndex,
+  updateChapterLatestIndex,
+  fetchImgList,
+})(ChapterList);

@@ -53,7 +53,7 @@ class RippleCircle extends PureComponent {
   render() {
     const { left, top, radius } = this.props;
     const { active, opacity } = this.state;
-    const scale = (active) ? 1 : 0;
+    const scale = active ? 1 : 0;
     const style = {
       transform: `translate(${left}px,${top}px) scale(${scale}, ${scale})`,
       width: radius * 2,

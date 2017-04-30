@@ -18,11 +18,7 @@ import {
   updateChapterLatestIndex,
   updateSubscribe,
 } from './reducers/comics';
-import {
-  fetchImgList,
-  fetchChapter,
-  updateReaded,
-} from './reducers/getAction';
+import { fetchImgList, fetchChapter, updateReaded } from './reducers/getAction';
 import { stopScroll } from './reducers/scrollEpic';
 import { startResize } from './reducers/resizeEpic';
 
@@ -62,20 +58,25 @@ class App extends Component {
   componentDidMount() {
     this.props.startResize();
     chrome.runtime.onMessage.addListener(() => {
-      chrome.storage.local.get((item) => {
+      chrome.storage.local.get(item => {
         const { subscribe, site, comicsID } = this.props;
         if (!item[this.props.site][comicsID]) {
-          chrome.tabs.getCurrent((tab) => {
+          chrome.tabs.getCurrent(tab => {
             chrome.tabs.remove(tab.id);
           });
         }
-        if (!some(item.subscribe, citem => (citem.site === site && citem.comicsID === comicsID))
-            && subscribe) {
+        if (
+          !some(
+            item.subscribe,
+            citem => citem.site === site && citem.comicsID === comicsID,
+          ) &&
+          subscribe
+        ) {
           this.props.updateSubscribe(false);
         }
       });
     });
-    const chapter = (window.location.search.split('&chapter='))[1];
+    const chapter = window.location.search.split('&chapter=')[1];
     this.props.fetchChapter(chapter);
   }
 
@@ -112,16 +113,25 @@ class App extends Component {
 
   subscribeHandler = () => {
     const { chapter, site, comicsID } = this.props;
-    chrome.storage.local.get((item) => {
+    chrome.storage.local.get(item => {
       if (item.subscribe) {
         let newItem = {};
-        if (some(item.subscribe, citem => (citem.site === site && citem.comicsID === comicsID))) {
+        if (
+          some(
+            item.subscribe,
+            citem => citem.site === site && citem.comicsID === comicsID,
+          )
+        ) {
           newItem = {
             ...item,
-            subscribe: filter(item.subscribe, citem =>
-              (citem.site !== site && citem.chapter !== chapter)),
+            subscribe: filter(
+              item.subscribe,
+              citem => citem.site !== site && citem.chapter !== chapter,
+            ),
           };
-          chrome.storage.local.set(newItem, () => this.props.updateSubscribe(false));
+          chrome.storage.local.set(newItem, () =>
+            this.props.updateSubscribe(false),
+          );
         } else {
           newItem = {
             ...item,
@@ -133,7 +143,9 @@ class App extends Component {
               ...item.subscribe,
             ],
           };
-          chrome.storage.local.set(newItem, () => this.props.updateSubscribe(true));
+          chrome.storage.local.set(newItem, () =>
+            this.props.updateSubscribe(true),
+          );
         }
       }
     });
@@ -145,7 +157,7 @@ class App extends Component {
       <div className={cn.App}>
         <header className={cn.Header}>
           <span className={cn.leftContainer}>
-            <IconButton onClickHandler={this.showChapterListHandler} >
+            <IconButton onClickHandler={this.showChapterListHandler}>
               <MenuIcon className={cn.icon} />
             </IconButton>
             <span>Comics Scroller</span>
@@ -155,32 +167,30 @@ class App extends Component {
           <span className={cn.rigthtContainer}>
             <IconButton>
               <a href={'https://www.facebook.com/ComicsScroller/'}>
-                <FbIcon
-                  className={cn.icon}
-                />
+                <FbIcon className={cn.icon} />
               </a>
             </IconButton>
             <IconButton>
               <a href={'https://github.com/zeroshine/ComicsScroller/issues'}>
-                <GithubIcon
-                  className={cn.icon}
-                />
+                <GithubIcon className={cn.icon} />
               </a>
             </IconButton>
-            <IconButton onClickHandler={(prevable) ? this.prevChapterHandler : undefined} >
-              <PrevIcon
-                className={(prevable) ? cn.icon : cn.icon_deactive}
-              />
+            <IconButton
+              onClickHandler={prevable ? this.prevChapterHandler : undefined}
+            >
+              <PrevIcon className={prevable ? cn.icon : cn.icon_deactive} />
             </IconButton>
-            <IconButton onClickHandler={(nextable) ? this.nextChapterHandler : undefined} >
-              <NextIcon
-                className={(nextable) ? cn.icon : cn.icon_deactive}
-              />
+            <IconButton
+              onClickHandler={nextable ? this.nextChapterHandler : undefined}
+            >
+              <NextIcon className={nextable ? cn.icon : cn.icon_deactive} />
             </IconButton>
-            <IconButton onClickHandler={(chapterTitle !== '') ? this.subscribeHandler : undefined} >
-              <TagIcon
-                className={getTagIconClass(chapterTitle, subscribe)}
-              />
+            <IconButton
+              onClickHandler={
+                chapterTitle !== '' ? this.subscribeHandler : undefined
+              }
+            >
+              <TagIcon className={getTagIconClass(chapterTitle, subscribe)} />
             </IconButton>
           </span>
         </header>
@@ -195,13 +205,25 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  const { title, chapterNowIndex, chapterList, chapters, subscribe, site, comicsID } = state.comics;
+  const {
+    title,
+    chapterNowIndex,
+    chapterList,
+    chapters,
+    subscribe,
+    site,
+    comicsID,
+  } = state.comics;
   const chapterID = chapterList[chapterNowIndex];
   return {
     title,
-    chapterTitle: (chapterList.length > 0 && chapters[chapterID]) ? chapters[chapterID].title : '',
+    chapterTitle: chapterList.length > 0 && chapters[chapterID]
+      ? chapters[chapterID].title
+      : '',
     site,
-    chapter: (chapterList.length > 0 && chapters[chapterID]) ? chapters[chapterID].chapter : '',
+    chapter: chapterList.length > 0 && chapters[chapterID]
+      ? chapters[chapterID].chapter
+      : '',
     prevable: chapterNowIndex < chapterList.length,
     nextable: chapterNowIndex > 0,
     chapterNowIndex,
@@ -210,14 +232,13 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(
-  mapStateToProps, {
-    fetchChapter,
-    stopScroll,
-    startResize,
-    resetImg,
-    updateReaded,
-    updateChapterLatestIndex,
-    updateSubscribe,
-    fetchImgList,
-  })(App);
+export default connect(mapStateToProps, {
+  fetchChapter,
+  stopScroll,
+  startResize,
+  resetImg,
+  updateReaded,
+  updateChapterLatestIndex,
+  updateSubscribe,
+  fetchImgList,
+})(App);

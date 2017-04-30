@@ -21,13 +21,19 @@ const ripple = (WrapComponent: Class<React.Component<*, *, *>> | Function) => {
       if (e.defaultPrevented) return;
       const x = e.pageX - window.scrollX || window.pageXOffset;
       const y = e.pageY - window.scrollY || window.pageYOffset;
-      const { left, top, height, width } = e.currentTarget.getBoundingClientRect();
+      const {
+        left,
+        top,
+        height,
+        width,
+      } = e.currentTarget.getBoundingClientRect();
       const dx = x - left;
       const dy = y - top;
-      const topLeft = (dx * dx) + (dy * dy);
-      const topRight = ((width - dx) * (width - dx)) + (dy * dy);
-      const bLeft = (dx * dx) + ((height - dy) * (height - dy));
-      const bRight = ((width - dx) * (width - dx)) + ((height - dy) * (height - dy));
+      const topLeft = dx * dx + dy * dy;
+      const topRight = (width - dx) * (width - dx) + dy * dy;
+      const bLeft = dx * dx + (height - dy) * (height - dy);
+      const bRight =
+        (width - dx) * (width - dx) + (height - dy) * (height - dy);
       const radius = Math.sqrt(Math.max(topLeft, topRight, bLeft, bRight));
       this.counter = this.counter + 1;
       this.setState({
@@ -52,10 +58,7 @@ const ripple = (WrapComponent: Class<React.Component<*, *, *>> | Function) => {
     render() {
       const { ...others } = this.props;
       return (
-        <WrapComponent
-          {...others}
-          onMouseDownHandler={this.onMouseDownHandler}
-        >
+        <WrapComponent {...others} onMouseDownHandler={this.onMouseDownHandler}>
           {map(this.state.ripples, item => (
             <RippleCircle
               key={item.id}

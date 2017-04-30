@@ -7,15 +7,12 @@ import rootEpic from '../epics';
 const logger = createLogger();
 const epicMiddleware = createEpicMiddleware(rootEpic);
 
-let createStoreWithMiddleware = applyMiddleware(
-  epicMiddleware,
-  logger,
-)(createStore);
+let createStoreWithMiddleware = applyMiddleware(epicMiddleware, logger)(
+  createStore,
+);
 
 if (process.env.NODE_ENV === 'production') {
-  createStoreWithMiddleware = applyMiddleware(
-    epicMiddleware,
-  )(createStore);
+  createStoreWithMiddleware = applyMiddleware(epicMiddleware)(createStore);
 }
 
 export default function configureStore(initialState) {

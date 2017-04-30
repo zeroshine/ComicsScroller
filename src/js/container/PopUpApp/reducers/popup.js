@@ -16,7 +16,7 @@ type Action = {
   },
   category: string,
   index: number,
-}
+};
 
 type State = {
   update: Array<*>,
@@ -31,7 +31,7 @@ type State = {
   comicbus: {
     baseURL: 'http://www.comicbus.com',
   },
-}
+};
 
 const initialState = {
   update: [],
@@ -57,9 +57,21 @@ export default function popup(state: State = initialState, action: Action) {
   switch (action.type) {
     case UPDATE_POPUP_DATA:
       return {
-        update: map(action.data.update, item => ({ ...item, shift: false, move: false })),
-        subscribe: map(action.data.subscribe, item => ({ ...item, shift: false, move: false })),
-        history: map(action.data.history, item => ({ ...item, shift: false, move: false })),
+        update: map(action.data.update, item => ({
+          ...item,
+          shift: false,
+          move: false,
+        })),
+        subscribe: map(action.data.subscribe, item => ({
+          ...item,
+          shift: false,
+          move: false,
+        })),
+        history: map(action.data.history, item => ({
+          ...item,
+          shift: false,
+          move: false,
+        })),
         dm5: {
           ...state.dm5,
           ...action.data.dm5,
@@ -79,15 +91,20 @@ export default function popup(state: State = initialState, action: Action) {
         const { site, comicsID } = state.history[index];
         return {
           ...state,
-          history: filter(state.history, item => !item.move).map(item =>
-            ({ ...item, move: false, shift: false })),
+          history: filter(state.history, item => !item.move).map(item => ({
+            ...item,
+            move: false,
+            shift: false,
+          })),
           [site]: pickBy(state[site], item => item.comicsID !== comicsID),
         };
       }
       return {
         ...state,
-        [action.category]: filter(state[action.category], item => !item.move).map(item =>
-            ({ ...item, move: false, shift: false })),
+        [action.category]: filter(
+          state[action.category],
+          item => !item.move,
+        ).map(item => ({ ...item, move: false, shift: false })),
       };
     case SHIFT_CARDS:
       return {
@@ -110,11 +127,13 @@ export default function popup(state: State = initialState, action: Action) {
   }
 }
 
-export function updatePopupData(data: {
-  subscribe: Array<*>,
-  history: Array<*>,
-  update: Array<*>,
-}) {
+export function updatePopupData(
+  data: {
+    subscribe: Array<*>,
+    history: Array<*>,
+    update: Array<*>,
+  },
+) {
   return { type: UPDATE_POPUP_DATA, data };
 }
 

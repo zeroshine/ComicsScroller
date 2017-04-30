@@ -13,6 +13,7 @@
     "set:prod": "npm run clean && npm run mkdir && npm run copy:prod",
     "product": "npm run set:prod && NODE_ENV=production npm run compile:background && BABEL_ENV=production webpack --config webpack.config.prod.js",
     "zip": "rm -rf *.zip && zip -r ComicsScroller.zip ./ComicsScroller",
+    "prettier": "prettier --single-quote=true --trailing-comma=all --write 'src/js/**/*.{js,jsx}'",
     "test": "jest --coverage"
   },
   "jest": {

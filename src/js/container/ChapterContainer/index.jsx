@@ -9,18 +9,18 @@ import cn from './ChapterContainer.css';
 class ChapterContainer extends Component {
   node: HTMLBaseElement;
 
-  refHandler = (node) => {
+  refHandler = node => {
     this.node = node;
   };
 
   render() {
     return (
       <div
-        style={(this.props.show) ? undefined : { height: this.node.clientHeight }}
+        style={this.props.show ? undefined : { height: this.node.clientHeight }}
         className={cn.ChapterContainer}
         ref={this.refHandler}
       >
-        <div style={(this.props.show) ? undefined : { display: 'none' }} >
+        <div style={this.props.show ? undefined : { display: 'none' }}>
           {map(this.props.result, index => (
             <ComicImage
               key={index}
@@ -41,7 +41,9 @@ ChapterContainer.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const { result, show } = state.comics.imageList.chapterEntity[ownProps.chapter];
+  const { result, show } = state.comics.imageList.chapterEntity[
+    ownProps.chapter
+  ];
   return {
     result,
     show,

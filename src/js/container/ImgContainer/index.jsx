@@ -25,11 +25,11 @@ class ImgContainer extends Component {
           paddingBottom: this.props.paddingBottom,
         }}
       >
-        {(this.props.renderResult.length > 0) ? map(this.props.renderResult, key =>
-          <ComicImage
-            key={key}
-            index={key}
-          />) : <Loading />}
+        {this.props.renderResult.length > 0
+          ? map(this.props.renderResult, key => (
+              <ComicImage key={key} index={key} />
+            ))
+          : <Loading />}
       </div>
     );
   }
@@ -49,26 +49,34 @@ const getPaddingTop = createSelector(
   comics => comics.imageList.entity,
   comics => comics.renderBeginIndex,
   comics => comics.innerHeight,
-  (result, entity, begin, innerHeight) => reduce(filter(result, item => item < begin),
-    (acc, i) => {
-      if (entity[i].type === 'wide') return (acc + (innerHeight - 68)) + (2 * margin);
-      return (acc + entity[i].height + (2 * margin));
-    },
-    0,
-  ));
+  (result, entity, begin, innerHeight) =>
+    reduce(
+      filter(result, item => item < begin),
+      (acc, i) => {
+        if (entity[i].type === 'wide')
+          return acc + (innerHeight - 68) + 2 * margin;
+        return acc + entity[i].height + 2 * margin;
+      },
+      0,
+    ),
+);
 
 const getPaddingBottom = createSelector(
   comics => comics.imageList.result,
   comics => comics.imageList.entity,
   comics => comics.renderEndIndex,
   comics => comics.innerHeight,
-  (result, entity, end, innerHeight) => reduce(filter(result, item => item > end),
-    (acc, i) => {
-      if (entity[i].type === 'wide') return (acc + (innerHeight - 68)) + (2 * margin);
-      return (acc + entity[i].height + (2 * margin));
-    },
-    0,
-  ));
+  (result, entity, end, innerHeight) =>
+    reduce(
+      filter(result, item => item > end),
+      (acc, i) => {
+        if (entity[i].type === 'wide')
+          return acc + (innerHeight - 68) + 2 * margin;
+        return acc + entity[i].height + 2 * margin;
+      },
+      0,
+    ),
+);
 
 function mapStateToProps({ comics }) {
   return {

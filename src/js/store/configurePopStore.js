@@ -3,9 +3,7 @@ import { createLogger } from 'redux-logger';
 import rootReducer from '../reducers/popup';
 
 const logger = createLogger();
-let createStoreWithMiddleware = applyMiddleware(
-  logger,
-)(createStore);
+let createStoreWithMiddleware = applyMiddleware(logger)(createStore);
 
 if (process.env.NODE_ENV === 'production') {
   createStoreWithMiddleware = createStore;

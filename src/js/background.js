@@ -39,7 +39,7 @@ function dm5RefererHandler(details) {
 
 function dm5CookieHandler(details) {
   return {
-    requestHeaders: map(details.requestHeaders, (item) => {
+    requestHeaders: map(details.requestHeaders, item => {
       if (item.name === 'Cookie') {
         return {
           name: item.name,
@@ -65,81 +65,101 @@ function sfRefererHandler(details) {
 
 chrome.browserAction.setBadgeBackgroundColor({ color: '#F00' });
 
-chrome.webRequest.onBeforeSendHeaders.addListener(dm5RefererHandler,
+chrome.webRequest.onBeforeSendHeaders.addListener(
+  dm5RefererHandler,
   { urls: ['http://www.dm5.com/m*/chapterfun*'] },
-  ['requestHeaders', 'blocking']);
+  ['requestHeaders', 'blocking'],
+);
 
-chrome.webRequest.onBeforeSendHeaders.addListener(dm5CookieHandler,
+chrome.webRequest.onBeforeSendHeaders.addListener(
+  dm5CookieHandler,
   { urls: ['http://www.dm5.com/m*/'] },
-  ['requestHeaders', 'blocking']);
+  ['requestHeaders', 'blocking'],
+);
 
-chrome.webRequest.onBeforeSendHeaders.addListener(sfRefererHandler,
+chrome.webRequest.onBeforeSendHeaders.addListener(
+  sfRefererHandler,
   { urls: ['http://*.sfacg.com/*'] },
-  ['requestHeaders', 'blocking']);
+  ['requestHeaders', 'blocking'],
+);
 
-chrome.notifications.onClicked.addListener((id) => {
+chrome.notifications.onClicked.addListener(id => {
   chrome.tabs.create({ url: id });
 });
 
 function comicsQuery() {
-  chrome.storage.local.get((item) => {
+  chrome.storage.local.get(item => {
     if (typeof item !== 'undefined' && typeof item.subscribe !== 'undefined') {
       forEach(item.subscribe, ({ site, comicsID }) => {
         const { chapterURL } = item[site][comicsID];
-        fetchChapterPage$[site](chapterURL)
-        .subscribe(({ title, chapterList, coverURL, chapters }) => {
-          const comic = item[site][comicsID];
-          forEach(chapterList, (chapterID) => {
-            if (!comic.chapters[chapterID]) {
-              chrome.storage.local.get(oldStore => chrome.storage.local.set({
-                ...oldStore,
-                [site]: {
-                  ...oldStore[site],
-                  [comicsID]: {
-                    ...oldStore[site][comicsID],
-                    title,
-                    chapterList,
-                    coverURL,
-                    chapters,
-                  },
-                },
-                update: [
-                  {
-                    site,
-                    chapterID,
-                    updateChapter: {
-                      title: chapters[chapterID].title,
-                      href: chapters[chapterID].href,
+        fetchChapterPage$
+          [site](chapterURL)
+          .subscribe(({ title, chapterList, coverURL, chapters }) => {
+            const comic = item[site][comicsID];
+            forEach(chapterList, chapterID => {
+              if (!comic.chapters[chapterID]) {
+                chrome.storage.local.get(oldStore =>
+                  chrome.storage.local.set(
+                    {
+                      ...oldStore,
+                      [site]: {
+                        ...oldStore[site],
+                        [comicsID]: {
+                          ...oldStore[site][comicsID],
+                          title,
+                          chapterList,
+                          coverURL,
+                          chapters,
+                        },
+                      },
+                      update: [
+                        {
+                          site,
+                          chapterID,
+                          updateChapter: {
+                            title: chapters[chapterID].title,
+                            href: chapters[chapterID].href,
+                          },
+                          comicsID,
+                        },
+                        ...oldStore.update,
+                      ],
                     },
-                    comicsID,
-                  },
-                  ...oldStore.update,
-                ],
-              }, () => chrome.notifications.create(chapters[chapterID].href, {
-                type: 'image',
-                title: 'Comics Scroller Update',
-                iconUrl: './imgs/comics-48.png',
-                imageUrl: coverURL,
-                message: `${comic.title} ${title} 更新`,
-              }, () => chrome.storage.local.get(
-                store => chrome.browserAction.setBadgeText({ text: `${store.update.length}` }),
-              ))));
-            }
+                    () =>
+                      chrome.notifications.create(
+                        chapters[chapterID].href,
+                        {
+                          type: 'image',
+                          title: 'Comics Scroller Update',
+                          iconUrl: './imgs/comics-48.png',
+                          imageUrl: coverURL,
+                          message: `${comic.title} ${title} 更新`,
+                        },
+                        () =>
+                          chrome.storage.local.get(store =>
+                            chrome.browserAction.setBadgeText({
+                              text: `${store.update.length}`,
+                            }),
+                          ),
+                      ),
+                  ),
+                );
+              }
+            });
           });
-        });
       });
     }
   });
 }
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.get((item) => {
+  chrome.storage.local.get(item => {
     const { version } = chrome.runtime.getManifest();
     if (!item.version) {
       chrome.storage.local.clear();
       chrome.storage.local.set(initObject);
     } else {
-      chrome.storage.local.set({ ...item, ...initObject }); 
+      chrome.storage.local.set({ ...item, ...initObject });
     }
     chrome.notifications.create('Comics Scroller Update', {
       type: 'basic',
@@ -150,46 +170,59 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.webNavigation.onBeforeNavigate.addListener((details) => {
-  if (comicbusRegex.test(details.url)) {
-    console.log('comicbus fired');
-    const chapter = comicbusRegex.exec(details.url)[2];
-    chrome.tabs.update(details.tabId, { url: `${chrome.extension.getURL('app.html')}?site=comicbus&chapter=${chapter}` });
-    ga('send', 'event', 'comicbus view');
-  } else if (sfRegex.test(details.url)) {
-    console.log('sf fired');
-    const chapter = sfRegex.exec(details.url)[1];
-    chrome.tabs.update(details.tabId, { url: `${chrome.extension.getURL('app.html')}?site=sf&chapter=${chapter}` });
-    ga('send', 'event', 'sf view');
-  } else if (dm5Regex.test(details.url)) {
-    console.log('dm5 fired');
-    let chapter = '';
-    chapter = dm5Regex.exec(details.url)[2];
-    chrome.tabs.update(details.tabId, { url: `${chrome.extension.getURL('app.html')}?site=dm5&chapter=${chapter}` });
-    ga('send', 'event', 'dm5 view');
-  }
-}, {
-  url: [
-    { urlMatches: 'comicbus\.com\/online\/.*$' },
-    { urlMatches: 'comic\.sfacg\.com\/HTML\/[^\/]+\/.+$' },
-    { urlMatches: 'http://(tel||www)\.dm5\.com/m\d*' },
-  ],
+chrome.webNavigation.onBeforeNavigate.addListener(
+  details => {
+    if (comicbusRegex.test(details.url)) {
+      console.log('comicbus fired');
+      const chapter = comicbusRegex.exec(details.url)[2];
+      chrome.tabs.update(details.tabId, {
+        url: `${chrome.extension.getURL('app.html')}?site=comicbus&chapter=${chapter}`,
+      });
+      ga('send', 'event', 'comicbus view');
+    } else if (sfRegex.test(details.url)) {
+      console.log('sf fired');
+      const chapter = sfRegex.exec(details.url)[1];
+      chrome.tabs.update(details.tabId, {
+        url: `${chrome.extension.getURL('app.html')}?site=sf&chapter=${chapter}`,
+      });
+      ga('send', 'event', 'sf view');
+    } else if (dm5Regex.test(details.url)) {
+      console.log('dm5 fired');
+      let chapter = '';
+      chapter = dm5Regex.exec(details.url)[2];
+      chrome.tabs.update(details.tabId, {
+        url: `${chrome.extension.getURL('app.html')}?site=dm5&chapter=${chapter}`,
+      });
+      ga('send', 'event', 'dm5 view');
+    }
+  },
+  {
+    url: [
+      { urlMatches: 'comicbus\.com\/online\/.*$' },
+      { urlMatches: 'comic\.sfacg\.com\/HTML\/[^\/]+\/.+$' },
+      { urlMatches: 'http://(tel||www)\.dm5\.com/m\d*' },
+    ],
+  },
+);
+
+chrome.alarms.create('comcisScroller', {
+  when: Date.now(),
+  periodInMinutes: 10,
 });
 
-chrome.alarms.create('comcisScroller', { when: Date.now(), periodInMinutes: 10 });
-
-chrome.alarms.onAlarm.addListener((alarm) => {
+chrome.alarms.onAlarm.addListener(alarm => {
   if (alarm.name === 'comcisScroller') {
     comicsQuery();
   }
 });
 
 /* eslint-disable */
+// prettier-ignore
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 // $FlowFixMe
 m=s.getElementsByTagName(o)[0];a.alocal=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','https://ssl.google-analytics.com/analytics.js','ga');
 ga('create', 'UA-59728771-1', 'auto');
-ga('set','checkProtocolTask', null);
+ga('set', 'checkProtocolTask', null);
 ga('send', 'pageview');

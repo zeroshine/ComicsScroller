@@ -12,7 +12,7 @@ class IconButton extends Component {
 
   node: any;
 
-  onMouseDownHandler = (e) => {
+  onMouseDownHandler = e => {
     this.props.onMouseDownHandler(e, this.node);
   };
 
@@ -22,7 +22,9 @@ class IconButton extends Component {
     }
   };
 
-  refHandler = (node) => { this.node = node; };
+  refHandler = node => {
+    this.node = node;
+  };
 
   render() {
     return (

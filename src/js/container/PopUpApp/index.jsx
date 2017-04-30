@@ -102,9 +102,15 @@ const MenuButton = ({
       {children}
     </div>
     <div className={showMenu ? cn.menuOn : cn.menuOff}>
-      <div onMouseDown={preventDefault} onClick={downloadHandler}>Download Config</div>
-      <div onMouseDown={preventDefault} onClick={uploadHandler}>Upload Config</div>
-      <div onMouseDown={preventDefault} onClick={resetHandler}>Reset Config</div>
+      <div onMouseDown={preventDefault} onClick={downloadHandler}>
+        Download Config
+      </div>
+      <div onMouseDown={preventDefault} onClick={uploadHandler}>
+        Upload Config
+      </div>
+      <div onMouseDown={preventDefault} onClick={resetHandler}>
+        Reset Config
+      </div>
       <a
         style={{ display: 'none' }}
         ref={aRefHandler}
@@ -142,17 +148,17 @@ class PopUpApp extends Component {
   };
 
   componentDidMount() {
-    chrome.storage.local.get((item) => {
+    chrome.storage.local.get(item => {
       this.props.updatePopupData(item);
     });
   }
 
-  tabOnClickHandler = (e) => {
+  tabOnClickHandler = e => {
     const selectedType = e.target.getAttribute('data-type');
     this.setState({ selectedType });
   };
 
-  transitionEndHandler = (e) => {
+  transitionEndHandler = e => {
     const index = parseInt(e.target.getAttribute('data-index'), 10);
     const move = e.target.getAttribute('data-move');
     const shift = e.target.getAttribute('data-shift');
@@ -162,12 +168,12 @@ class PopUpApp extends Component {
       if (len > 1) {
         this.props.shiftCards(category, index);
       } else {
-        chrome.storage.local.get((item) => {
+        chrome.storage.local.get(item => {
           this.props.updatePopupData(item);
         });
       }
     } else if (shift === 'true' && index === len - 1) {
-      chrome.storage.local.get((item) => {
+      chrome.storage.local.get(item => {
         this.props.updatePopupData(item);
       });
     }
@@ -182,7 +188,7 @@ class PopUpApp extends Component {
     this.setState(prevState => ({ showMenu: !prevState.showMenu }));
   };
 
-  inputRefHandler = (node) => {
+  inputRefHandler = node => {
     this.fileInput = node;
   };
 
@@ -191,14 +197,14 @@ class PopUpApp extends Component {
       this.fileInput.click();
     }
   };
-  
+
   fileOnChangeHandler = () => {
     const fr = new FileReader();
-    fr.onload = (e) => {
+    fr.onload = e => {
       const result = JSON.parse(e.target.result);
-      chrome.storage.local.set(result, (err) => {
+      chrome.storage.local.set(result, err => {
         if (!err) {
-          chrome.storage.local.get((item) => {
+          chrome.storage.local.get(item => {
             this.props.updatePopupData(item);
             chrome.browserAction.setBadgeText({
               text: `${item.update.length === 0 ? '' : item.update.length}`,
@@ -211,12 +217,12 @@ class PopUpApp extends Component {
     fr.readAsText(this.fileInput.files.item(0));
   };
 
-  aRefHandler = (node) => {
+  aRefHandler = node => {
     this.aRef = node;
   };
 
   downloadHandler = () => {
-    chrome.storage.local.get((item) => {
+    chrome.storage.local.get(item => {
       const json = JSON.stringify(item);
       const blob = new Blob([json], { type: 'octet/stream' });
       const url = window.URL.createObjectURL(blob);
@@ -232,7 +238,7 @@ class PopUpApp extends Component {
   resetHandler = () => {
     chrome.storage.local.clear();
     chrome.storage.local.set(initObject, () => {
-      chrome.storage.local.get((item) => {
+      chrome.storage.local.get(item => {
         this.props.updatePopupData(item);
         chrome.runtime.sendMessage({ msg: 'UPDATE' });
       });

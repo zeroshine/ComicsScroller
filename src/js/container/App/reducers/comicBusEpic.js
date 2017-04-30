@@ -115,10 +115,10 @@ function fetchImgs$(chapter: string) {
 }
 
 export function fetchImgSrcEpic(action$: any, store: Store) {
-  return action$.ofType(FETCH_IMAGE_SRC).mergeMap((action) => {
+  return action$.ofType(FETCH_IMAGE_SRC).mergeMap(action => {
     const { result, entity } = store.getState().comics.imageList;
     return Observable.from(result)
-      .filter((item) => {
+      .filter(item => {
         return (
           item >= action.begin &&
           item <= action.end &&
@@ -126,7 +126,7 @@ export function fetchImgSrcEpic(action$: any, store: Store) {
           entity[item].type !== 'end'
         );
       })
-      .map((id) => {
+      .map(id => {
         return loadImgSrc(entity[id].src, id);
       });
   });
@@ -150,11 +150,11 @@ export function fetchChapterPage$(url: string) {
       'body > table:nth-child(7) > tbody > tr > td > table > tbody > tr:nth-child(1) > td:nth-child(1) > img',
     ).src;
     const chapterList = [
-      ...map(chapterNodes, (n) => {
+      ...map(chapterNodes, n => {
         const arr = /\'(.*)-(.*)\.html/.exec(n.getAttribute('onclick'));
         return `comic-${arr[1]}.html?ch=${arr[2]}`;
       }).reverse(),
-      ...map(volNodes, (n) => {
+      ...map(volNodes, n => {
         const arr = /\'(.*)-(.*)\.html/.exec(n.getAttribute('onclick'));
         return `comic-${arr[1]}.html?ch=${arr[2]}`;
       }).reverse(),
@@ -205,19 +205,16 @@ export function fetchChapterEpic(action$: any) {
         Observable.of(concatImageList(imgList)),
         Observable.of(updateRenderIndex(0, 6)),
         Observable.of(fetchImgSrc(0, 6)),
-        fetchChapterPage$(`${baseURL}/html/${comicsID}.html`).mergeMap(({
-          title,
-          coverURL,
-          chapterList,
-          chapters,
-        }) => {
+        fetchChapterPage$(
+          `${baseURL}/html/${comicsID}.html`,
+        ).mergeMap(({ title, coverURL, chapterList, chapters }) => {
           const chapterIndex = findIndex(
             chapterList,
             item => item === action.chapter,
           );
           return Observable.bindCallback(
             chrome.storage.local.get,
-          )().mergeMap((item) => {
+          )().mergeMap(item => {
             const newItem = {
               ...item,
               update: filter(
@@ -289,7 +286,7 @@ export function fetchChapter(chapter: string) {
 }
 
 export function fetchImgListEpic(action$: any, store: Store) {
-  return action$.ofType(FETCH_IMG_LIST).mergeMap((action) => {
+  return action$.ofType(FETCH_IMG_LIST).mergeMap(action => {
     const { chapterList } = store.getState().comics;
     const chapter = chapterList[action.index];
     return fetchImgs$(chapter).mergeMap(({ imgList }) => {
@@ -313,7 +310,7 @@ export function fetchImgList(index: number) {
 
 export function updateReadedEpic(action$: any, store: { getState: Function }) {
   return action$.ofType(UPDATE_READED).mergeMap(action =>
-    Observable.bindCallback(chrome.storage.local.get)().mergeMap((item) => {
+    Observable.bindCallback(chrome.storage.local.get)().mergeMap(item => {
       const { comicsID, chapterList } = store.getState().comics;
       const chapterID = chapterList[action.index];
       const newItem = {
