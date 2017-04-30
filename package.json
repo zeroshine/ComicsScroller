@@ -1,6 +1,6 @@
 {
   "name": "comicsscroller",
-  "version": "4.0.0",
+  "version": "4.0.2",
   "private": true,
   "scripts": {
     "clean": "rm -rf ./ComicsScroller",

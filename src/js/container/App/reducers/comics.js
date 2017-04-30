@@ -212,7 +212,7 @@ export default function comics(state: State = initialState, action: Action) {
     case UPDATE_INNER_HEIGHT:
       return {
         ...state,
-        innerHeight: action.innerHeight,
+        innerHeight: action.height,
       };
     default:
       return state;
