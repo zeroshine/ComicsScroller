@@ -92,61 +92,62 @@ function comicsQuery() {
     if (typeof item !== 'undefined' && typeof item.subscribe !== 'undefined') {
       forEach(item.subscribe, ({ site, comicsID }) => {
         const { chapterURL } = item[site][comicsID];
-        fetchChapterPage$
-          [site](chapterURL)
-          .subscribe(({ title, chapterList, coverURL, chapters }) => {
-            const comic = item[site][comicsID];
-            forEach(chapterList, chapterID => {
-              if (!comic.chapters[chapterID]) {
-                chrome.storage.local.get(oldStore =>
-                  chrome.storage.local.set(
-                    {
-                      ...oldStore,
-                      [site]: {
-                        ...oldStore[site],
-                        [comicsID]: {
-                          ...oldStore[site][comicsID],
-                          title,
-                          chapterList,
-                          coverURL,
-                          chapters,
-                        },
+        const fetchChapterPage = fetchChapterPage$[site];
+        fetchChapterPage(
+          chapterURL,
+        ).subscribe(({ title, chapterList, coverURL, chapters }) => {
+          const comic = item[site][comicsID];
+          forEach(chapterList, chapterID => {
+            if (!comic.chapters[chapterID]) {
+              chrome.storage.local.get(oldStore =>
+                chrome.storage.local.set(
+                  {
+                    ...oldStore,
+                    [site]: {
+                      ...oldStore[site],
+                      [comicsID]: {
+                        ...oldStore[site][comicsID],
+                        title,
+                        chapterList,
+                        coverURL,
+                        chapters,
                       },
-                      update: [
-                        {
-                          site,
-                          chapterID,
-                          updateChapter: {
-                            title: chapters[chapterID].title,
-                            href: chapters[chapterID].href,
-                          },
-                          comicsID,
-                        },
-                        ...oldStore.update,
-                      ],
                     },
-                    () =>
-                      chrome.notifications.create(
-                        chapters[chapterID].href,
-                        {
-                          type: 'image',
-                          title: 'Comics Scroller Update',
-                          iconUrl: './imgs/comics-48.png',
-                          imageUrl: coverURL,
-                          message: `${comic.title} ${title} 更新`,
+                    update: [
+                      {
+                        site,
+                        chapterID,
+                        updateChapter: {
+                          title: chapters[chapterID].title,
+                          href: chapters[chapterID].href,
                         },
-                        () =>
-                          chrome.storage.local.get(store =>
-                            chrome.browserAction.setBadgeText({
-                              text: `${store.update.length}`,
-                            }),
-                          ),
-                      ),
-                  ),
-                );
-              }
-            });
+                        comicsID,
+                      },
+                      ...oldStore.update,
+                    ],
+                  },
+                  () =>
+                    chrome.notifications.create(
+                      chapters[chapterID].href,
+                      {
+                        type: 'image',
+                        title: 'Comics Scroller Update',
+                        iconUrl: './imgs/comics-48.png',
+                        imageUrl: coverURL,
+                        message: `${comic.title} ${title} 更新`,
+                      },
+                      () =>
+                        chrome.storage.local.get(store =>
+                          chrome.browserAction.setBadgeText({
+                            text: `${store.update.length}`,
+                          }),
+                        ),
+                    ),
+                ),
+              );
+            }
           });
+        });
       });
     }
   });
@@ -159,7 +160,7 @@ chrome.runtime.onInstalled.addListener(() => {
       chrome.storage.local.clear();
       chrome.storage.local.set(initObject);
     } else {
-      chrome.storage.local.set({ ...item, ...initObject });
+      chrome.storage.local.set({ ...initObject, ...item });
     }
     chrome.notifications.create('Comics Scroller Update', {
       type: 'basic',
