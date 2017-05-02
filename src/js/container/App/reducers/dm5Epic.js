@@ -101,18 +101,20 @@ export function fetchChapterPage$(url) {
     url,
     responseType: 'document',
   }).mergeMap(function fetchChapterPageHandler({ response }) {
-    const chapterNode = response.querySelectorAll(
-      '.nr6.lan2:not(:last-child) > li:not(:last-child) > a, .nr6.lan2:nth-last-child(3) > li:last-child > a',
+    const nodes = response.querySelectorAll(
+      '.nr6.lan2:not(:last-child) > li > a',
     );
+    const chapterNodes = filter(nodes, item => /\/m\d+\/$/.test(item.href));
+    console.log('chapterNodes', nodes);
     const title = response.querySelector('#mhinfo > div.inbt > h1').textContent;
     const coverURL = response.querySelector(
       '#mhinfo > div.innr9.innr9_min > div.innr90 > div.innr91 > img',
     ).src;
-    const chapterList = map(chapterNode, n =>
+    const chapterList = map(chapterNodes, n =>
       n.getAttribute('href').replace(/\//g, ''),
     );
     const chapters = reduce(
-      chapterNode,
+      chapterNodes,
       (acc, n) => ({
         ...acc,
         [n.getAttribute('href').replace(/\//g, '')]: {
