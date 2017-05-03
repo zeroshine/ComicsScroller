@@ -1,10 +1,9 @@
 @value grey-200 from 'css/color';
-
 body {
-  font-family: 'Noto Sans', Arial,Helvetica, sans-serif;
-  color:#616161;
+  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  color: #616161;
   background: grey-200;
-  margin: 0;
+  overflow-x: hidden;
 }
 
 div {
@@ -15,12 +14,11 @@ span {
   box-sizing: border-box;
 }
 
-a:link{
-  text-decoration:none !important;
-  color:inherit;
+a:link {
+  text-decoration: none !important;
+  color: inherit;
 }
 
-a:visited{
-  color:inherit;
+a:visited {
+  color: inherit;
 }
-
