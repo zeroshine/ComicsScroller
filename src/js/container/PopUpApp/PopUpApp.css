@@ -1,5 +1,4 @@
-@value deep-orange-500,
-grey-300 from 'css/color';
+@value deep-orange-500, grey-300 from 'css/color';
 .headerContainer {
   display: flex;
   background: #fff;
