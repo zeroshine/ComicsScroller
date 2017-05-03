@@ -65,6 +65,7 @@ const UPDATE_READED_CHAPTERS = 'UPDATE_READED_CHAPTERS';
 const CONCAT_IMAGE_LIST = 'CONCAT_IMAGE_LIST';
 const LOAD_IMAGE_SRC = 'LOAD_IMAGE_SRC';
 const UPDATE_IMAGE_HEIGHT = 'UPDATE_IMAGE_HEIGHT';
+const UPDATE_IMAGE_TYPE = 'UPDATE_IMAGE_TYPE';
 const UPDATE_INNER_HEIGHT = 'UPDATE_INNER_HEIGHT';
 const RESET_IMAGE = 'RESET_IMAGE';
 
@@ -88,8 +89,8 @@ export default function comics(state: State = initialState, action: Action) {
         };
       }
       return state;
-    case UPDATE_IMAGE_HEIGHT:
-      if (action.index) {
+    case UPDATE_IMAGE_TYPE:
+      if (action.index >= 0) {
         return {
           ...state,
           imageList: {
@@ -99,7 +100,7 @@ export default function comics(state: State = initialState, action: Action) {
               [action.index]: {
                 ...state.imageList.entity[action.index],
                 height: action.height,
-                type: 'wide',
+                type: action.imgType,
               },
             },
           },
@@ -263,8 +264,8 @@ export function loadImgSrc(src: string, index: number) {
   return { type: LOAD_IMAGE_SRC, src, index };
 }
 
-export function updateImgHeight(height: number, index: number) {
-  return { type: UPDATE_IMAGE_HEIGHT, height, index };
+export function updateImgType(height: number, index: number, imgType: string) {
+  return { type: UPDATE_IMAGE_TYPE, height, index, imgType };
 }
 
 export function resetImg() {

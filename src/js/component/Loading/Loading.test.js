@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import renderer from 'react-test-renderer';
 import Loading from './';
 
 test('Loading contains circle svg', () => {
@@ -11,4 +12,11 @@ test('Loading contains circle svg', () => {
       </svg>,
     ),
   ).toBe(true);
+});
+
+test('Loading snapshot', () => {
+  const tree = renderer.create(
+    <Loading />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
 });

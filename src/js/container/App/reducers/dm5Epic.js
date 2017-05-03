@@ -105,7 +105,6 @@ export function fetchChapterPage$(url) {
       '.nr6.lan2:not(:last-child) > li > a',
     );
     const chapterNodes = filter(nodes, item => /\/m\d+\/$/.test(item.href));
-    console.log('chapterNodes', nodes);
     const title = response.querySelector('#mhinfo > div.inbt > h1').textContent;
     const coverURL = response.querySelector(
       '#mhinfo > div.innr9.innr9_min > div.innr90 > div.innr91 > img',

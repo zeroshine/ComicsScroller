@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1492700591783" clover="3.2.0">
-  <project timestamp="1492700591783" name="All files">
+<coverage generated="1493794148172" clover="3.2.0">
+  <project timestamp="1493794148172" name="All files">
     <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1" elements="2" coveredelements="2" complexity="0" loc="1" ncloc="1" packages="1" files="1" classes="1">
-      <file name="index.jsx" path="/Users/zeroshine/Dropbox/ComicsScroller/src/js/component/Loading/index.jsx">
+      <file name="index.jsx" path="/Users/jc0362/Dropbox/ComicsScroller/src/js/component/Loading/index.jsx">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="7" count="1" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
       </file>
     </metrics>
   </project>

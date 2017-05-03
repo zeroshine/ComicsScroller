@@ -1,14 +1,12 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import cn from './Image.css';
-import { updateImgHeight } from '../../container/App/reducers/comics';
+import cn from './ComicImage.css';
+import { updateImgType } from '../../container/App/reducers/comics';
 
-function getImgClass(showMode: string, type: string) {
+function getImgClass(type: string) {
   if (type === 'end') return cn.ComicImageEnd;
-  switch (showMode) {
-    case 'init':
-      return cn.ComicImageInit;
+  switch (type) {
     case 'normal':
       return cn.ComicImage;
     case 'wide':
@@ -16,14 +14,13 @@ function getImgClass(showMode: string, type: string) {
     case 'natural':
       return cn.ComicImageNatural;
     default:
-      return undefined;
+      return cn.ComicImageInit;
   }
 }
 
 class ComicImage extends Component {
   state: {
     showImage: boolean,
-    showMode: string,
   };
 
   props: {
@@ -31,7 +28,7 @@ class ComicImage extends Component {
     src: number,
     type: string,
     index: Function,
-    updateImgHeight: Function,
+    updateImgType: Function,
   };
 
   w: number;
@@ -39,48 +36,37 @@ class ComicImage extends Component {
 
   state = {
     showImage: false,
-    showMode: 'init',
   };
 
   imgLoadHandler = e => {
     this.w = e.target.naturalWidth;
     this.h = e.target.naturalHeight;
     const innerHeight = window.innerHeight;
-    if (this.h > innerHeight) {
+    if (this.h > innerHeight - 48) {
       if (this.w > this.h) {
-        this.setState({
-          showMode: 'wide',
-          showImage: true,
-        });
-        this.props.updateImgHeight(window.innerHeight - 68, this.props.index);
+        this.props.updateImgType(innerHeight - 68, this.props.index, 'wide');
       } else {
-        this.setState({
-          showMode: 'normal',
-          showImage: true,
-        });
+        this.props.updateImgType(1400, this.props.index, 'normal');
       }
     } else {
-      this.setState({
-        showMode: 'natural',
-        showImage: true,
-      });
-      this.props.updateImgHeight(this.h, this.props.index);
+      this.props.updateImgType(this.h, this.props.index, 'natural');
     }
+    this.setState({ showImage: true });
   };
 
   render() {
     return (
-      <div className={getImgClass(this.state.showMode, this.props.type)}>
+      <div className={getImgClass(this.props.type)}>
         {!this.state.showImage && this.props.type !== 'end'
           ? <div>Loading...</div>
           : undefined}
         {!this.props.loading && this.props.type !== 'end'
           ? <img
-              style={this.state.showImage ? undefined : { display: 'none' }}
-              src={this.props.src}
-              onLoad={this.imgLoadHandler}
-              alt={'comicImage'}
-            />
+            style={this.state.showImage ? undefined : { display: 'none' }}
+            src={this.props.src}
+            onLoad={this.imgLoadHandler}
+            alt={'comicImage'}
+          />
           : undefined}
         {this.props.type === 'end' ? '本 章 結 束' : undefined}
       </div>
@@ -100,5 +86,5 @@ function makeMapStateToProps(state, props) {
 }
 
 export default connect(makeMapStateToProps, {
-  updateImgHeight,
+  updateImgType,
 })(ComicImage);

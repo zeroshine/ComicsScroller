@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loading snapshot 1`] = `
+<div
+  className={undefined}
+>
+  <svg>
+    <circle
+      cx="30"
+      cy="30"
+      r="25"
+    />
+  </svg>
+</div>
+`;
