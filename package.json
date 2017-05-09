@@ -1,15 +1,15 @@
 {
   "name": "comicsscroller",
-  "version": "4.0.7",
+  "version": "4.0.8",
   "private": true,
   "scripts": {
     "clean": "rm -rf ./ComicsScroller",
     "mkdir": "mkdir -p ./ComicsScroller/js && mkdir -p ./ComicsScroller/css",
-    "copy:dev": "cp -r ./src/extensions/* ./ComicsScroller/ && rm -rf ./ComicsScroller/app.html ./ComicsScroller/popup.html && mv ./ComicsScroller/app_dev.html ./ComicsScroller/app.html && mv ./ComicsScroller/popup_dev.html ./ComicsScroller/popup.html",
+    "copy:dev": "cp -r ./src/extensions/* ./ComicsScroller/ && rm -rf ./ComicsScroller/{app,popup}.html && mv ./ComicsScroller/app_dev.html ./ComicsScroller/app.html && mv ./ComicsScroller/popup_dev.html ./ComicsScroller/popup.html",
     "set:dev": "npm run clean && npm run mkdir && npm run copy:dev ",
     "start": "npm run set:dev && npm run compile:background && NODE_ENV=development node server.js",
     "compile:background": "webpack --config webpack.config.bg.js",
-    "copy:prod": "cp -r ./src/extensions/* ./ComicsScroller/ && rm -rf ./ComicsScroller/app_dev.html ./ComicsScroller/popup_dev.html",
+    "copy:prod": "cp -r ./src/extensions/* ./ComicsScroller/ && rm -rf ./ComicsScroller/{app,popup}_dev.html",
     "set:prod": "npm run clean && npm run mkdir && npm run copy:prod",
     "product": "npm run set:prod && NODE_ENV=production npm run compile:background && BABEL_ENV=production webpack --config webpack.config.prod.js",
     "zip": "rm -rf *.zip && zip -r ComicsScroller.zip ./ComicsScroller",
