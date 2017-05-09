@@ -62,12 +62,12 @@ module.exports = {
           },
         }, {
           loader: 'postcss-loader',
-          options: {
-            ident: 'postcss',
-            plugins: () => [
-              postcssNested,
-            ]
-          }
+          // options: {
+          //   ident: 'postcss',
+          //   plugins: () => [
+          //     postcssNested(),
+          //   ]
+          // }
         }
       ]),
     }, {

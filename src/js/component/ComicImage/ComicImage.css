@@ -5,10 +5,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  >img {
+  > img {
     height: 100%;
   }
-  >div {
+  > div {
     font-size: 40px;
     color: #FFF;
     text-align: center;
