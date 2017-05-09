@@ -90,7 +90,9 @@ chrome.notifications.onClicked.addListener(id => {
 function comicsQuery() {
   chrome.storage.local.get(item => {
     if (typeof item !== 'undefined' && typeof item.subscribe !== 'undefined') {
-      chrome.browserAction.setBadgeText({text: `${(item.update.length > 0) ? item.update.length : ''}`});
+      chrome.browserAction.setBadgeText({
+        text: `${item.update.length > 0 ? item.update.length : ''}`,
+      });
       forEach(item.subscribe, ({ site, comicsID }) => {
         const { chapterURL } = item[site][comicsID];
         const fetchChapterPage = fetchChapterPage$[site];
@@ -154,8 +156,8 @@ function comicsQuery() {
   });
 }
 
-chrome.runtime.onInstalled.addListener((details) => {
-  if (details.reason === 'update'){
+chrome.runtime.onInstalled.addListener(details => {
+  if (details.reason === 'update') {
     chrome.storage.local.get(item => {
       const { version } = chrome.runtime.getManifest();
       if (!item.version) {

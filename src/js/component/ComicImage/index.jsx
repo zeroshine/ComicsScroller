@@ -63,11 +63,11 @@ export class ComicImage extends Component {
           : undefined}
         {!this.props.loading && this.props.type !== 'end'
           ? <img
-            style={this.state.showImage ? undefined : { display: 'none' }}
-            src={this.props.src}
-            onLoad={this.imgLoadHandler}
-            alt={'comicImage'}
-          />
+              style={this.state.showImage ? undefined : { display: 'none' }}
+              src={this.props.src}
+              onLoad={this.imgLoadHandler}
+              alt={'comicImage'}
+            />
           : undefined}
         {this.props.type === 'end' ? '本 章 結 束' : undefined}
       </div>

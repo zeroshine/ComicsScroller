@@ -15,8 +15,6 @@ test('Loading contains circle svg', () => {
 });
 
 test('Loading snapshot', () => {
-  const tree = renderer.create(
-    <Loading />
-  ).toJSON();
+  const tree = renderer.create(<Loading />).toJSON();
   expect(tree).toMatchSnapshot();
 });

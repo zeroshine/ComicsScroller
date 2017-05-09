@@ -146,11 +146,11 @@ class ComicCard extends Component {
             </div>
             {this.props.updateChapter
               ? <div>
-                <span>更新章節</span>
-                <span onClick={this.updateChapterHandler}>
-                  {this.props.updateChapter.title}
-                </span>
-              </div>
+                  <span>更新章節</span>
+                  <span onClick={this.updateChapterHandler}>
+                    {this.props.updateChapter.title}
+                  </span>
+                </div>
               : undefined}
             <div>
               <span>上次看到</span>
