@@ -5,9 +5,9 @@ import { createSelector } from 'reselect';
 import map from 'lodash/map';
 import reduce from 'lodash/reduce';
 import filter from 'lodash/filter';
-import cn from './ImgContainer.css';
 import Loading from 'cmp/Loading';
-import ComicImage from 'cmp/ComicImage';
+import ConnectedComicImage from 'cmp/ComicImage';
+import cn from './ImgContainer.css';
 
 class ImgContainer extends Component {
   props: {
@@ -27,7 +27,7 @@ class ImgContainer extends Component {
       >
         {this.props.renderResult.length > 0
           ? map(this.props.renderResult, key => (
-              <ComicImage key={key} index={key} />
+              <ConnectedComicImage key={key} index={key} />
             ))
           : <Loading />}
       </div>

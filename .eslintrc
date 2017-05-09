@@ -8,7 +8,7 @@
     "chrome": true,
     "ga": true
   },
-  "extends": "airbnb",
+  "extends": ["airbnb", "prettier"],
   "plugins": [
     "flowtype"
   ],

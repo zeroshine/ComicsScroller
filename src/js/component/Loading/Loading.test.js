@@ -4,9 +4,9 @@ import renderer from 'react-test-renderer';
 import Loading from './';
 
 test('Loading contains circle svg', () => {
-  const LoadingCmp = shallow(<Loading />);
+  const Cmp = shallow(<Loading />);
   expect(
-    LoadingCmp.contains(
+    Cmp.contains(
       <svg>
         <circle cx="30" cy="30" r="25" />
       </svg>,

@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for container/App/reducers/sfEpic.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">container/App/reducers</a> sfEpic.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">7.69% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>5/65</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/20</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/37</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">7.94% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>5/63</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/dom/ajax';
+import 'rxjs/add/observable/bindCallback';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/from';
+import map from 'lodash/map';
+import findIndex from 'lodash/findIndex';
+import filter from 'lodash/filter';
+import reduce from 'lodash/reduce';
+import some from 'lodash/some';
+import {
+  updateTitle,
+  updateComicsID,
+  updateChapters,
+  updateChapterList,
+  concatImageList,
+  loadImgSrc,
+  updateChapterLatestIndex,
+  updateChapterNowIndex,
+  updateRenderIndex,
+  updateReadedChapters,
+  updateSubscribe,
+} from './comics';
+import { startScroll } from './scrollEpic';
+&nbsp;
+const baseURL = 'http://comic.sfacg.com';
+const FETCH_CHAPTER = 'FETCH_CHAPTER';
+const FETCH_IMAGE_SRC = 'FETCH_IMAGE_SRC';
+const FETCH_IMG_LIST = 'FETCH_IMG_LIST';
+const UPDATE_READED = 'UPDATE_READED';
+declare var chrome: any;
+&nbsp;
+function <span class="fstat-no" title="function not covered" >fetchImgs$(</span>chapter) {
+<span class="cstat-no" title="statement not covered" >  return Observable.ajax({</span>
+    url: `${baseURL}/${chapter}`,
+    responseType: 'document',
+  }).mergeMap(function <span class="fstat-no" title="function not covered" >fetchImgPageHandler(</span>{ response }) {
+    const comicsID = <span class="cstat-no" title="statement not covered" >/\.sfacg\.com\/(.*\/)$/.exec(</span>
+      response.querySelector('.AD_D2 &gt; a:nth-child(1)').href,
+    )[1];
+    const scriptURL = <span class="cstat-no" title="statement not covered" >/src=\"\/(Utility\/\d+.*\.js)\"&gt;/.exec(</span>
+      response.head.innerHTML,
+    )[1];
+<span class="cstat-no" title="statement not covered" >    return Observable.of({ chapter, scriptURL, comicsID });</span>
+  });
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >fetchScript$(</span>scriptURL, chapter) {
+<span class="cstat-no" title="statement not covered" >  return Observable.ajax({</span>
+    url: `${baseURL}/${scriptURL}`,
+    responseType: 'text',
+  }).mergeMap(function <span class="fstat-no" title="function not covered" >scriptURLHandler(</span>{ response }) {
+    let picCount;
+    let hosts;
+    let picAy;
+<span class="cstat-no" title="statement not covered" >    eval(response); </span>// eslint-disable-line
+    // $FlowFixMe
+    const imgList = <span class="cstat-no" title="statement not covered" >Array.from({ length: picCount }, <span class="fstat-no" title="function not covered" >(v</span>, k) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+      src: `${hosts[1]}${picAy[k]}`,
+      chapter,
+    }));
+<span class="cstat-no" title="statement not covered" >    return Observable.of({ imgList });</span>
+  });
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >fetchImgSrcEpic(</span>action$: any, store: { getState: Function }) {
+<span class="cstat-no" title="statement not covered" >  return action$.ofType(FETCH_IMAGE_SRC).mergeMap(<span class="fstat-no" title="function not covered" >ac</span>tion =&gt; {</span>
+    const { result, entity } = <span class="cstat-no" title="statement not covered" >store.getState().comics.imageList;</span>
+<span class="cstat-no" title="statement not covered" >    return Observable.from(result)</span>
+      .filter(<span class="fstat-no" title="function not covered" >it</span>em =&gt; {
+<span class="cstat-no" title="statement not covered" >        return (</span>
+          item &gt;= action.begin &amp;&amp;
+          item &lt;= action.end &amp;&amp;
+          entity[item].loading &amp;&amp;
+          entity[item].type !== 'end'
+        );
+      })
+      .map(<span class="fstat-no" title="function not covered" >id</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >        return loadImgSrc(entity[id].src, id);</span>
+      });
+  });
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >fetchImgSrc(</span>begin: number, end: number) {
+<span class="cstat-no" title="statement not covered" >  return { type: FETCH_IMAGE_SRC, begin, end };</span>
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >fetchChapterPage$(</span>url: string) {
+<span class="cstat-no" title="statement not covered" >  return Observable.ajax({</span>
+    url,
+    responseType: 'document',
+  }).mergeMap(function <span class="fstat-no" title="function not covered" >fetchChapterPageHandler(</span>{ response }) {
+    const chapterNode = <span class="cstat-no" title="statement not covered" >response.querySelectorAll(</span>
+      '.serialise_list.Blue_link2 &gt; li &gt; a',
+    );
+    const title = <span class="cstat-no" title="statement not covered" >response.querySelector(</span>
+      'body &gt; table &gt; tbody &gt; tr &gt; td:nth-child(1) &gt; table:nth-child(2) &gt; tbody &gt; tr &gt; td &gt; h1 &gt; b',
+    ).textContent;
+    const coverURL = <span class="cstat-no" title="statement not covered" >response.querySelector('.comic_cover &gt; img').src;</span>
+    const chapterList = <span class="cstat-no" title="statement not covered" >map(chapterNode, <span class="fstat-no" title="function not covered" >n </span>=&gt;</span>
+<span class="cstat-no" title="statement not covered" >      n.getAttribute('href').replace(/^(\/)/g, ''),</span>
+    );
+    const chapters = <span class="cstat-no" title="statement not covered" >reduce(</span>
+      chapterNode,
+<span class="fstat-no" title="function not covered" >      (a</span>cc, n) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+        ...acc,
+        [n.getAttribute('href').replace(/^(\/)/g, '')]: {
+          title: n.textContent,
+          href: n.href,
+        },
+      }),
+      {},
+    );
+<span class="cstat-no" title="statement not covered" >    return Observable.of({ title, coverURL, chapterList, chapters });</span>
+  });
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >fetchChapterEpic(</span>action$: any) {
+<span class="cstat-no" title="statement not covered" >  return action$.ofType(FETCH_CHAPTER).mergeMap(<span class="fstat-no" title="function not covered" >ac</span>tion =&gt;</span>
+<span class="cstat-no" title="statement not covered" >    fetchImgs$(action.chapter).mergeMap(<span class="fstat-no" title="function not covered" >({</span> chapter, scriptURL, comicsID }) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      return Observable.merge(</span>
+        Observable.of(updateComicsID(comicsID)),
+        fetchScript$(scriptURL, action.chapter).mergeMap(<span class="fstat-no" title="function not covered" >({</span> imgList }) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+          concatImageList(imgList),
+          updateRenderIndex(0, 6),
+          fetchImgSrc(0, 6),
+        ]),
+        fetchChapterPage$(
+          `${baseURL}/${comicsID}`,
+        ).mergeMap(<span class="fstat-no" title="function not covered" >({</span> title, coverURL, chapterList, chapters }) =&gt; {
+          const chapterIndex = <span class="cstat-no" title="statement not covered" >findIndex(chapterList, <span class="fstat-no" title="function not covered" >it</span>em =&gt; <span class="cstat-no" title="statement not covered" >item === chapter)</span>;</span>
+<span class="cstat-no" title="statement not covered" >          return Observable.bindCallback(</span>
+            chrome.storage.local.get,
+          )().mergeMap(<span class="fstat-no" title="function not covered" >it</span>em =&gt; {
+            const newItem = <span class="cstat-no" title="statement not covered" >{</span>
+              ...item,
+              update: filter(
+                item.upadte,
+<span class="fstat-no" title="function not covered" >                up</span>dateItem =&gt;
+<span class="cstat-no" title="statement not covered" >                  updateItem.site !== 'sf' || updateItem.chapterID !== chapter,</span>
+              ),
+              history: [
+                {
+                  site: 'sf',
+                  comicsID,
+                },
+                ...filter(
+                  item.history,
+<span class="fstat-no" title="function not covered" >                  hi</span>storyItem =&gt;
+<span class="cstat-no" title="statement not covered" >                    historyItem.site !== 'sf' ||</span>
+                    historyItem.comicsID !== comicsID,
+                ),
+              ],
+              sf: {
+                ...item.sf,
+                [comicsID]: {
+                  title,
+                  chapters,
+                  chapterList,
+                  coverURL,
+                  chapterURL: `${baseURL}/${comicsID}`,
+                  lastReaded: chapter,
+                  readedChapters: {
+                    ...(item.sf[comicsID]
+                      ? item.sf[comicsID].readedChapters
+                      : {}),
+                    [chapter]: chapter,
+                  },
+                },
+              },
+            };
+            const subscribe = <span class="cstat-no" title="statement not covered" >some(</span>
+              item.subscribe,
+<span class="fstat-no" title="function not covered" >              ci</span>tem =&gt; <span class="cstat-no" title="statement not covered" >citem.site === 'sf' &amp;&amp; citem.comicsID === comicsID,</span>
+            );
+<span class="cstat-no" title="statement not covered" >            chrome.browserAction.setBadgeText({</span>
+              text: `${newItem.update.length === 0 ? '' : newItem.update.length}`,
+            });
+<span class="cstat-no" title="statement not covered" >            return Observable.merge(</span>
+              Observable.of(updateSubscribe(subscribe)),
+              Observable.bindCallback(chrome.storage.local.set)(
+                newItem,
+              ).mergeMap(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+                updateTitle(title),
+                updateReadedChapters(newItem.sf[comicsID].readedChapters),
+                updateChapters(chapters),
+                updateChapterList(chapterList),
+                updateChapterNowIndex(chapterIndex),
+                updateChapterLatestIndex(chapterIndex),
+                startScroll(),
+              ]),
+            );
+          });
+        }),
+      );
+    }),
+  );
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >fetchChapter(</span>chapter: string) {
+<span class="cstat-no" title="statement not covered" >  return { type: FETCH_CHAPTER, chapter };</span>
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >fetchImgListEpic(</span>action$: any, store: { getState: Function }) {
+<span class="cstat-no" title="statement not covered" >  return action$.ofType(FETCH_IMG_LIST).mergeMap(<span class="fstat-no" title="function not covered" >ac</span>tion =&gt; {</span>
+    const { chapterList } = <span class="cstat-no" title="statement not covered" >store.getState().comics;</span>
+    const chapter = <span class="cstat-no" title="statement not covered" >chapterList[action.index];</span>
+<span class="cstat-no" title="statement not covered" >    return fetchImgs$(chapter).mergeMap(<span class="fstat-no" title="function not covered" >({</span> scriptURL }) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      return fetchScript$(scriptURL, chapter).mergeMap(<span class="fstat-no" title="function not covered" >({</span> imgList }) =&gt; {</span>
+        const nowImgList = <span class="cstat-no" title="statement not covered" >store.getState().comics.imageList.result;</span>
+<span class="cstat-no" title="statement not covered" >        if (nowImgList.length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >          return [</span>
+            concatImageList(imgList),
+            updateRenderIndex(0, 6),
+            fetchImgSrc(0, 6),
+            startScroll(),
+          ];
+        }
+<span class="cstat-no" title="statement not covered" >        return [concatImageList(imgList)];</span>
+      });
+    });
+  });
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >fetchImgList(</span>index: number) {
+<span class="cstat-no" title="statement not covered" >  return { type: FETCH_IMG_LIST, index };</span>
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >updateReadedEpic(</span>action$: any, store: { getState: Function }) {
+<span class="cstat-no" title="statement not covered" >  return action$.ofType(UPDATE_READED).mergeMap(<span class="fstat-no" title="function not covered" >ac</span>tion =&gt;</span>
+<span class="cstat-no" title="statement not covered" >    Observable.bindCallback(chrome.storage.local.get)().mergeMap(<span class="fstat-no" title="function not covered" >it</span>em =&gt; {</span>
+      const { comicsID, chapterList } = <span class="cstat-no" title="statement not covered" >store.getState().comics;</span>
+      const chapterID = <span class="cstat-no" title="statement not covered" >chapterList[action.index];</span>
+      const newItem = <span class="cstat-no" title="statement not covered" >{</span>
+        ...item,
+        update: filter(
+          item.update,
+<span class="fstat-no" title="function not covered" >          ui</span>tem =&gt; <span class="cstat-no" title="statement not covered" >uitem.site !== 'sf' || uitem.chapterID !== chapterID,</span>
+        ),
+        sf: {
+          ...item.sf,
+          [comicsID]: {
+            ...item.sf[comicsID],
+            lastReaded: chapterID,
+            readedChapters: {
+              ...item.sf[comicsID].readedChapters,
+              [chapterID]: chapterID,
+            },
+          },
+        },
+      };
+<span class="cstat-no" title="statement not covered" >      return Observable.bindCallback(chrome.storage.local.set)(</span>
+        newItem,
+      ).mergeMap(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >        chrome.browserAction.setBadgeText({</span>
+          text: `${newItem.update.length === 0 ? '' : newItem.update.length}`,
+        });
+<span class="cstat-no" title="statement not covered" >        return [</span>
+          updateReadedChapters(newItem.sf[comicsID].readedChapters),
+          updateChapterNowIndex(action.index),
+        ];
+      });
+    }),
+  );
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >updateReaded(</span>index: number) {
+<span class="cstat-no" title="statement not covered" >  return { type: UPDATE_READED, index };</span>
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu May 04 2017 16:17:17 GMT+0800 (CST)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

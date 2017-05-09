@@ -237,7 +237,7 @@ export function updateReadedEpic(action$, store) {
       const chapterID = chapterList[action.index];
       const newItem = {
         ...item,
-        udpate: filter(
+        update: filter(
           item.update,
           uitem => uitem.site !== 'dm5' || uitem.chapterID !== chapterID,
         ),

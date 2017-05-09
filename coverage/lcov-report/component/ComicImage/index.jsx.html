@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for component/ComicImage/index.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">component/ComicImage</a> index.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">15.79% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>3/19</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">42.86% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>9/21</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">40% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/5</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">15.79% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>3/19</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import cn from './ComicImage.css';
+import { updateImgType } from '../../container/App/reducers/comics';
+&nbsp;
+export function getImgClass(type: string) {
+  switch (type) {
+<span class="branch-0 cbranch-no" title="branch not covered" >    case 'normal':</span>
+<span class="cstat-no" title="statement not covered" >      return cn.ComicImage;</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    case 'wide':</span>
+<span class="cstat-no" title="statement not covered" >      return cn.ComicImageWide;</span>
+<span class="branch-2 cbranch-no" title="branch not covered" >    case 'natural':</span>
+<span class="cstat-no" title="statement not covered" >      return cn.ComicImageNatural;</span>
+<span class="branch-3 cbranch-no" title="branch not covered" >    case 'end':</span>
+<span class="cstat-no" title="statement not covered" >      return cn.ComicImageEnd;</span>
+    default:
+      return cn.ComicImageInit;
+  }
+}
+&nbsp;
+export class ComicImage extends Component {
+  state: {
+    showImage: boolean,
+  };
+&nbsp;
+  props: {
+    loading: boolean,
+    src: number,
+    type: string,
+    index: Function,
+    updateImgType: Function,
+  };
+&nbsp;
+  w: number;
+  h: number;
+&nbsp;
+  state = {
+    showImage: false,
+  };
+&nbsp;
+  imgLoadHandler = <span class="fstat-no" title="function not covered" >e </span>=&gt; {
+<span class="cstat-no" title="statement not covered" >    this.w = e.target.naturalWidth;</span>
+<span class="cstat-no" title="statement not covered" >    this.h = e.target.naturalHeight;</span>
+    const innerHeight = <span class="cstat-no" title="statement not covered" >window.innerHeight;</span>
+<span class="cstat-no" title="statement not covered" >    if (this.h &gt; innerHeight - 48) {</span>
+<span class="cstat-no" title="statement not covered" >      if (this.w &gt; this.h) {</span>
+<span class="cstat-no" title="statement not covered" >        this.props.updateImgType(innerHeight - 68, this.props.index, 'wide');</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        this.props.updateImgType(1400, this.props.index, 'normal');</span>
+      }
+    } else {
+<span class="cstat-no" title="statement not covered" >      this.props.updateImgType(this.h, this.props.index, 'natural');</span>
+    }
+<span class="cstat-no" title="statement not covered" >    this.setState({ showImage: true });</span>
+  };
+&nbsp;
+  render() {
+    return (
+      &lt;div className={getImgClass(this.props.type)}&gt;
+        {!this.state.showImage &amp;&amp; this.props.type !== 'end'
+          ? &lt;div&gt;Loading...&lt;/div&gt;
+          : <span class="branch-1 cbranch-no" title="branch not covered" >undefined}</span>
+        {!this.props.loading &amp;&amp; this.props.type !== 'end'
+          ? &lt;img
+            style={this.state.showImage ? <span class="branch-0 cbranch-no" title="branch not covered" >undefined </span>: { display: 'none' }}
+            src={this.props.src}
+            onLoad={this.imgLoadHandler}
+            alt={'comicImage'}
+          /&gt;
+          : <span class="branch-1 cbranch-no" title="branch not covered" >undefined}</span>
+        {this.props.type === 'end' ? <span class="branch-0 cbranch-no" title="branch not covered" >'本 章 結 束' </span>: undefined}
+      &lt;/div&gt;
+    );
+  }
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >makeMapStateToProps(</span>state, props) {
+  const { index } = <span class="cstat-no" title="statement not covered" >props;</span>
+<span class="cstat-no" title="statement not covered" >  return function <span class="fstat-no" title="function not covered" >mapStateToProps(</span>{ comics }) {</span>
+<span class="cstat-no" title="statement not covered" >    return {</span>
+      src: comics.imageList.entity[index].src,
+      loading: comics.imageList.entity[index].loading,
+      type: comics.imageList.entity[index].type,
+    };
+  };
+}
+&nbsp;
+export default connect(makeMapStateToProps, {
+  updateImgType,
+})(ComicImage);
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu May 04 2017 16:17:17 GMT+0800 (CST)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

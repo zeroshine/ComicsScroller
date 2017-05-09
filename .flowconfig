@@ -2,6 +2,7 @@
 ./bin
 ./Comicscroller
 ./node_moduless
+**/*.test.js
 
 [include]
 ./src/js/**/*.jsx

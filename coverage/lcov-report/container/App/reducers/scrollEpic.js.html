@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for container/App/reducers/scrollEpic.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">container/App/reducers</a> scrollEpic.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">9.38% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>3/32</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">9.38% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>3/32</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/throttleTime';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import findIndex from 'lodash/findIndex';
+import { fetchImgSrc, fetchImgList, updateReaded } from './getAction';
+import { updateChapterLatestIndex, updateRenderIndex } from './comics';
+&nbsp;
+const START_SCROLL_EPIC = 'START_SCROLL_EPIC';
+const STOP_SCROLL_EPIC = 'STOP_SCROLL_EPIC';
+declare var document: Document;
+// function getImageIndexOnScreen(entity, begin, end) {
+//   if (end &lt;= begin) {
+//     return {
+//       begin: begin - 6,
+//       end: begin + 6,
+//     };
+//   }
+//   const index = Math.floor((begin + end) / 2);
+//   const { bottom, top } = entity[index].node.getBoundingClientRect();
+//   const { innerHeight } = window;
+//   if ((top &lt;= 0 &amp;&amp; bottom &gt;= 0) ||
+//     (bottom &gt;= innerHeight &amp;&amp; top &lt;= innerHeight) ||
+//     (top &gt; 0 &amp;&amp; top &lt; innerHeight &amp;&amp; bottom &gt; 0 &amp;&amp; bottom &lt; innerHeight)) {
+//     return {
+//       begin: index - 6,
+//       end: index + 6,
+//     };
+//   } else if (top &gt; innerHeight) {
+//     return getImageIndexOnScreen(entity, begin, index);
+//   } else if (bottom &lt; 0) {
+//     return getImageIndexOnScreen(entity, index + 1, end);
+//   }
+//   return { begin: -1, end: -1 };
+// }
+&nbsp;
+const margin = 20;
+&nbsp;
+function <span class="fstat-no" title="function not covered" >fromScrollEvent(</span>store: { getState: Function }, cancelType: string) {
+<span class="cstat-no" title="statement not covered" >  return Observable.fromEvent(document, 'scroll')</span>
+    .throttleTime(100)
+    .mergeMap(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+      const { entity, result } = <span class="cstat-no" title="statement not covered" >store.getState().comics.imageList;</span>
+      const {
+        chapterList,
+        chapterLatestIndex,
+        chapterNowIndex,
+        renderBeginIndex,
+        renderEndIndex,
+        innerHeight,
+      } = <span class="cstat-no" title="statement not covered" >store.getState().comics;</span>
+      let accHeight = <span class="cstat-no" title="statement not covered" >margin;</span>
+      let viewIndex = <span class="cstat-no" title="statement not covered" >0;</span>
+      const scrollTop = <span class="cstat-no" title="statement not covered" >document.body ? document.body.scrollTop : 0;</span>
+      const len = <span class="cstat-no" title="statement not covered" >result.length;</span>
+<span class="cstat-no" title="statement not covered" >      for (let i = 0; i &lt; len; i += 1) {</span>
+<span class="cstat-no" title="statement not covered" >        viewIndex = i;</span>
+<span class="cstat-no" title="statement not covered" >        if (accHeight &gt; scrollTop) {</span>
+<span class="cstat-no" title="statement not covered" >          break;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        if (entity[result[i]].type === 'wide') {</span>
+<span class="cstat-no" title="statement not covered" >          accHeight += innerHeight - 68 + 2 * margin;</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          accHeight += entity[result[i]].height + 2 * margin;</span>
+        }
+      }
+      const imgChapter = <span class="cstat-no" title="statement not covered" >entity[viewIndex].chapter;</span>
+      const imgChapterIndex = <span class="cstat-no" title="statement not covered" >findIndex(</span>
+        chapterList,
+<span class="fstat-no" title="function not covered" >        it</span>em =&gt; <span class="cstat-no" title="statement not covered" >item === imgChapter,</span>
+      );
+      const result$ = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >      if ((renderBeginIndex + renderEndIndex) / 2 !== viewIndex) {</span>
+<span class="cstat-no" title="statement not covered" >        result$.push(</span>
+          updateRenderIndex(viewIndex - 6, viewIndex + 6),
+          fetchImgSrc(viewIndex - 6, viewIndex + 6),
+        );
+      }
+<span class="cstat-no" title="statement not covered" >      if (chapterLatestIndex === imgChapterIndex &amp;&amp; chapterLatestIndex &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >        result$.push(</span>
+          fetchImgList(chapterLatestIndex - 1),
+          updateChapterLatestIndex(chapterLatestIndex - 1),
+        );
+      }
+<span class="cstat-no" title="statement not covered" >      if (chapterNowIndex !== imgChapterIndex) {</span>
+<span class="cstat-no" title="statement not covered" >        result$.push(updateReaded(imgChapterIndex));</span>
+      }
+<span class="cstat-no" title="statement not covered" >      return result$;</span>
+    })
+    .takeUntil(cancelType);
+}
+&nbsp;
+export default function <span class="fstat-no" title="function not covered" >scrollEpic(</span>
+  action$: any,
+  store: { getState: Function },
+) {
+<span class="cstat-no" title="statement not covered" >  return action$</span>
+    .ofType(START_SCROLL_EPIC)
+    .mergeMap(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >fromScrollEvent(store, action$.ofType(STOP_SCROLL_EPIC)))</span>;
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >startScroll(</span>) {
+<span class="cstat-no" title="statement not covered" >  return { type: START_SCROLL_EPIC };</span>
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >stopScroll(</span>) {
+<span class="cstat-no" title="statement not covered" >  return { type: STOP_SCROLL_EPIC };</span>
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu May 04 2017 16:17:17 GMT+0800 (CST)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

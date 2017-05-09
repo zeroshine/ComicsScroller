@@ -5,7 +5,6 @@ import cn from './ComicImage.css';
 import { updateImgType } from '../../container/App/reducers/comics';
 
 function getImgClass(type: string) {
-  if (type === 'end') return cn.ComicImageEnd;
   switch (type) {
     case 'normal':
       return cn.ComicImage;
@@ -13,12 +12,14 @@ function getImgClass(type: string) {
       return cn.ComicImageWide;
     case 'natural':
       return cn.ComicImageNatural;
+    case 'end':
+      return cn.ComicImageEnd;
     default:
       return cn.ComicImageInit;
   }
 }
 
-class ComicImage extends Component {
+export class ComicImage extends Component {
   state: {
     showImage: boolean,
   };

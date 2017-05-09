@@ -90,6 +90,7 @@ chrome.notifications.onClicked.addListener(id => {
 function comicsQuery() {
   chrome.storage.local.get(item => {
     if (typeof item !== 'undefined' && typeof item.subscribe !== 'undefined') {
+      chrome.browserAction.setBadgeText({text: `${(item.update.length > 0) ? item.update.length : ''}`});
       forEach(item.subscribe, ({ site, comicsID }) => {
         const { chapterURL } = item[site][comicsID];
         const fetchChapterPage = fetchChapterPage$[site];
@@ -153,22 +154,26 @@ function comicsQuery() {
   });
 }
 
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.get(item => {
-    const { version } = chrome.runtime.getManifest();
-    if (!item.version) {
-      chrome.storage.local.clear();
-      chrome.storage.local.set(initObject);
-    } else {
-      chrome.storage.local.set({ ...initObject, ...item });
-    }
-    chrome.notifications.create('Comics Scroller Update', {
-      type: 'basic',
-      iconUrl: './imgs/comics-128.png',
-      title: 'Comics Scroller Update',
-      message: `Comics Scroller ${version} 更新`,
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'update'){
+    chrome.storage.local.get(item => {
+      const { version } = chrome.runtime.getManifest();
+      if (!item.version) {
+        chrome.storage.local.clear();
+        chrome.storage.local.set(initObject);
+      } else {
+        const newItem = { ...initObject, ...item };
+        delete newItem.udpate;
+        chrome.storage.local.set(newItem);
+      }
+      chrome.notifications.create('Comics Scroller Update', {
+        type: 'basic',
+        iconUrl: './imgs/comics-128.png',
+        title: 'Comics Scroller Update',
+        message: `Comics Scroller ${version} 更新`,
+      });
     });
-  });
+  }
 });
 
 chrome.webNavigation.onBeforeNavigate.addListener(
