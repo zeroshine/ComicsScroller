@@ -1,5 +1,6 @@
 node_modules/*
 ComicsScroller.zip
+coverage/*
 ComicsScroller/
 npm-debug.log
 .DS_Store
