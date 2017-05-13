@@ -3,6 +3,8 @@
   display: flex;
   background: #fff;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+  position: relative;
+  z-index: 100;
 }
 
 .button {
@@ -111,6 +113,10 @@
   overflow-x: hidden;
   display: flex;
   transition: 330ms ease-in-out transform;
+  > div {
+    height: calc(100vh - 48px);
+    overflow-y: auto;
+  }
   &::-webkit-scrollbar {
     background: transparent;
     width: 6px;
@@ -119,7 +125,7 @@
     background: rgba(117, 117, 117, 0.5);
     border-radius: 3px;
   }
-  >div {
+  > div {
     width: 500px;
     flex: 0 0 auto;
   }

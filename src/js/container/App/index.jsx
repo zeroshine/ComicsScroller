@@ -126,7 +126,7 @@ class App extends Component {
             ...item,
             subscribe: filter(
               item.subscribe,
-              citem => citem.site !== site && citem.chapter !== chapter,
+              citem => citem.site !== site || citem.comicsID !== comicsID,
             ),
           };
           chrome.storage.local.set(newItem, () =>
