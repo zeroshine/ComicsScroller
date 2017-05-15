@@ -164,9 +164,7 @@ chrome.runtime.onInstalled.addListener(details => {
         chrome.storage.local.clear();
         chrome.storage.local.set(initObject);
       } else {
-        const newItem = { ...initObject, ...item };
-        delete newItem.udpate;
-        chrome.storage.local.set(newItem);
+        chrome.storage.local.set({ ...initObject, ...item });
       }
       chrome.notifications.create('Comics Scroller Update', {
         type: 'basic',
