@@ -185,15 +185,20 @@ export function fetchChapterEpic(action$: any) {
               Observable.of(updateSubscribe(subscribe)),
               Observable.bindCallback(chrome.storage.local.set)(
                 newItem,
-              ).mergeMap(() => [
-                updateTitle(title),
-                updateReadedChapters(newItem.sf[comicsID].readedChapters),
-                updateChapters(chapters),
-                updateChapterList(chapterList),
-                updateChapterNowIndex(chapterIndex),
-                updateChapterLatestIndex(chapterIndex),
-                startScroll(),
-              ]),
+              ).mergeMap(() => {
+                chrome.browserAction.setBadgeText({
+                  text: `${newItem.update.length === 0 ? '' : newItem.update.length}`,
+                });
+                return [
+                  updateTitle(title),
+                  updateReadedChapters(newItem.sf[comicsID].readedChapters),
+                  updateChapters(chapters),
+                  updateChapterList(chapterList),
+                  updateChapterNowIndex(chapterIndex),
+                  updateChapterLatestIndex(chapterIndex),
+                  startScroll(),
+                ];
+              }),
             );
           });
         }),
