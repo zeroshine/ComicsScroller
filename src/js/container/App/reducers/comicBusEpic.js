@@ -218,7 +218,7 @@ export function fetchChapterEpic(action$: any) {
             const newItem = {
               ...item,
               update: filter(
-                item.upadte,
+                item.update,
                 updateItem =>
                   updateItem.site !== 'comicbus' ||
                   updateItem.chapterID !== action.chapter,

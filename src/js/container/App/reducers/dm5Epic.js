@@ -145,7 +145,7 @@ export function fetchChapterEpic(action$) {
             const newItem = {
               ...item,
               update: filter(
-                item.upadte,
+                item.update,
                 updateItem =>
                   updateItem.site !== 'dm5' || updateItem.chapterID !== chapter,
               ),
