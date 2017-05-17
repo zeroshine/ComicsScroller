@@ -53,17 +53,17 @@ function fromScrollEvent(store: { getState: Function }, cancelType: string) {
       } = store.getState().comics;
       let accHeight = margin;
       let viewIndex = 0;
-      const scrollTop = document.body ? document.body.scrollTop : 0;
+      const scrollTop = (document.body) ? document.body.scrollTop + 0.75 * innerHeight : 0;
       const len = result.length;
       for (let i = 0; i < len; i += 1) {
-        viewIndex = i;
-        if (accHeight > scrollTop) {
-          break;
-        }
         if (entity[result[i]].type === 'wide') {
           accHeight += innerHeight - 68 + 2 * margin;
         } else {
           accHeight += entity[result[i]].height + 2 * margin;
+        }
+        if (accHeight > scrollTop) {
+          viewIndex = i;
+          break;
         }
       }
       const imgChapter = entity[viewIndex].chapter;
