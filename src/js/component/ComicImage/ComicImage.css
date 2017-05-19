@@ -18,7 +18,6 @@
 
 .ComicImage {
   composes: ComicImageNatural;
-  height: 1400px;
 }
 
 .ComicImageInit {
@@ -28,12 +27,10 @@
 
 .ComicImageWide {
   composes: ComicImage;
-  max-height: calc(100vh - 68px);
   min-width: 980px;
 }
 
 .ComicImageEnd {
-  height: 72px;
   margin: 20px 0;
   line-height: 72px;
   font-size: 36px;

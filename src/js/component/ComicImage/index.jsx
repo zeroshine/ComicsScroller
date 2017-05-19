@@ -28,6 +28,7 @@ export class ComicImage extends Component {
     loading: boolean,
     src: number,
     type: string,
+    height: number,
     index: Function,
     updateImgType: Function,
   };
@@ -40,24 +41,29 @@ export class ComicImage extends Component {
   };
 
   imgLoadHandler = e => {
-    this.w = e.target.naturalWidth;
-    this.h = e.target.naturalHeight;
-    const innerHeight = window.innerHeight;
-    if (this.h > innerHeight - 48) {
-      if (this.w > this.h) {
-        this.props.updateImgType(innerHeight - 68, this.props.index, 'wide');
+    if (this.props.type === 'image') {
+      this.w = e.target.naturalWidth;
+      this.h = e.target.naturalHeight;
+      const innerHeight = window.innerHeight;
+      if (this.h > innerHeight - 48) {
+        if (this.w > this.h) {
+          this.props.updateImgType(innerHeight - 68, this.props.index, 'wide');
+        } else {
+          this.props.updateImgType(1400, this.props.index, 'normal');
+        }
       } else {
-        this.props.updateImgType(1400, this.props.index, 'normal');
+        this.props.updateImgType(this.h + 4, this.props.index, 'natural');
       }
-    } else {
-      this.props.updateImgType(this.h, this.props.index, 'natural');
     }
     this.setState({ showImage: true });
   };
 
   render() {
     return (
-      <div className={getImgClass(this.props.type)}>
+      <div
+        className={getImgClass(this.props.type)}
+        style={{ height: this.props.height }}
+      >
         {!this.state.showImage && this.props.type !== 'end'
           ? <div>Loading...</div>
           : undefined}
@@ -78,11 +84,8 @@ export class ComicImage extends Component {
 function makeMapStateToProps(state, props) {
   const { index } = props;
   return function mapStateToProps({ comics }) {
-    return {
-      src: comics.imageList.entity[index].src,
-      loading: comics.imageList.entity[index].loading,
-      type: comics.imageList.entity[index].type,
-    };
+    const { src, loading, type, height } = comics.imageList.entity[index];
+    return { src, loading, type, height };
   };
 }
 

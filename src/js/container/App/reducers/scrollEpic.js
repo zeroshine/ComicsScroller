@@ -53,7 +53,8 @@ function fromScrollEvent(store: { getState: Function }, cancelType: string) {
       } = store.getState().comics;
       let accHeight = margin;
       let viewIndex = 0;
-      const scrollTop = (document.body) ? document.body.scrollTop + 0.75 * innerHeight : 0;
+      // $FlowFixMe
+      const scrollTop = document.body.scrollTop + 0.75 * innerHeight;
       const len = result.length;
       for (let i = 0; i < len; i += 1) {
         if (entity[result[i]].type === 'wide') {
