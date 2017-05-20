@@ -14,7 +14,7 @@
           }
         ],
         "react",
-        "stage-2",
+        "stage-2"
       ],
       "plugins": [
         "transform-runtime",

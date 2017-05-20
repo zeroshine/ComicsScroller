@@ -36,6 +36,7 @@ class App extends Component {
     comicsID: string,
     chapter: string,
     chapterTitle: string,
+    chapterList: Array<*>,
     site: string,
     chapterNowIndex: number,
     prevable: boolean,
@@ -162,7 +163,7 @@ class App extends Component {
             </IconButton>
             <span>Comics Scroller</span>
             <span>{`${this.props.title}  >`}</span>
-            <span>{this.props.chapterTitle}</span>
+            <span>{(this.props.chapterList.length > 0) ? this.props.chapterTitle : 'Loading ...'}</span>
           </span>
           <span className={cn.rigthtContainer}>
             <IconButton>
@@ -224,6 +225,7 @@ function mapStateToProps(state) {
     chapter: chapterList.length > 0 && chapters[chapterID]
       ? chapters[chapterID].chapter
       : '',
+    chapterList,
     prevable: chapterNowIndex < chapterList.length,
     nextable: chapterNowIndex > 0,
     chapterNowIndex,

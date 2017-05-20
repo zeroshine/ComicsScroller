@@ -67,11 +67,6 @@ function fromScrollEvent(store: { getState: Function }, cancelType: string) {
           break;
         }
       }
-      const imgChapter = entity[viewIndex].chapter;
-      const imgChapterIndex = findIndex(
-        chapterList,
-        item => item === imgChapter,
-      );
       const result$ = [];
       if ((renderBeginIndex + renderEndIndex) / 2 !== viewIndex) {
         result$.push(
@@ -79,14 +74,21 @@ function fromScrollEvent(store: { getState: Function }, cancelType: string) {
           fetchImgSrc(viewIndex - 6, viewIndex + 6),
         );
       }
-      if (chapterLatestIndex === imgChapterIndex && chapterLatestIndex > 0) {
-        result$.push(
-          fetchImgList(chapterLatestIndex - 1),
-          updateChapterLatestIndex(chapterLatestIndex - 1),
+      if (chapterList.length > 0) {
+        const imgChapter = entity[viewIndex].chapter;
+        const imgChapterIndex = findIndex(
+          chapterList,
+          item => item === imgChapter,
         );
-      }
-      if (chapterNowIndex !== imgChapterIndex) {
-        result$.push(updateReaded(imgChapterIndex));
+        if (chapterLatestIndex === imgChapterIndex && chapterLatestIndex > 0) {
+          result$.push(
+            fetchImgList(chapterLatestIndex - 1),
+            updateChapterLatestIndex(chapterLatestIndex - 1),
+          );
+        }
+        if (chapterNowIndex !== imgChapterIndex) {
+          result$.push(updateReaded(imgChapterIndex));
+        }
       }
       return result$;
     })

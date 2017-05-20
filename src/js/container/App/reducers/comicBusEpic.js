@@ -197,6 +197,29 @@ export function fetchChapterPage$(url: string) {
   });
 }
 
+export function fetchImgListEpic(action$: any, store: Store) {
+  return action$.ofType(FETCH_IMG_LIST).mergeMap(action => {
+    const { chapterList } = store.getState().comics;
+    const chapter = chapterList[action.index];
+    return fetchImgs$(chapter).mergeMap(({ imgList }) => {
+      const nowImgList = store.getState().comics.imageList.result;
+      if (nowImgList.length === 0) {
+        return [
+          concatImageList(imgList),
+          updateRenderIndex(0, 6),
+          fetchImgSrc(0, 6),
+          startScroll(),
+        ];
+      }
+      return [concatImageList(imgList)];
+    });
+  });
+}
+
+export function fetchImgList(index: number) {
+  return { type: FETCH_IMG_LIST, index };
+}
+
 export function fetchChapterEpic(action$: any) {
   return action$.ofType(FETCH_CHAPTER).mergeMap(action =>
     fetchImgs$(action.chapter).mergeMap(({ imgList, comicsID }) => {
@@ -205,6 +228,7 @@ export function fetchChapterEpic(action$: any) {
         Observable.of(concatImageList(imgList)),
         Observable.of(updateRenderIndex(0, 6)),
         Observable.of(fetchImgSrc(0, 6)),
+        Observable.of(startScroll()),
         fetchChapterPage$(
           `${baseURL}/html/${comicsID}.html`,
         ).mergeMap(({ title, coverURL, chapterList, chapters }) => {
@@ -268,15 +292,22 @@ export function fetchChapterEpic(action$: any) {
                 chrome.browserAction.setBadgeText({
                   text: `${newItem.update.length === 0 ? '' : newItem.update.length}`,
                 });
-                return [
+                const result$ = [
                   updateTitle(title),
                   updateReadedChapters(newItem.comicbus[comicsID].readedChapters),
                   updateChapters(chapters),
                   updateChapterList(chapterList),
                   updateChapterNowIndex(chapterIndex),
-                  updateChapterLatestIndex(chapterIndex),
-                  startScroll(),
                 ];
+                if (chapterIndex > 0) {
+                  result$.push(
+                    fetchImgList(chapterIndex - 1),
+                    updateChapterLatestIndex(chapterIndex - 1),
+                  );
+                } else {
+                  result$.push(updateChapterLatestIndex(chapterIndex - 1));
+                }
+                return result$;
               }),
             );
           });
@@ -288,29 +319,6 @@ export function fetchChapterEpic(action$: any) {
 
 export function fetchChapter(chapter: string) {
   return { type: FETCH_CHAPTER, chapter };
-}
-
-export function fetchImgListEpic(action$: any, store: Store) {
-  return action$.ofType(FETCH_IMG_LIST).mergeMap(action => {
-    const { chapterList } = store.getState().comics;
-    const chapter = chapterList[action.index];
-    return fetchImgs$(chapter).mergeMap(({ imgList }) => {
-      const nowImgList = store.getState().comics.imageList.result;
-      if (nowImgList.length === 0) {
-        return [
-          concatImageList(imgList),
-          updateRenderIndex(0, 6),
-          fetchImgSrc(0, 6),
-          startScroll(),
-        ];
-      }
-      return [concatImageList(imgList)];
-    });
-  });
-}
-
-export function fetchImgList(index: number) {
-  return { type: FETCH_IMG_LIST, index };
 }
 
 export function updateReadedEpic(action$: any, store: { getState: Function }) {

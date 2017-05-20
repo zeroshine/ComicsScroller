@@ -8,19 +8,24 @@
     "chrome": true,
     "ga": true
   },
-  "extends": ["airbnb", "prettier"],
+  "extends": [
+    "airbnb",
+    "prettier",
+    "prettier/flowtype",
+    "prettier/react"
+  ],
   "plugins": [
     "flowtype"
   ],
   "rules": {
     "prefer-arrow-callback": "off",
     "arrow-body-style": "off",
-    "arrow-parens": "off",
-    "no-mixed-operators": "off",
+    // "arrow-parens": "off",
+    // "no-mixed-operators": "off",
     "no-useless-escape": "off",
     "react/prefer-stateless-function": "off",
     "react/sort-comp": "off",
-    "react/require-default-props": "off",
+    // "react/require-default-props": "off",
     "flowtype/define-flow-type": 1,
     "jsx-a11y/no-static-element-interactions": "off"
   },

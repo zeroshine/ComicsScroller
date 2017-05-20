@@ -20,10 +20,11 @@ render(
 
 if (module.hot) {
   module.hot.accept('./container/App', () => {
+    const NextApp = require('./container/App').default;
     render(
       <AppContainer>
         <Provider store={store}>
-          <App />
+          <NextApp />
         </Provider>
       </AppContainer>,
       document.getElementById('app'),
