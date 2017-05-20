@@ -227,9 +227,7 @@ export function fetchChapterEpic(action$, store) {
                     updateChapterLatestIndex(chapterIndex - 1),
                   );
                 } else {
-                  result$.push(
-                    updateChapterLatestIndex(chapterIndex - 1),
-                  );
+                  result$.push(updateChapterLatestIndex(chapterIndex - 1));
                 }
                 return result$;
               }),

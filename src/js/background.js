@@ -103,7 +103,7 @@ function comicsQuery() {
           chapterURL,
         ).subscribe(({ title, chapterList, coverURL, chapters }) => {
           const comic = item[site][comicsID];
-          forEach(chapterList, (chapterID) => {
+          forEach(chapterList, chapterID => {
             if (!comic.chapters[chapterID]) {
               chrome.storage.local.get(oldStore =>
                 chrome.storage.local.set(

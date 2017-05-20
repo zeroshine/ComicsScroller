@@ -40,7 +40,7 @@ export class ComicImage extends Component {
     showImage: false,
   };
 
-  imgLoadHandler = (e : Event) => {
+  imgLoadHandler = (e: Event) => {
     if (this.props.type === 'image' && e.target instanceof HTMLImageElement) {
       this.w = e.target.naturalWidth;
       this.h = e.target.naturalHeight;

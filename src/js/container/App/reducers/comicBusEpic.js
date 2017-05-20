@@ -294,7 +294,9 @@ export function fetchChapterEpic(action$: any) {
                 });
                 const result$ = [
                   updateTitle(title),
-                  updateReadedChapters(newItem.comicbus[comicsID].readedChapters),
+                  updateReadedChapters(
+                    newItem.comicbus[comicsID].readedChapters,
+                  ),
                   updateChapters(chapters),
                   updateChapterList(chapterList),
                   updateChapterNowIndex(chapterIndex),

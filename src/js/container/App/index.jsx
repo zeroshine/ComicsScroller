@@ -163,7 +163,11 @@ class App extends Component {
             </IconButton>
             <span>Comics Scroller</span>
             <span>{`${this.props.title}  >`}</span>
-            <span>{(this.props.chapterList.length > 0) ? this.props.chapterTitle : 'Loading ...'}</span>
+            <span>
+              {this.props.chapterList.length > 0
+                ? this.props.chapterTitle
+                : 'Loading ...'}
+            </span>
           </span>
           <span className={cn.rigthtContainer}>
             <IconButton>
