@@ -84,7 +84,10 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 );
 
 chrome.notifications.onClicked.addListener(id => {
-  chrome.tabs.create({ url: id });
+  if (id !== 'Comics Scroller Update') {
+    chrome.tabs.create({ url: id });
+  }
+  chrome.notifications.clear(id);
 });
 
 function comicsQuery() {
@@ -100,7 +103,7 @@ function comicsQuery() {
           chapterURL,
         ).subscribe(({ title, chapterList, coverURL, chapters }) => {
           const comic = item[site][comicsID];
-          forEach(chapterList, chapterID => {
+          forEach(chapterList, (chapterID) => {
             if (!comic.chapters[chapterID]) {
               chrome.storage.local.get(oldStore =>
                 chrome.storage.local.set(
@@ -170,7 +173,7 @@ chrome.runtime.onInstalled.addListener(details => {
         type: 'basic',
         iconUrl: './imgs/comics-128.png',
         title: 'Comics Scroller Update',
-        message: `Comics Scroller ${version} 更新`,
+        message: `Comics Scroller 版本 ${version} 更新`,
       });
     });
   }
