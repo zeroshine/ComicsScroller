@@ -29,6 +29,7 @@ export class ComicImage extends Component {
     src: number,
     type: string,
     height: number,
+    innerHeight: number,
     index: Function,
     updateImgType: Function,
   };
@@ -44,7 +45,7 @@ export class ComicImage extends Component {
     if (this.props.type === 'image' && e.target instanceof HTMLImageElement) {
       this.w = e.target.naturalWidth;
       this.h = e.target.naturalHeight;
-      const innerHeight = window.innerHeight;
+      const innerHeight = this.props.innerHeight;
       if (this.h > innerHeight - 48) {
         if (this.w > this.h) {
           this.props.updateImgType(innerHeight - 68, this.props.index, 'wide');
@@ -84,8 +85,8 @@ export class ComicImage extends Component {
 function makeMapStateToProps(state, props) {
   const { index } = props;
   return function mapStateToProps({ comics }) {
-    const { src, loading, type, height } = comics.imageList.entity[index];
-    return { src, loading, type, height };
+    const { src, loading, type, height, innerHeight } = comics.imageList.entity[index];
+    return { src, loading, type, height, innerHeight };
   };
 }
 
