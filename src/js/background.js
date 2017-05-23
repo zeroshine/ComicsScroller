@@ -176,6 +176,9 @@ chrome.runtime.onInstalled.addListener(details => {
         message: `Comics Scroller 版本 ${version} 更新`,
       });
     });
+  } else if (details.reason === 'install') {
+    chrome.storage.local.clear();
+    chrome.storage.local.set(initObject);
   }
 });
 
