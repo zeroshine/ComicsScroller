@@ -85,8 +85,8 @@ export class ComicImage extends Component {
 function makeMapStateToProps(state, props) {
   const { index } = props;
   return function mapStateToProps({ comics }) {
-    const { src, loading, type, height, innerHeight } = comics.imageList.entity[index];
-    return { src, loading, type, height, innerHeight };
+    const { src, loading, type, height } = comics.imageList.entity[index];
+    return { src, loading, type, height, innerHeight: comics.innerHeight };
   };
 }
 

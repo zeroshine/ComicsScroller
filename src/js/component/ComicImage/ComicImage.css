@@ -5,8 +5,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  max-width: calc(100vw);
   > img {
     height: 100%;
+    max-width: calc(100vw - 4px);
+    object-fit: contain;
   }
   > div {
     font-size: 40px;
