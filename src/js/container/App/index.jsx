@@ -162,7 +162,8 @@ class App extends Component {
               <MenuIcon className={cn.icon} />
             </IconButton>
             <span>Comics Scroller</span>
-            <span>{`${this.props.title}  >`}</span>
+            <a target='_blank' href={this.props.chapterURL}>{`${this.props.title}`}</a>
+            <span>></span>
             <span>
               {this.props.chapterList.length > 0
                 ? this.props.chapterTitle
@@ -218,6 +219,7 @@ function mapStateToProps(state) {
     subscribe,
     site,
     comicsID,
+    baseURL,
   } = state.comics;
   const chapterID = chapterList[chapterNowIndex];
   return {
@@ -235,6 +237,7 @@ function mapStateToProps(state) {
     chapterNowIndex,
     comicsID,
     subscribe,
+    chapterURL: `${baseURL}/${comicsID}`,
   };
 }
 

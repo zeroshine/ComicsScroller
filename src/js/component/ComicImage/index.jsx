@@ -50,7 +50,8 @@ export class ComicImage extends Component {
         if (this.w > this.h) {
           this.props.updateImgType(innerHeight - 68, this.props.index, 'wide');
         } else {
-          this.props.updateImgType(1400, this.props.index, 'normal');
+          // this.props.updateImgType(1400, this.props.index, 'normal');
+          this.props.updateImgType(this.h + 4, this.props.index, 'natural'); 
         }
       } else {
         this.props.updateImgType(this.h + 4, this.props.index, 'natural');

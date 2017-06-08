@@ -20,6 +20,7 @@ module.exports = {
     ]
   },
   output: {
+    publicPath: 'http://localhost:8000',
     path: path.join(__dirname, 'ComicsSroller'),
     filename: '[name].js',
   },
@@ -57,12 +58,6 @@ module.exports = {
           }
         }, {
           loader: 'postcss-loader',
-          // options: {
-          //   ident: 'postcss',
-          //   plugins: () => [
-          //     postcssNested(),
-          //   ]
-          // }
         }
       ]
     }, {
