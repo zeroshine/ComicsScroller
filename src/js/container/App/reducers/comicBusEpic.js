@@ -136,19 +136,15 @@ export function fetchImgSrc(begin: number, end: number) {
   return { type: FETCH_IMAGE_SRC, begin, end };
 }
 
-export function fetchChapterPage$(url: string) {
+export function fetchChapterPage$(url: string, comicsID: string) {
   return Observable.ajax({
     url,
     responseType: 'document',
   }).mergeMap(function fetchChapterPageHandler({ response }) {
     const chapterNodes = response.querySelectorAll('.ch');
     const volNodes = response.querySelectorAll('.vol');
-    const title = response.querySelector(
-      'body > table:nth-child(7) > tbody > tr > td > table > tbody > tr:nth-child(1) > td:nth-child(2) > table:nth-child(1) > tbody > tr:nth-child(1) > td > table > tbody > tr > td:nth-child(2) > font',
-    ).textContent;
-    const coverURL = response.querySelector(
-      'body > table:nth-child(7) > tbody > tr > td > table > tbody > tr:nth-child(1) > td:nth-child(1) > img',
-    ).src;
+    const title = response.title.split(',')[0];
+    const coverURL = `${baseURL}/pics/0/${comicsID}.jpg`;
     const chapterList = [
       ...map(chapterNodes, n => {
         const arr = /\'(.*)-(.*)\.html/.exec(n.getAttribute('onclick'));
@@ -231,6 +227,7 @@ export function fetchChapterEpic(action$: any) {
         Observable.of(startScroll()),
         fetchChapterPage$(
           `${baseURL}/html/${comicsID}.html`,
+          comicsID
         ).mergeMap(({ title, coverURL, chapterList, chapters }) => {
           const chapterIndex = findIndex(
             chapterList,
