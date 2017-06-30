@@ -54,7 +54,7 @@ function fromScrollEvent(store: { getState: Function }, cancelType: string) {
       let accHeight = margin;
       let viewIndex = 0;
       // $FlowFixMe
-      const scrollTop = document.body.scrollTop + 0.75 * innerHeight;
+      const scrollTop = window.pageYOffset + 0.75 * innerHeight;
       const len = result.length;
       for (let i = 0; i < len; i += 1) {
         if (entity[result[i]].type === 'wide') {

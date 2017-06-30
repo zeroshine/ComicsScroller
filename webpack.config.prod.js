@@ -40,9 +40,7 @@ module.exports = {
         BABEL_ENV: JSON.stringify('production'),
       },
     }),
-    new BabiliPlugin({
-      mangle: false,
-    }),
+    new BabiliPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
   ],
   module: {

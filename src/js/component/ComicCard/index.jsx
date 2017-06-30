@@ -185,8 +185,8 @@ function mapStateToProps(state, ownProps) {
     chapterURL,
     coverURL,
     baseURL: state.popup[ownProps.site].baseURL,
-    lastReaded: chapters[lastReaded],
-    lastChapter: chapters[chapterList[0]],
+    lastReaded: chapters[lastReaded] || {},
+    lastChapter: (chapterList[0] && chapters[chapterList[0]]) ? chapters[chapterList[0]] : {},
   };
 }
 

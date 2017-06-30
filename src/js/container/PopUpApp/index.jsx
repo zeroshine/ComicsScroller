@@ -8,6 +8,7 @@ import ripple from 'cmp/Ripple';
 import { updatePopupData, shiftCards } from './reducers/popup';
 import cn from './PopUpApp.css';
 import initObject from '../../util/initObject';
+import filter from 'lodash/filter';
 
 declare var chrome: any;
 
@@ -240,6 +241,9 @@ class PopUpApp extends Component {
     chrome.storage.local.set(initObject, () => {
       chrome.storage.local.get(item => {
         this.props.updatePopupData(item);
+        chrome.browserAction.setBadgeText({
+          text: `${item.update.length === 0 ? '' : item.update.length}`,
+        });
         chrome.runtime.sendMessage({ msg: 'UPDATE' });
       });
     });
@@ -336,9 +340,9 @@ class PopUpApp extends Component {
 
 function mapStateToProps(state) {
   return {
-    update: state.popup.update,
-    subscribe: state.popup.subscribe,
-    history: state.popup.history,
+    update: filter(state.popup.update, item => state.popup[item.site][item.comicsID]),
+    subscribe: filter(state.popup.subscribe, item => state.popup[item.site][item.comicsID]),
+    history: filter(state.popup.history, item => state.popup[item.site][item.comicsID]),
   };
 }
 
