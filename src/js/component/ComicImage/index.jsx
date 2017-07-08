@@ -64,7 +64,7 @@ export class ComicImage extends Component {
     return (
       <div
         className={getImgClass(this.props.type)}
-        style={{ height: this.props.height }}
+        style={{ height: (this.props.type === 'wide') ? this.props.innerHeight - 68 : this.props.height }}
       >
         {!this.state.showImage && this.props.type !== 'end'
           ? <div>Loading...</div>
