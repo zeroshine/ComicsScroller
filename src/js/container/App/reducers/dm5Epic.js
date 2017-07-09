@@ -35,7 +35,7 @@ const UPDATE_READED = 'UPDATE_READED';
 
 function fetchImgs$(chapter) {
   return Observable.ajax({
-    url: `${baseURL}/${chapter}`,
+    url: `${baseURL}/${chapter}/`,
     responseType: 'document',
   }).mergeMap(function fetchImgPageHandler({ response }) {
     const node = response.querySelector('.topToolBar > a');
