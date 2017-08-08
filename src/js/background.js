@@ -163,6 +163,7 @@ chrome.runtime.onInstalled.addListener(details => {
   if (details.reason === 'update') {
     chrome.storage.local.get(item => {
       const { version } = chrome.runtime.getManifest();
+      delete item.udpate;
       if (!item.version) {
         chrome.storage.local.clear();
         chrome.storage.local.set(initObject);
