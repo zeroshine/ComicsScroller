@@ -59,6 +59,8 @@
   flex-wrap: wrap;
   width: 100%;
   padding: 20px 0;
+  align-items: flex-start;
+  align-content: flex-start;
   height: calc(90vh - 48px);
   overflow-y: auto;
   > div {
@@ -68,7 +70,7 @@
     line-height: 40px;
     text-align: center;
     flex: 1 0 auto;
-    max-width: 220px;
+    max-width: calc(25% - 8px);
     border: 1px solid;
     border-radius: 5px;
     margin: 4px;

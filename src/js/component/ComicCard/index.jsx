@@ -26,6 +26,7 @@ class ComicCard extends Component {
     chapterURL: string,
     category: string,
     comicsID: string,
+    chapterID: string,
     coverURL: string,
     title: string,
     site: string,
@@ -108,7 +109,7 @@ class ComicCard extends Component {
         newStore = {
           update: filter(
             store.update,
-            item => item.comicsID !== this.props.comicsID,
+            item => item.comicsID !== this.props.comicsID || item.chapterID !== this.props.chapterID,
           ),
         };
       }

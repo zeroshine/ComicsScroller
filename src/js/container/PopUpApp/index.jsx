@@ -300,6 +300,7 @@ class PopUpApp extends Component {
                 index={i}
                 updateChapter={item.updateChapter}
                 comicsID={item.comicsID}
+                chapterID={item.chapterID}
                 last={i === this.props[this.state.selectedType].length - 1}
               />
             ))}
