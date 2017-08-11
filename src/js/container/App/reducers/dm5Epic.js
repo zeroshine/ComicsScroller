@@ -45,7 +45,7 @@ function fetchImgs$(chapter) {
     const DM5_CID = /DM5_CID=(\d+);/.exec(script)[1];
     const DM5_CURL = /DM5_CURL\s*=\s*\"\/(m\d+\/)\"/.exec(script)[1];
     const imgList = Array.from({ length: DM5_IMAGE_COUNT }, (v, k) => ({
-      src: `${baseURL}/${DM5_CURL}chapterfun.ashx?cid=${DM5_CID}&page=${k + 1}&key=&language=1`,
+      src: `${baseURL}/${DM5_CURL}chapterfun.ashx?cid=${DM5_CID}&page=${k + 1}&key=&language=1&gtk=6`,
       chapter: `m${DM5_CID}`,
     }));
     return Observable.of({

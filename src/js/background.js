@@ -31,7 +31,7 @@ function dm5RefererHandler(details) {
       ...details.requestHeaders,
       {
         name: 'Referer',
-        value: 'http://www.dm5.com/',
+        value: 'http://www.dm5.com/m',
       },
     ],
   };
@@ -67,7 +67,7 @@ chrome.browserAction.setBadgeBackgroundColor({ color: '#F00' });
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
   dm5RefererHandler,
-  { urls: ['http://www.dm5.com/m*/chapterfun*'] },
+  { urls: ['http://www.dm5.com/m*/chapterfun*', 'http://*.cdndm5.com/*'] },
   ['requestHeaders', 'blocking'],
 );
 
