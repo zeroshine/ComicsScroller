@@ -187,6 +187,7 @@ export function fetchChapterPage$(url: string, comicsID: string) {
         return `comic-${arr[1]}.html?ch=${arr[2]}`;
       }).reverse(),
     ];
+    const uniChapterList = Array.from(new Set(chapterList)).reverse()
     const chapters = {
       ...reduce(
         chapterNodes,
@@ -221,7 +222,7 @@ export function fetchChapterPage$(url: string, comicsID: string) {
         {},
       ),
     };
-    return Observable.of({ title, coverURL, chapterList, chapters });
+    return Observable.of({ title, coverURL, chapterList: uniChapterList, chapters });
   });
 }
 
