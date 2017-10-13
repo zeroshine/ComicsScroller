@@ -45,12 +45,31 @@ function fetchImgs$(chapter: string) {
     responseType: 'document',
   }).mergeMap(function fetchImgPageHandler({ response }) {
     /* eslint-disable */
-    eval(
-      response
-        .querySelector('#Form1 > script')
-        .textContent.replace(/eval.*$/, ''),
-    );
+    var y=46;
+    function lc(l){
+      if (l.length!=2 ) return l;
+      var az = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      var a = l.substring(0,1);
+      var b = l.substring(1,2);
+      if( a=="Z" ) return 8000+az.indexOf(b);
+      else return az.indexOf(a)*52+az.indexOf(b);
+    }
+
+    function su(a,b,c){
+      var e=(a+'').substring(b,b+c);
+      return (e);
+    }
+
+    var responseContext = response.querySelector('#Form1 > script').textContent
+    
+    var chs= parseInt(responseContext.match(/var chs=(\d+);/)[1], 10)
+    var ti= parseInt(responseContext.match(/var ti=(\d+);/)[1], 10)
+    var cs = responseContext.match(/var cs='(\w+)';/)[1]
+
     let ch = /.*ch\=(.*)/.exec(chapter)[1];
+    currentCh = parseInt(ch, 10)
+
+    var p = 1
     if (ch.indexOf('#') > 0) {
       ch = ch.split('#')[0];
     }
@@ -83,10 +102,9 @@ function fetchImgs$(chapter: string) {
       c = ss(cs, cc - f, f);
       ch = c;
     }
-    const ps = ss(c, 7, 3);
     const imgList = [];
     // $FlowFixMe
-    for (let i = 0; i < ps; i += 1) {
+    for (let i = 0; i < cc / y; i += 1) {
       let c = '';
       const cc = cs.length;
       for (let j = 0; j < cc / f; j += 1) {
@@ -101,12 +119,26 @@ function fetchImgs$(chapter: string) {
         // $FlowFixMe
         ch = chs;
       }
+      
       // $FlowFixMe
-      const src = `http://img${ss(c, 4, 2)}.6comic.com:99/${ss(c, 6, 1)}/${ti}/${ss(c, 0, 4)}/${nn(i + 1)}_${ss(c, mm(i + 1) + 10, 3, f)}.jpg`;
-      imgList.push({
-        chapter,
-        src,
-      });
+      const [ cshecString, jgiwiString, pqtnbString, fjdebString ] = responseContext.match(/var\s\w+=\s(lc\Wsu\Wcs,i\Wy\W\d+,\d+\W\W);|var\s\w+=(lc\Wsu\Wcs,i\Wy\W\d+,\d+\W\W);|var\s\w+\s=\s(lc\Wsu\Wcs,i\Wy\W\d+,\d+\W\W);|var\s\w+\s=(lc\Wsu\Wcs,i\Wy\W\d+,\d+\W\W);/g)
+      eval(cshecString)
+      eval(jgiwiString)
+      eval(pqtnbString)
+      eval(fjdebString)
+      srcString = responseContext.match(/src = 'http\:\/\/\w+'\s\W\s\w+\W\w+,\s\d,\s\d\W\s\+\s'\.\d\w+\.\w+\/'\s\+\s\w+\W\w+,\s\d,\s\d\W\s\+\s'\/'\s\+\s\w+\s\+\s'\/'\s\+\s(\w+)\s\+\s'\/'\s\+\s\w+\W\w\W\s\+\s'_'\s\+\s\w+\W\w+,\s\w+\W\w\W,\s\d\W\s\+\s'\.\w+';/)
+      showChapter = eval(srcString[1])
+      eval(responseContext.match(/ps=[a-zA-Z]+;/g)[0])
+      if (currentCh == showChapter) {
+        for(h=1; h < ps; h++) {
+          p = h
+          eval(srcString[0])
+          imgList.push({
+            chapter,
+            src,
+          });
+        }
+      }
     }
     // $FlowFixMe
     return Observable.of({ imgList, comicsID: ti });
@@ -155,6 +187,7 @@ export function fetchChapterPage$(url: string, comicsID: string) {
         return `comic-${arr[1]}.html?ch=${arr[2]}`;
       }).reverse(),
     ];
+    const uniChapterList = Array.from(new Set(chapterList)).reverse()
     const chapters = {
       ...reduce(
         chapterNodes,
@@ -189,7 +222,7 @@ export function fetchChapterPage$(url: string, comicsID: string) {
         {},
       ),
     };
-    return Observable.of({ title, coverURL, chapterList, chapters });
+    return Observable.of({ title, coverURL, chapterList: uniChapterList, chapters });
   });
 }
 
