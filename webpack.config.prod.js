@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const postcssNested = require('postcss-nested');
-const BabiliPlugin = require('babili-webpack-plugin');
+const BabiliPlugin = require('babel-minify-webpack-plugin');
 
 module.exports = {
   entry: {

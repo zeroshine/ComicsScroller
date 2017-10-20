@@ -46,9 +46,7 @@ function fetchImgs$(chapter: string) {
   }).mergeMap(function fetchImgPageHandler({ response }) {
     /* eslint-disable */
     eval(
-      response
-        .querySelector('#Form1 > script')
-        .textContent.replace(/eval.*$/, ''),
+      /(var chs.*var cs=\'[^']+\';)/.exec(response.querySelector('#Form1 > script').textContent)[1]
     );
     let ch = /.*ch\=(.*)/.exec(chapter)[1];
     if (ch.indexOf('#') > 0) {

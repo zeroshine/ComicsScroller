@@ -1,6 +1,5 @@
 var path = require('path');
 var webpack = require('webpack');
-const BabiliPlugin = require('babili-webpack-plugin');
 
 module.exports = {
   entry: ['./src/js/background.js'],
