@@ -38,14 +38,17 @@ function fetchImgs$(chapter) {
     url: `${baseURL}/${chapter}/`,
     responseType: 'document',
   }).mergeMap(function fetchImgPageHandler({ response }) {
-    const node = response.querySelector('.topToolBar > a');
-    const script = response.querySelector('body > script:nth-child(6)')
+    const node = response.querySelector('a.back');
+    const script = response.querySelector('head > script:nth-child(17)')
       .textContent;
     const DM5_IMAGE_COUNT = /DM5_IMAGE_COUNT=(\d+);/.exec(script)[1];
     const DM5_CID = /DM5_CID=(\d+);/.exec(script)[1];
     const DM5_CURL = /DM5_CURL\s*=\s*\"\/(m\d+\/)\"/.exec(script)[1];
+    const DM5_MID = /DM5_MID=(\d+);/.exec(script)[1];
+    const DM5_VIEWSIGN_DT = /DM5_VIEWSIGN_DT=\s*\"([^"]*)\"/.exec(script)[1];
+    const DM5_VIEWSIGN = /DM5_VIEWSIGN=\s*\"([^"]*)\"/.exec(script)[1];
     const imgList = Array.from({ length: DM5_IMAGE_COUNT }, (v, k) => ({
-      src: `${baseURL}/${DM5_CURL}chapterfun.ashx?cid=${DM5_CID}&page=${k + 1}&key=&language=1&gtk=6`,
+      src: `${baseURL}/${DM5_CURL}chapterfun.ashx?cid=${DM5_CID}&page=${k + 1}&key=&language=1&gtk=6&_cid=${DM5_CID}&_mid=${DM5_MID}&_dt=${DM5_VIEWSIGN_DT}&_sign=${DM5_VIEWSIGN}`,
       chapter: `m${DM5_CID}`,
     }));
     return Observable.of({
@@ -101,13 +104,18 @@ export function fetchChapterPage$(url) {
     url,
     responseType: 'document',
   }).mergeMap(function fetchChapterPageHandler({ response }) {
-    const nodes = response.querySelectorAll(
-      '.nr6.lan2:not(:last-child) > li > a',
+    const chapterNodes = response.querySelectorAll(
+      '#detail-list-select-1 > li > a,' +
+      '#detail-list-select-1 > .chapteritem > li > a',
     );
-    const chapterNodes = filter(nodes, item => /\/m\d+\/$/.test(item.href));
-    const title = response.querySelector('#mhinfo > div.inbt > h1').textContent;
+    chapterNodes.forEach(node => node.removeChild(node.querySelector('span')));
+    const titleNode = response.querySelector(
+      '.banner_detail_form > .info > .title'
+    );
+    titleNode.removeChild(titleNode.querySelector('.right'));
+    const title = titleNode.textContent.trim();
     const coverURL = response.querySelector(
-      '#mhinfo > div.innr9.innr9_min > div.innr90 > div.innr91 > img',
+      '.banner_detail_form > .cover > img',
     ).src;
     const chapterList = map(chapterNodes, n =>
       n.getAttribute('href').replace(/\//g, ''),
