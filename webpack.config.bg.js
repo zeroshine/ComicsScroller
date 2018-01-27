@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+const MinifyPlugin = require("babel-minify-webpack-plugin");
 
 module.exports = {
   entry: ['./src/js/background.js'],
@@ -7,7 +8,7 @@ module.exports = {
     path: path.join(__dirname, 'ComicsScroller/js'),
     filename: 'background.js',
   },
-  plugins: process.env.NODE_ENV === 'production' ? [new BabiliPlugin({})] : [],
+  plugins: process.env.NODE_ENV === 'production' ? [new MinifyPlugin({})] : [],
   module: {
     loaders: [
       {
