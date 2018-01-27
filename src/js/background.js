@@ -120,7 +120,7 @@ function comicsQuery() {
                       },
                     },
                     update: [
-                      {
+                      /* {
                         site,
                         chapterID,
                         updateChapter: {
@@ -128,27 +128,10 @@ function comicsQuery() {
                           href: chapters[chapterID].href,
                         },
                         comicsID,
-                      },
+                      }, */
                       ...oldStore.update,
                     ],
-                  },
-                  () =>
-                    chrome.notifications.create(
-                      chapters[chapterID].href,
-                      {
-                        type: 'image',
-                        title: 'Comics Scroller Update',
-                        iconUrl: './imgs/comics-48.png',
-                        imageUrl: coverURL,
-                        message: `${comic.title} ${title} 更新`,
-                      },
-                      () =>
-                        chrome.storage.local.get(store =>
-                          chrome.browserAction.setBadgeText({
-                            text: `${store.update.length}`,
-                          }),
-                        ),
-                    ),
+                  }
                 ),
               );
             }
