@@ -25,11 +25,13 @@ class ImgContainer extends Component {
           paddingBottom: this.props.paddingBottom,
         }}
       >
-        {this.props.renderResult.length > 0
-          ? map(this.props.renderResult, key => (
-              <ConnectedComicImage key={key} index={key} />
-            ))
-          : <Loading />}
+        {this.props.renderResult.length > 0 ? (
+          map(this.props.renderResult, key => (
+            <ConnectedComicImage key={key} index={key} />
+          ))
+        ) : (
+          <Loading />
+        )}
       </div>
     );
   }

@@ -46,7 +46,9 @@ function fetchImgs$(chapter: string) {
   }).mergeMap(function fetchImgPageHandler({ response }) {
     /* eslint-disable */
     eval(
-      /(var chs.*var cs=\'[^']+\';)/.exec(response.querySelector('#Form1 > script').textContent)[1]
+      /(var chs.*var cs=\'[^']+\';)/.exec(
+        response.querySelector('#Form1 > script').textContent,
+      )[1],
     );
     let ch = /.*ch\=(.*)/.exec(chapter)[1];
     if (ch.indexOf('#') > 0) {
@@ -66,7 +68,7 @@ function fetchImgs$(chapter: string) {
       return d == null ? e.replace(/[a-z]*/gi, '') : e;
     };
     const nn = n => (n < 10 ? '00' + n : n < 100 ? '0' + n : n);
-    const mm = p => parseInt((p - 1) / 10, 10) % 10 + (p - 1) % 10 * 3;
+    const mm = p => parseInt((p - 1) / 10, 10) % 10 + ((p - 1) % 10) * 3;
     let c = '';
     // $FlowFixMe
     const cc = cs.length;
@@ -100,7 +102,11 @@ function fetchImgs$(chapter: string) {
         ch = chs;
       }
       // $FlowFixMe
-      const src = `http://img${ss(c, 4, 2)}.6comic.com:99/${ss(c, 6, 1)}/${ti}/${ss(c, 0, 4)}/${nn(i + 1)}_${ss(c, mm(i + 1) + 10, 3, f)}.jpg`;
+      const src = `http://img${ss(c, 4, 2)}.6comic.com:99/${ss(
+        c,
+        6,
+        1,
+      )}/${ti}/${ss(c, 0, 4)}/${nn(i + 1)}_${ss(c, mm(i + 1) + 10, 3, f)}.jpg`;
       imgList.push({
         chapter,
         src,
@@ -161,9 +167,10 @@ export function fetchChapterPage$(url: string, comicsID: string) {
           return {
             ...acc,
             [`comic-${arr[1]}.html?ch=${arr[2]}`]: {
-              title: n.children.length > 0
-                ? n.children[0].textContent
-                : n.textContent,
+              title:
+                n.children.length > 0
+                  ? n.children[0].textContent
+                  : n.textContent,
               href: `${baseURL}/online/comic-${arr[1]}.html?ch=${arr[2]}`,
             },
           };
@@ -177,9 +184,10 @@ export function fetchChapterPage$(url: string, comicsID: string) {
           return {
             ...acc,
             [`comic-${arr[1]}.html?ch=${arr[2]}`]: {
-              title: n.children.length > 0
-                ? n.children[0].textContent
-                : n.textContent,
+              title:
+                n.children.length > 0
+                  ? n.children[0].textContent
+                  : n.textContent,
               href: `${baseURL}/online/comic-${arr[1]}.html?ch=${arr[2]}`,
             },
           };
@@ -225,89 +233,94 @@ export function fetchChapterEpic(action$: any) {
         Observable.of(startScroll()),
         fetchChapterPage$(
           `${baseURL}/html/${comicsID}.html`,
-          comicsID
+          comicsID,
         ).mergeMap(({ title, coverURL, chapterList, chapters }) => {
           const chapterIndex = findIndex(
             chapterList,
             item => item === action.chapter,
           );
-          return Observable.bindCallback(
-            chrome.storage.local.get,
-          )().mergeMap(item => {
-            const newItem = {
-              ...item,
-              update: filter(
-                item.update,
-                updateItem =>
-                  updateItem.site !== 'comicbus' ||
-                  updateItem.chapterID !== action.chapter,
-              ),
-              history: [
-                {
-                  site: 'comicbus',
-                  comicsID,
-                },
-                ...filter(
-                  item.history,
-                  historyItem =>
-                    historyItem.site !== 'comicbus' ||
-                    historyItem.comicsID !== comicsID,
+          return Observable.bindCallback(chrome.storage.local.get)().mergeMap(
+            item => {
+              const newItem = {
+                ...item,
+                update: filter(
+                  item.update,
+                  updateItem =>
+                    updateItem.site !== 'comicbus' ||
+                    updateItem.chapterID !== action.chapter,
                 ),
-              ],
-              comicbus: {
-                ...item.comicbus,
-                [comicsID]: {
-                  title,
-                  chapters,
-                  chapterList,
-                  coverURL,
-                  chapterURL: `${baseURL}/html/${comicsID}.html`,
-                  lastReaded: action.chapter,
-                  readedChapters: {
-                    ...(item.comicbus[comicsID]
-                      ? item.comicbus[comicsID].readedChapters
-                      : {}),
-                    [action.chapter]: action.chapter,
+                history: [
+                  {
+                    site: 'comicbus',
+                    comicsID,
+                  },
+                  ...filter(
+                    item.history,
+                    historyItem =>
+                      historyItem.site !== 'comicbus' ||
+                      historyItem.comicsID !== comicsID,
+                  ),
+                ],
+                comicbus: {
+                  ...item.comicbus,
+                  [comicsID]: {
+                    title,
+                    chapters,
+                    chapterList,
+                    coverURL,
+                    chapterURL: `${baseURL}/html/${comicsID}.html`,
+                    lastReaded: action.chapter,
+                    readedChapters: {
+                      ...(item.comicbus[comicsID]
+                        ? item.comicbus[comicsID].readedChapters
+                        : {}),
+                      [action.chapter]: action.chapter,
+                    },
                   },
                 },
-              },
-            };
-            chrome.browserAction.setBadgeText({
-              text: `${newItem.update.length === 0 ? '' : newItem.update.length}`,
-            });
-            const subscribe = some(
-              item.subscribe,
-              citem => citem.site === 'comicbus' && citem.comicsID === comicsID,
-            );
-            return Observable.merge(
-              Observable.of(updateSubscribe(subscribe)),
-              Observable.bindCallback(chrome.storage.local.set)(
-                newItem,
-              ).mergeMap(() => {
-                chrome.browserAction.setBadgeText({
-                  text: `${newItem.update.length === 0 ? '' : newItem.update.length}`,
-                });
-                const result$ = [
-                  updateTitle(title),
-                  updateReadedChapters(
-                    newItem.comicbus[comicsID].readedChapters,
-                  ),
-                  updateChapters(chapters),
-                  updateChapterList(chapterList),
-                  updateChapterNowIndex(chapterIndex),
-                ];
-                if (chapterIndex > 0) {
-                  result$.push(
-                    fetchImgList(chapterIndex - 1),
-                    updateChapterLatestIndex(chapterIndex - 1),
-                  );
-                } else {
-                  result$.push(updateChapterLatestIndex(chapterIndex - 1));
-                }
-                return result$;
-              }),
-            );
-          });
+              };
+              chrome.browserAction.setBadgeText({
+                text: `${
+                  newItem.update.length === 0 ? '' : newItem.update.length
+                }`,
+              });
+              const subscribe = some(
+                item.subscribe,
+                citem =>
+                  citem.site === 'comicbus' && citem.comicsID === comicsID,
+              );
+              return Observable.merge(
+                Observable.of(updateSubscribe(subscribe)),
+                Observable.bindCallback(chrome.storage.local.set)(
+                  newItem,
+                ).mergeMap(() => {
+                  chrome.browserAction.setBadgeText({
+                    text: `${
+                      newItem.update.length === 0 ? '' : newItem.update.length
+                    }`,
+                  });
+                  const result$ = [
+                    updateTitle(title),
+                    updateReadedChapters(
+                      newItem.comicbus[comicsID].readedChapters,
+                    ),
+                    updateChapters(chapters),
+                    updateChapterList(chapterList),
+                    updateChapterNowIndex(chapterIndex),
+                  ];
+                  if (chapterIndex > 0) {
+                    result$.push(
+                      fetchImgList(chapterIndex - 1),
+                      updateChapterLatestIndex(chapterIndex - 1),
+                    );
+                  } else {
+                    result$.push(updateChapterLatestIndex(chapterIndex - 1));
+                  }
+                  return result$;
+                }),
+              );
+            },
+          );
         }),
       );
     }),

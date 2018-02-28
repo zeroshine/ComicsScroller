@@ -127,13 +127,11 @@ export default function popup(state: State = initialState, action: Action) {
   }
 }
 
-export function updatePopupData(
-  data: {
-    subscribe: Array<*>,
-    history: Array<*>,
-    update: Array<*>,
-  },
-) {
+export function updatePopupData(data: {
+  subscribe: Array<*>,
+  history: Array<*>,
+  update: Array<*>,
+}) {
   return { type: UPDATE_POPUP_DATA, data };
 }
 

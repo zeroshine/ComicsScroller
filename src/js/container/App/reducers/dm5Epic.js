@@ -48,10 +48,11 @@ function fetchImgs$(chapter) {
     const DM5_VIEWSIGN_DT = /DM5_VIEWSIGN_DT\s*=\s*"(.*)";/.exec(script)[1];
     const DM5_VIEWSIGN = /DM5_VIEWSIGN="([^"]*)";/.exec(script)[1];
     const imgList = Array.from({ length: DM5_IMAGE_COUNT }, (v, k) => ({
-      src: `${baseURL}/${DM5_CURL}chapterfun.ashx?` +
+      src:
+        `${baseURL}/${DM5_CURL}chapterfun.ashx?` +
         `cid=${DM5_CID}` +
         `&page=${k + 1}` +
-        `&key=` + 
+        `&key=` +
         `&language=1` +
         `&gtk=6` +
         `&_cid=${DM5_CID}` +
@@ -113,13 +114,12 @@ export function fetchChapterPage$(url) {
     url,
     responseType: 'document',
   }).mergeMap(function fetchChapterPageHandler({ response }) {
-    const chapterNodes = response.querySelectorAll(
-      '#chapterlistload li > a',
-    );
-    const title = response.querySelector('.info .title').textContent.trim().split(/\s+/)[0];
-    const coverURL = response.querySelector(
-      '.cover > img',
-    ).src;
+    const chapterNodes = response.querySelectorAll('#chapterlistload li > a');
+    const title = response
+      .querySelector('.info .title')
+      .textContent.trim()
+      .split(/\s+/)[0];
+    const coverURL = response.querySelector('.cover > img').src;
     const chapterList = map(chapterNodes, n =>
       n.getAttribute('href').replace(/\//g, ''),
     );
@@ -134,7 +134,6 @@ export function fetchChapterPage$(url) {
       }),
       {},
     );
-    console.log(chapterNodes)
     return Observable.of({ title, coverURL, chapterList, chapters });
   });
 }
@@ -170,82 +169,90 @@ export function fetchChapterEpic(action$, store) {
         Observable.of(updateRenderIndex(0, 6)),
         Observable.of(fetchImgSrc(0, 6)),
         Observable.of(startScroll()),
-        fetchChapterPage$(
-          `${baseURL}/${comicsID}`,
-        ).mergeMap(({ title, coverURL, chapterList, chapters }) => {
-          const chapterIndex = findIndex(chapterList, item => item === chapter);
-          return Observable.bindCallback(
-            chrome.storage.local.get,
-          )().mergeMap(item => {
-            const newItem = {
-              ...item,
-              update: filter(
-                item.update,
-                updateItem =>
-                  updateItem.site !== 'dm5' || updateItem.chapterID !== chapter,
-              ),
-              history: [
-                {
-                  site: 'dm5',
-                  comicsID,
-                },
-                ...filter(
-                  item.history,
-                  historyItem =>
-                    historyItem.site !== 'dm5' ||
-                    historyItem.comicsID !== comicsID,
-                ),
-              ],
-              dm5: {
-                ...item.dm5,
-                [comicsID]: {
-                  title,
-                  chapters,
-                  chapterList,
-                  coverURL,
-                  chapterURL: `${baseURL}/${comicsID}`,
-                  lastReaded: chapter,
-                  readedChapters: {
-                    ...(item.dm5[comicsID]
-                      ? item.dm5[comicsID].readedChapters
-                      : {}),
-                    [chapter]: chapter,
+        fetchChapterPage$(`${baseURL}/${comicsID}`).mergeMap(
+          ({ title, coverURL, chapterList, chapters }) => {
+            const chapterIndex = findIndex(
+              chapterList,
+              item => item === chapter,
+            );
+            return Observable.bindCallback(chrome.storage.local.get)().mergeMap(
+              item => {
+                const newItem = {
+                  ...item,
+                  update: filter(
+                    item.update,
+                    updateItem =>
+                      updateItem.site !== 'dm5' ||
+                      updateItem.chapterID !== chapter,
+                  ),
+                  history: [
+                    {
+                      site: 'dm5',
+                      comicsID,
+                    },
+                    ...filter(
+                      item.history,
+                      historyItem =>
+                        historyItem.site !== 'dm5' ||
+                        historyItem.comicsID !== comicsID,
+                    ),
+                  ],
+                  dm5: {
+                    ...item.dm5,
+                    [comicsID]: {
+                      title,
+                      chapters,
+                      chapterList,
+                      coverURL,
+                      chapterURL: `${baseURL}/${comicsID}`,
+                      lastReaded: chapter,
+                      readedChapters: {
+                        ...(item.dm5[comicsID]
+                          ? item.dm5[comicsID].readedChapters
+                          : {}),
+                        [chapter]: chapter,
+                      },
+                    },
                   },
-                },
+                };
+                const subscribe = some(
+                  item.subscribe,
+                  citem => citem.site === 'dm5' && citem.comicsID === comicsID,
+                );
+                return Observable.merge(
+                  Observable.of(updateSubscribe(subscribe)),
+                  Observable.bindCallback(chrome.storage.local.set)(
+                    newItem,
+                  ).mergeMap(() => {
+                    chrome.browserAction.setBadgeText({
+                      text: `${
+                        newItem.update.length === 0 ? '' : newItem.update.length
+                      }`,
+                    });
+                    const result$ = [
+                      updateTitle(title),
+                      updateReadedChapters(
+                        newItem.dm5[comicsID].readedChapters,
+                      ),
+                      updateChapters(chapters),
+                      updateChapterList(chapterList),
+                      updateChapterNowIndex(chapterIndex),
+                    ];
+                    if (chapterIndex > 0) {
+                      result$.push(
+                        fetchImgList(chapterIndex - 1),
+                        updateChapterLatestIndex(chapterIndex - 1),
+                      );
+                    } else {
+                      result$.push(updateChapterLatestIndex(chapterIndex - 1));
+                    }
+                    return result$;
+                  }),
+                );
               },
-            };
-            const subscribe = some(
-              item.subscribe,
-              citem => citem.site === 'dm5' && citem.comicsID === comicsID,
             );
-            return Observable.merge(
-              Observable.of(updateSubscribe(subscribe)),
-              Observable.bindCallback(chrome.storage.local.set)(
-                newItem,
-              ).mergeMap(() => {
-                chrome.browserAction.setBadgeText({
-                  text: `${newItem.update.length === 0 ? '' : newItem.update.length}`,
-                });
-                const result$ = [
-                  updateTitle(title),
-                  updateReadedChapters(newItem.dm5[comicsID].readedChapters),
-                  updateChapters(chapters),
-                  updateChapterList(chapterList),
-                  updateChapterNowIndex(chapterIndex),
-                ];
-                if (chapterIndex > 0) {
-                  result$.push(
-                    fetchImgList(chapterIndex - 1),
-                    updateChapterLatestIndex(chapterIndex - 1),
-                  );
-                } else {
-                  result$.push(updateChapterLatestIndex(chapterIndex - 1));
-                }
-                return result$;
-              }),
-            );
-          });
-        }),
+          },
+        ),
       );
     }),
   );

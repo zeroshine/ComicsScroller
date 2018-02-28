@@ -109,14 +109,18 @@ class ComicCard extends Component {
         newStore = {
           update: filter(
             store.update,
-            item => item.comicsID !== this.props.comicsID || item.chapterID !== this.props.chapterID,
+            item =>
+              item.comicsID !== this.props.comicsID ||
+              item.chapterID !== this.props.chapterID,
           ),
         };
       }
       chrome.storage.local.set(newStore, err => {
         if (!err) {
           chrome.browserAction.setBadgeText({
-            text: `${newStore.update.length === 0 ? '' : newStore.update.length}`,
+            text: `${
+              newStore.update.length === 0 ? '' : newStore.update.length
+            }`,
           });
           this.props.moveCard(this.props.category, this.props.index);
           chrome.runtime.sendMessage({ msg: 'UPDATE' });
@@ -145,14 +149,16 @@ class ComicCard extends Component {
               <span>來源網站</span>
               <span onClick={this.siteClickHandler}>{this.props.site}</span>
             </div>
-            {this.props.updateChapter
-              ? <div>
-                  <span>更新章節</span>
-                  <span onClick={this.updateChapterHandler}>
-                    {this.props.updateChapter.title}
-                  </span>
-                </div>
-              : undefined}
+            {this.props.updateChapter ? (
+              <div>
+                <span>更新章節</span>
+                <span onClick={this.updateChapterHandler}>
+                  {this.props.updateChapter.title}
+                </span>
+              </div>
+            ) : (
+              undefined
+            )}
             <div>
               <span>上次看到</span>
               <span onClick={this.lastReadHandler}>
@@ -187,7 +193,10 @@ function mapStateToProps(state, ownProps) {
     coverURL,
     baseURL: state.popup[ownProps.site].baseURL,
     lastReaded: chapters[lastReaded] || {},
-    lastChapter: (chapterList[0] && chapters[chapterList[0]]) ? chapters[chapterList[0]] : {},
+    lastChapter:
+      chapterList[0] && chapters[chapterList[0]]
+        ? chapters[chapterList[0]]
+        : {},
   };
 }
 

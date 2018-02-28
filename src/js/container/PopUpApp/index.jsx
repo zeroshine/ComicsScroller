@@ -99,9 +99,7 @@ const MenuButton = ({
     onMouseDown={onMouseDownHandler}
   >
     <MoreIcon />
-    <div className={cn.rippleContainer}>
-      {children}
-    </div>
+    <div className={cn.rippleContainer}>{children}</div>
     <div className={showMenu ? cn.menuOn : cn.menuOff}>
       <div onMouseDown={preventDefault} onClick={downloadHandler}>
         Download Config
@@ -341,9 +339,18 @@ class PopUpApp extends Component {
 
 function mapStateToProps(state) {
   return {
-    update: filter(state.popup.update, item => state.popup[item.site][item.comicsID]),
-    subscribe: filter(state.popup.subscribe, item => state.popup[item.site][item.comicsID]),
-    history: filter(state.popup.history, item => state.popup[item.site][item.comicsID]),
+    update: filter(
+      state.popup.update,
+      item => state.popup[item.site][item.comicsID],
+    ),
+    subscribe: filter(
+      state.popup.subscribe,
+      item => state.popup[item.site][item.comicsID],
+    ),
+    history: filter(
+      state.popup.history,
+      item => state.popup[item.site][item.comicsID],
+    ),
   };
 }
 
