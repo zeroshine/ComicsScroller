@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { hot } from 'react-hot-loader';
 import some from 'lodash/some';
 import filter from 'lodash/filter';
 import MenuIcon from 'imgs/menu.svg';
@@ -162,7 +163,9 @@ class App extends Component {
               <MenuIcon className={cn.icon} />
             </IconButton>
             <span>Comics Scroller</span>
-            <a target='_blank' href={this.props.chapterURL}>{`${this.props.title}`}</a>
+            <a target="_blank" href={this.props.chapterURL}>{`${
+              this.props.title
+            }`}</a>
             <span>></span>
             <span>
               {this.props.chapterList.length > 0
@@ -224,13 +227,15 @@ function mapStateToProps(state) {
   const chapterID = chapterList[chapterNowIndex];
   return {
     title,
-    chapterTitle: chapterList.length > 0 && chapters[chapterID]
-      ? chapters[chapterID].title
-      : '',
+    chapterTitle:
+      chapterList.length > 0 && chapters[chapterID]
+        ? chapters[chapterID].title
+        : '',
     site,
-    chapter: chapterList.length > 0 && chapters[chapterID]
-      ? chapters[chapterID].chapter
-      : '',
+    chapter:
+      chapterList.length > 0 && chapters[chapterID]
+        ? chapters[chapterID].chapter
+        : '',
     chapterList,
     prevable: chapterNowIndex < chapterList.length,
     nextable: chapterNowIndex > 0,
@@ -241,7 +246,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {
+const connectedApp = connect(mapStateToProps, {
   fetchChapter,
   stopScroll,
   startResize,
@@ -251,3 +256,5 @@ export default connect(mapStateToProps, {
   updateSubscribe,
   fetchImgList,
 })(App);
+
+export default hot(module)(connectedApp);

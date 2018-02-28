@@ -51,7 +51,7 @@ export class ComicImage extends Component {
           this.props.updateImgType(innerHeight - 68, this.props.index, 'wide');
         } else {
           // this.props.updateImgType(1400, this.props.index, 'normal');
-          this.props.updateImgType(this.h + 4, this.props.index, 'natural'); 
+          this.props.updateImgType(this.h + 4, this.props.index, 'natural');
         }
       } else {
         this.props.updateImgType(this.h + 4, this.props.index, 'natural');
@@ -64,19 +64,28 @@ export class ComicImage extends Component {
     return (
       <div
         className={getImgClass(this.props.type)}
-        style={{ height: (this.props.type === 'wide') ? this.props.innerHeight - 68 : this.props.height }}
+        style={{
+          height:
+            this.props.type === 'wide'
+              ? this.props.innerHeight - 68
+              : this.props.height,
+        }}
       >
-        {!this.state.showImage && this.props.type !== 'end'
-          ? <div>Loading...</div>
-          : undefined}
-        {!this.props.loading && this.props.type !== 'end'
-          ? <img
-              style={this.state.showImage ? undefined : { display: 'none' }}
-              src={this.props.src}
-              onLoad={this.imgLoadHandler}
-              alt={'comicImage'}
-            />
-          : undefined}
+        {!this.state.showImage && this.props.type !== 'end' ? (
+          <div>Loading...</div>
+        ) : (
+          undefined
+        )}
+        {!this.props.loading && this.props.type !== 'end' ? (
+          <img
+            style={this.state.showImage ? undefined : { display: 'none' }}
+            src={this.props.src}
+            onLoad={this.imgLoadHandler}
+            alt={'comicImage'}
+          />
+        ) : (
+          undefined
+        )}
         {this.props.type === 'end' ? '本 章 結 束' : undefined}
       </div>
     );

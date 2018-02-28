@@ -7,20 +7,18 @@ module.exports = {
   devtool: 'cheap-module-source-map',
   entry: {
     app: [
-      'react-hot-loader/patch',
       'webpack-dev-server/client?http://localhost:8000',
       'webpack/hot/only-dev-server',
       './src/js/index'
     ],
     popup: [
-      'react-hot-loader/patch',
       'webpack-dev-server/client?http://localhost:8000',
       'webpack/hot/only-dev-server',
       './src/js/popup'
     ]
   },
   output: {
-    publicPath: 'http://localhost:8000',
+    publicPath: 'http://localhost:8000/',
     path: path.join(__dirname, 'ComicsSroller'),
     filename: '[name].js',
   },

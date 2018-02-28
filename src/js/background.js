@@ -2,15 +2,9 @@
 import map from 'lodash/map';
 import forEach from 'lodash/forEach';
 import initObject from './util/initObject';
-import {
-  fetchChapterPage$ as fetchChapterPage$Dm5,
-} from './container/App/reducers/dm5Epic';
-import {
-  fetchChapterPage$ as fetchChapterPage$Sf,
-} from './container/App/reducers/sfEpic';
-import {
-  fetchChapterPage$ as fetchChapterPage$comicbus,
-} from './container/App/reducers/comicBusEpic';
+import { fetchChapterPage$ as fetchChapterPage$Dm5 } from './container/App/reducers/dm5Epic';
+import { fetchChapterPage$ as fetchChapterPage$Sf } from './container/App/reducers/sfEpic';
+import { fetchChapterPage$ as fetchChapterPage$comicbus } from './container/App/reducers/comicBusEpic';
 
 const dm5Regex = /http\:\/\/(tel||www)\.dm5\.com\/(m\d+)\//;
 const sfRegex = /http\:\/\/comic\.sfacg\.com\/(HTML\/[^\/]+\/.+)$/;
@@ -99,44 +93,51 @@ function comicsQuery() {
       forEach(item.subscribe, ({ site, comicsID }) => {
         const { chapterURL } = item[site][comicsID];
         const fetchChapterPage = fetchChapterPage$[site];
-        fetchChapterPage(
-          chapterURL,
-        ).subscribe(({ title, chapterList, coverURL, chapters }) => {
-          const comic = item[site][comicsID];
-          forEach(chapterList, chapterID => {
-            if (!comic.chapters[chapterID]) {
-              chrome.storage.local.get(oldStore =>
-                chrome.storage.local.set(
-                  {
-                    ...oldStore,
-                    [site]: {
-                      ...oldStore[site],
-                      [comicsID]: {
-                        ...oldStore[site][comicsID],
-                        title,
-                        chapterList,
-                        coverURL,
-                        chapters,
-                      },
-                    },
-                    update: [
-                      /* {
-                        site,
-                        chapterID,
-                        updateChapter: {
-                          title: chapters[chapterID].title,
-                          href: chapters[chapterID].href,
+        fetchChapterPage(chapterURL).subscribe(
+          ({ title, chapterList, coverURL, chapters }) => {
+            const comic = item[site][comicsID];
+            forEach(chapterList, chapterID => {
+              if (!comic.chapters[chapterID]) {
+                chrome.storage.local.get(oldStore =>
+                  chrome.storage.local.set(
+                    {
+                      ...oldStore,
+                      [site]: {
+                        ...oldStore[site],
+                        [comicsID]: {
+                          ...oldStore[site][comicsID],
+                          title,
+                          chapterList,
+                          coverURL,
+                          chapters,
                         },
-                        comicsID,
-                      }, */
-                      ...oldStore.update,
-                    ],
-                  }
-                ),
-              );
-            }
-          });
-        });
+                      },
+                      update: [
+                        {
+                          site,
+                          chapterID,
+                          updateChapter: {
+                            title: chapters[chapterID].title,
+                            href: chapters[chapterID].href,
+                          },
+                          comicsID,
+                        },
+                        ...oldStore.update,
+                      ],
+                    },
+                    () => {
+                      chrome.storage.local.get(store =>
+                        chrome.browserAction.setBadgeText({
+                          text: `${store.update.length}`,
+                        }),
+                      );
+                    },
+                  ),
+                );
+              }
+            });
+          },
+        );
       });
     }
   });
@@ -172,14 +173,18 @@ chrome.webNavigation.onBeforeNavigate.addListener(
       console.log('comicbus fired');
       const chapter = comicbusRegex.exec(details.url)[2];
       chrome.tabs.update(details.tabId, {
-        url: `${chrome.extension.getURL('app.html')}?site=comicbus&chapter=${chapter}`,
+        url: `${chrome.extension.getURL(
+          'app.html',
+        )}?site=comicbus&chapter=${chapter}`,
       });
       ga('send', 'event', 'comicbus view');
     } else if (sfRegex.test(details.url)) {
       console.log('sf fired');
       const chapter = sfRegex.exec(details.url)[1];
       chrome.tabs.update(details.tabId, {
-        url: `${chrome.extension.getURL('app.html')}?site=sf&chapter=${chapter}`,
+        url: `${chrome.extension.getURL(
+          'app.html',
+        )}?site=sf&chapter=${chapter}`,
       });
       ga('send', 'event', 'sf view');
     } else if (dm5Regex.test(details.url)) {
@@ -187,16 +192,18 @@ chrome.webNavigation.onBeforeNavigate.addListener(
       let chapter = '';
       chapter = dm5Regex.exec(details.url)[2];
       chrome.tabs.update(details.tabId, {
-        url: `${chrome.extension.getURL('app.html')}?site=dm5&chapter=${chapter}`,
+        url: `${chrome.extension.getURL(
+          'app.html',
+        )}?site=dm5&chapter=${chapter}`,
       });
       ga('send', 'event', 'dm5 view');
     }
   },
   {
     url: [
-      { urlMatches: 'comicbus\.com\/online\/.*$' },
-      { urlMatches: 'comic\.sfacg\.com\/HTML\/[^\/]+\/.+$' },
-      { urlMatches: 'http://(tel||www)\.dm5\.com/m\d*' },
+      { urlMatches: 'comicbus.com/online/.*$' },
+      { urlMatches: 'comic.sfacg.com/HTML/[^/]+/.+$' },
+      { urlMatches: 'http://(tel||www).dm5.com/md*' },
     ],
   },
 );
