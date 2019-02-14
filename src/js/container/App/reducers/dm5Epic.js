@@ -39,7 +39,7 @@ function fetchImgs$(chapter) {
     responseType: 'document',
   }).mergeMap(function fetchImgPageHandler({ response }) {
     const node = response.querySelector('div.title > span:nth-child(2) > a');
-    const script = response.querySelector('head > script:nth-child(17)')
+    const script = response.querySelector('head > script:nth-child(18)')
       .textContent;
     const DM5_IMAGE_COUNT = /DM5_IMAGE_COUNT=(\d+);/.exec(script)[1];
     const DM5_CID = /DM5_CID=(\d+);/.exec(script)[1];
