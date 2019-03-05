@@ -62,19 +62,19 @@ chrome.browserAction.setBadgeBackgroundColor({ color: '#F00' });
 chrome.webRequest.onBeforeSendHeaders.addListener(
   dm5RefererHandler,
   { urls: ['http://www.dm5.com/m*/chapterfun*', 'http://*.cdndm5.com/*'] },
-  ['requestHeaders', 'blocking'],
+  ['requestHeaders', 'blocking', 'extraHeaders'],
 );
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
   dm5CookieHandler,
   { urls: ['http://www.dm5.com/m*/'] },
-  ['requestHeaders', 'blocking'],
+  ['requestHeaders', 'blocking', 'extraHeaders'],
 );
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
   sfRefererHandler,
   { urls: ['http://*.sfacg.com/*'] },
-  ['requestHeaders', 'blocking'],
+  ['requestHeaders', 'blocking', 'extraHeaders'],
 );
 
 chrome.notifications.onClicked.addListener(id => {
