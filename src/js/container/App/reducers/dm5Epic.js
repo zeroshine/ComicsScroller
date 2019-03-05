@@ -39,7 +39,7 @@ function fetchImgs$(chapter) {
     responseType: 'document',
   }).mergeMap(function fetchImgPageHandler({ response }) {
     const node = response.querySelector('div.title > span:nth-child(2) > a');
-    const script = response.querySelector('head > script:nth-child(17)')
+    const script = response.querySelector('head')
       .textContent;
     const DM5_IMAGE_COUNT = /DM5_IMAGE_COUNT=(\d+);/.exec(script)[1];
     const DM5_CID = /DM5_CID=(\d+);/.exec(script)[1];
@@ -139,6 +139,7 @@ export function fetchChapterPage$(url) {
 }
 
 export function fetchImgListEpic(action$, store) {
+  console.log('fetchImgs$')
   return action$.ofType(FETCH_IMG_LIST).mergeMap(action => {
     const { chapterList } = store.getState().comics;
     return fetchImgs$(chapterList[action.index]).mergeMap(({ imgList }) => {
@@ -169,88 +170,79 @@ export function fetchChapterEpic(action$, store) {
         Observable.of(updateRenderIndex(0, 6)),
         Observable.of(fetchImgSrc(0, 6)),
         Observable.of(startScroll()),
-        fetchChapterPage$(`${baseURL}/${comicsID}`).mergeMap(
+        fetchChapterPage$(`${baseURL}/${comicsID}/`).mergeMap(
           ({ title, coverURL, chapterList, chapters }) => {
             const chapterIndex = findIndex(
               chapterList,
               item => item === chapter,
             );
-            return Observable.bindCallback(chrome.storage.local.get)().mergeMap(
-              item => {
-                const newItem = {
-                  ...item,
-                  update: filter(
-                    item.update,
-                    updateItem =>
-                      updateItem.site !== 'dm5' ||
-                      updateItem.chapterID !== chapter,
+            console.log(chapterIndex)
+            chrome.storage.local.get(null, item => {
+              const newItem = {
+                ...item,
+                update: filter(
+                  item.update,
+                  updateItem =>
+                    updateItem.site !== 'dm5' ||
+                    updateItem.chapterID !== chapter,
+                ),
+                history: [
+                  {
+                    site: 'dm5',
+                    comicsID,
+                  },
+                  ...filter(
+                    item.history,
+                    historyItem =>
+                      historyItem.site !== 'dm5' ||
+                      historyItem.comicsID !== comicsID,
                   ),
-                  history: [
-                    {
-                      site: 'dm5',
-                      comicsID,
-                    },
-                    ...filter(
-                      item.history,
-                      historyItem =>
-                        historyItem.site !== 'dm5' ||
-                        historyItem.comicsID !== comicsID,
-                    ),
-                  ],
-                  dm5: {
-                    ...item.dm5,
-                    [comicsID]: {
-                      title,
-                      chapters,
-                      chapterList,
-                      coverURL,
-                      chapterURL: `${baseURL}/${comicsID}`,
-                      lastReaded: chapter,
-                      readedChapters: {
-                        ...(item.dm5[comicsID]
-                          ? item.dm5[comicsID].readedChapters
-                          : {}),
-                        [chapter]: chapter,
-                      },
+                ],
+                dm5: {
+                  ...item.dm5,
+                  [comicsID]: {
+                    title,
+                    chapters,
+                    chapterList,
+                    coverURL,
+                    chapterURL: `${baseURL}/${comicsID}`,
+                    lastReaded: chapter,
+                    readedChapters: {
+                      ...(item.dm5[comicsID]
+                        ? item.dm5[comicsID].readedChapters
+                        : {}),
+                      [chapter]: chapter,
                     },
                   },
-                };
-                const subscribe = some(
-                  item.subscribe,
-                  citem => citem.site === 'dm5' && citem.comicsID === comicsID,
-                );
-                return Observable.merge(
-                  Observable.of(updateSubscribe(subscribe)),
-                  Observable.bindCallback(chrome.storage.local.set)(
-                    newItem,
-                  ).mergeMap(() => {
-                    chrome.browserAction.setBadgeText({
-                      text: `${
-                        newItem.update.length === 0 ? '' : newItem.update.length
-                      }`,
-                    });
-                    const result$ = [
-                      updateTitle(title),
-                      updateReadedChapters(
-                        newItem.dm5[comicsID].readedChapters,
-                      ),
-                      updateChapters(chapters),
-                      updateChapterList(chapterList),
-                      updateChapterNowIndex(chapterIndex),
-                    ];
-                    if (chapterIndex > 0) {
-                      result$.push(
-                        fetchImgList(chapterIndex - 1),
-                        updateChapterLatestIndex(chapterIndex - 1),
-                      );
-                    } else {
-                      result$.push(updateChapterLatestIndex(chapterIndex - 1));
-                    }
-                    return result$;
-                  }),
-                );
-              },
-            );
+                },
+              };
+              const subscribe = some(
+                item.subscribe,
+                citem => citem.site === 'dm5' && citem.comicsID === comicsID,
+              );
+              store.dispatch(updateSubscribe(subscribe))
+              chrome.storage.local.set(newItem, () => {
+                chrome.browserAction.setBadgeText({
+                  text: `${
+                    newItem.update.length === 0 ? '' : newItem.update.length
+                    }`,
+                });
+                store.dispatch(updateTitle(title));
+                store.dispatch(updateReadedChapters(
+                  newItem.dm5[comicsID].readedChapters,
+                ));
+                store.dispatch(updateChapters(chapters));
+                store.dispatch(updateChapterList(chapterList));
+                store.dispatch(updateChapterNowIndex(chapterIndex));
+                if (chapterIndex > 0) {
+                  store.dispatch(fetchImgList(chapterIndex - 1));
+                  store.dispatch(updateChapterLatestIndex(chapterIndex - 1));
+                } else {
+                  store.dispatch(updateChapterLatestIndex(chapterIndex - 1));
+                }
+              })
+            })
+            return []
           },
         ),
       );
@@ -263,8 +255,8 @@ export function fetchChapter(chapter) {
 }
 
 export function updateReadedEpic(action$, store) {
-  return action$.ofType(UPDATE_READED).mergeMap(action =>
-    Observable.bindCallback(chrome.storage.local.get)().mergeMap(item => {
+  return action$.ofType(UPDATE_READED).mergeMap(action => {
+    chrome.storage.local.get(null, item => {
       const { comicsID, chapterList } = store.getState().comics;
       const chapterID = chapterList[action.index];
       const newItem = {
@@ -285,19 +277,16 @@ export function updateReadedEpic(action$, store) {
           },
         },
       };
-      return Observable.bindCallback(chrome.storage.local.set)(
-        newItem,
-      ).mergeMap(() => {
+      chrome.storage.local.set(newItem, () => {
         chrome.browserAction.setBadgeText({
           text: `${newItem.update.length === 0 ? '' : newItem.update.length}`,
         });
-        return [
-          updateReadedChapters(newItem.dm5[comicsID].readedChapters),
-          updateChapterNowIndex(action.index),
-        ];
+        store.dispatch(updateReadedChapters(newItem.dm5[comicsID].readedChapters))
+        store.dispatch(updateChapterNowIndex(action.index))
       });
-    }),
-  );
+    })
+    return []
+  });
 }
 
 export function updateReaded(index) {
