@@ -35,6 +35,8 @@
     "http://*.sfacg.com/*",
     "http://*.dm5.com/*",
     "http://*.cdndm5.com/*",
+    "https://*.dm5.com/*",
+    "https://*.cdndm5.com/*",
     "http://localhost:8000/*"
   ],
   "content_security_policy": "img-src 'self' data: * ; script-src 'self' 'unsafe-eval' https://*.google-analytics.com https://ajax.googleapis.com http://localhost:8000; object-src 'self' ; ",
